@@ -22,13 +22,17 @@ public:
 	UStaticMeshComponent* Mesh;
 	UPROPERTY(VisibleAnywhere)
 	UArrowComponent* Arrow;
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* AttachedBuildingPos;
+	
+	ATMainBuilding* AttachedBuilding;
 	
 protected:
 	// Called when the game starts or when spawned
 
 	virtual void BeginPlay() override;
 
-	ATMainBuilding* AttachedBuilding;
+	
 	
 public:	
 	// Called every frame

@@ -23,13 +23,25 @@ private:
 	EBuildingMode BuildingMode = EBuildingMode::E_NotInBuildMode;
 	TSubclassOf<ATMainBuilding> BuildingClass;
 	FVector CursorLocation;
+	UPROPERTY()
 	ATMainBuilding* BuildingRefer; // 正在建造
-	ATMainBuilding* CursorHitActor; // 点击已经建造的
+	UPROPERTY()
+	ATMainBuilding* CursorHitBuilding; // 点击已经建造
+	UPROPERTY()
+	class UDecalComponent* DecalComponent;
+	UPROPERTY()
+	class ATMainAttachBase* AttachBase;
+	UPROPERTY(EditAnywhere)
+	class UMaterialInterface* DecalMaterial;
 
+	
+	bool CanConstruct;
+	
 public:
 	/*
 	 * 设置建造模式（拿起，放下）
 	 */
+	UFUNCTION(BlueprintCallable)
 	void SetBuildingMode(TSubclassOf<ATMainBuilding> BuildingCla);
 
 	UFUNCTION()

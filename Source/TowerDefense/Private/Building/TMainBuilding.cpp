@@ -10,7 +10,8 @@ ATMainBuilding::ATMainBuilding()
 	PrimaryActorTick.bCanEverTick = true;
 
 	BuildingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BuildingMesh"));
-	
+	BuildingMesh->SetCollisionProfileName(TEXT("Building"));
+	RootComponent = BuildingMesh;
 }
 
 // Called when the game starts or when spawned
@@ -51,5 +52,40 @@ void ATMainBuilding::OnHovered(bool bHovered)
 
 void ATMainBuilding::ToggleBuildingMode(bool bBuildingMode)
 {
+}
+
+void ATMainBuilding::CanConstructBuilding(bool bCanConstructBuild)
+{
+	if( bCanConstructBuild)
+	{
+		ChangeMaterial(TEXT("Green"));
+	}
+	else
+	{
+		ChangeMaterial(TEXT("Red"));
+	}
+}
+
+void ATMainBuilding::ChangeMaterial(FName Name)
+{
+	UMaterialInterface* Material = *Materials.Find(Name);
+	if( Material != nullptr)
+	{
+		TArray<USceneComponent*> OutChildren;
+		RootComponent->GetChildrenComponents(true, OutChildren);
+		if( RootComponent != nullptr) OutChildren.Add(RootComponent);
+		for( const auto Comp : OutChildren)
+		{
+			if( Comp->IsA<UMeshComponent>())
+			{
+				UMeshComponent* Mesh = Cast<UMeshComponent>(Comp);
+				const int MaterialCount = Mesh->GetMaterials().Num();
+				for( int i = 0; i < MaterialCount; ++i)
+				{
+					Mesh->SetMaterial(i, Material);
+				}
+			}
+		}
+	}
 }
 

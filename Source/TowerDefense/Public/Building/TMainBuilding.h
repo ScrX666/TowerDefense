@@ -18,6 +18,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* BuildingMesh;
+	UPROPERTY(EditAnywhere)
+	TMap<FName, UMaterialInterface*> Materials;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -29,5 +31,16 @@ public:
 	virtual void OnConstruct(ATMainAttachBase* AttachBase) override;
 	virtual void OnDestory() override;
 	virtual void OnHovered(bool bHovered) override;
+	
 	void ToggleBuildingMode(bool bBuildingMode);
+
+	/*
+	 * 根据状态改变材质
+	 */
+	UFUNCTION(BlueprintCallable)
+	void CanConstructBuilding(bool bCanConstructBuild);
+
+private:
+
+	void ChangeMaterial(FName Name);
 };
