@@ -68,6 +68,12 @@ void ATMainBuilding::CanConstructBuilding(bool bCanConstructBuild)
 
 void ATMainBuilding::ChangeMaterial(FName Name)
 {
+	if( Materials.Num() == 0)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("Materials None"));
+		return ;
+	}
+	
 	UMaterialInterface* Material = *Materials.Find(Name);
 	if( Material != nullptr)
 	{

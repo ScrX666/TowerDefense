@@ -4,10 +4,12 @@
 #include "TowerDefenseGameModeBase.h"
 
 #include "Character/Player/TPlayer.h"
+#include "GamePlay/THUD.h"
 #include "GamePlay/TPlayerController.h"
 
 ATowerDefenseGameModeBase::ATowerDefenseGameModeBase()
 {
 	DefaultPawnClass = ATPlayer::StaticClass();
 	PlayerControllerClass =	ATPlayerController::StaticClass();
+	HUDClass = ATHUD::StaticClass();
 }

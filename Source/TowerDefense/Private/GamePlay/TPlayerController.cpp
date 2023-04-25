@@ -47,6 +47,7 @@ void ATPlayerController::MouseClickDown()
 					auto Building = GetWorld()->SpawnActor<ATMainBuilding>(BuildingClass,BuildingRefer->GetTransform());
 					Building->ToggleBuildingMode(false);
 					AttachBase->OnConstructAttachBuilding(Building);
+					Building->OnConstruct(AttachBase);
 				}
 				else
 				{
@@ -57,8 +58,8 @@ void ATPlayerController::MouseClickDown()
 			{
 				SetBuildingMode(nullptr);
 			}
+			SetBuildingMode(nullptr);
 		}
-		SetBuildingMode(nullptr);
 	}
 	else
 	{
@@ -148,7 +149,15 @@ void ATPlayerController::BuildingModeOff()
 	DecalComponent->SetHiddenInGame(false);
 	if( BuildingRefer)
 	{
-		BuildingRefer->Destroy();
+		UE_LOG(LogTemp,Log,TEXT("Destory Building"));
+		if(BuildingRefer->Destroy())
+		{
+			UE_LOG(LogTemp,Log,TEXT("Destory Building Success"));
+		}
+		else
+		{
+			UE_LOG(LogTemp,Log,TEXT("Destory Building Fail"));
+		}
 		BuildingRefer = nullptr;
 	}
 }

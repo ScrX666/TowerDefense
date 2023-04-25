@@ -20,7 +20,7 @@ ATPlayer::ATPlayer()
 	CameraComponent->SetupAttachment(SpringArmComponent,USpringArmComponent::SocketName);
 	SpringArmComponent->SetupAttachment(RootComponent);
 	SpringArmComponent->bEnableCameraLag = true;
-	SpringArmComponent->TargetArmLength = 1500.0f;
+	SpringArmComponent->TargetArmLength = 2500.0f;
 	SpringArmComponent->SetRelativeRotation(FRotator(-40.0f, 0.0f, 0.0f));
 }
 
