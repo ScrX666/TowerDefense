@@ -21,13 +21,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void AddArrow();
-	void AIMove(APawn* aiPawn);
+	UFUNCTION()
+	void AIMove(ATFirstAIController* NPC);
+	UFUNCTION()
 	void SpawnAI();
 protected:
 	UPROPERTY(VisibleAnywhere)
 	USplineComponent* SplineComponent;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_AICharacter;
+	FVector FirstMoveLoc;
 
 	
 };

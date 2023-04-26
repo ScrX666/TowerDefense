@@ -17,5 +17,9 @@ void ATAICharacter::BeginPlay()
 	Super::BeginPlay();
 	
 }
+void ATAICharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 
+}
 
