@@ -25,12 +25,16 @@ protected:
 	void AIMove(ATFirstAIController* NPC);
 	UFUNCTION()
 	void SpawnAI();
+
+	
 protected:
 	UPROPERTY(VisibleAnywhere)
 	USplineComponent* SplineComponent;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_AICharacter;
 	FVector FirstMoveLoc;
-
+public:
+	UFUNCTION()
+	void MoveTo(ATFirstAIController* AIController, int index, FVector& NextPosition);
 	
 };

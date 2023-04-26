@@ -19,6 +19,7 @@ ATSplineMapActor::ATSplineMapActor()
 void ATSplineMapActor::BeginPlay()
 {
 	Super::BeginPlay();
+	// TODO: Timer
 	SpawnAI();
 }
 
@@ -86,10 +87,21 @@ void ATSplineMapActor::SpawnAI()
 	APawn* AiPawn = Cast<APawn>(AIActor);
 	AiPawn->SpawnDefaultController();
 	ATFirstAIController* moveController = Cast<ATFirstAIController >(AiPawn->GetController());
-	
-	AIMove(moveController);
-
+	moveController->SplineMapActor = this;
+	// AIMove(moveController);
+	MoveTo(moveController, 1, moveController->NextPosition);
 }
 
+void ATSplineMapActor::MoveTo(ATFirstAIController* AIController, int index, FVector& NextPosition)
+{
+	FVector MoveLoc = SplineComponent->GetLocationAtSplineInputKey(index,ESplineCoordinateSpace::World);
+
+	if(AIController)
+	{
+		UE_LOG(LogTemp,Log,TEXT("Spline %s"),*MoveLoc.ToString());
+		AIController->MoveToLocation(MoveLoc,0,false);
+	}
+	NextPosition = MoveLoc;
+}
 
 
