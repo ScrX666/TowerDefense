@@ -6,6 +6,7 @@
 #include "Building/TMainAttachBase.h"
 #include "Building/TMainBuilding.h"
 #include "Components/DecalComponent.h"
+#include "GamePlay/TPlayerState.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -39,8 +40,7 @@ void ATPlayerController::MouseClickDown()
 		// 建造模式
 		if( BuildingRefer != nullptr)
 		{
-			//TODO: 判断金币
-			if( true)
+			if( TPlayerState->CoinsEnough(10.0f))
 			{
 				if( CanConstruct)
 				{
@@ -48,6 +48,7 @@ void ATPlayerController::MouseClickDown()
 					Building->ToggleBuildingMode(false);
 					AttachBase->OnConstructAttachBuilding(Building);
 					Building->OnConstruct(AttachBase);
+					TPlayerState->RemoveCoins(10.0f);
 				}
 				else
 				{
@@ -56,7 +57,7 @@ void ATPlayerController::MouseClickDown()
 			}
 			else
 			{
-				SetBuildingMode(nullptr);
+				
 			}
 			SetBuildingMode(nullptr);
 		}
@@ -132,7 +133,7 @@ void ATPlayerController::BeginPlay()
 	Super::BeginPlay();
 	//TODO 用事件替换
 	EnableInput(this);
-	
+	TPlayerState = GetPlayerState<ATPlayerState>();
 	DecalComponent = UGameplayStatics::SpawnDecalAtLocation(this,DecalMaterial, FVector(50.0f), CursorLocation);
 }
 

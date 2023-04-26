@@ -18,8 +18,18 @@ ATMainBullet::ATMainBullet()
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMoveComp"));
 	SetRootComponent(Mesh);
 	SphereComponent->SetupAttachment(RootComponent);
+	SphereComponent->SetGenerateOverlapEvents(true);
 
-	// InitialLifeSpan = 2.0f;
+	ProjectileMovementComponent->MaxSpeed = 2000.0f;
+	ProjectileMovementComponent->InitialSpeed = 0.0f;
+	ProjectileMovementComponent->bIsHomingProjectile = true;
+	ProjectileMovementComponent->HomingAccelerationMagnitude = 10000000.0f;
+	ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
+	ProjectileMovementComponent->Velocity = FVector::ZeroVector;
+	
+	InitialLifeSpan = 2.0f;
+
+	
 }
 
 void ATMainBullet::SphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -27,7 +37,7 @@ void ATMainBullet::SphereOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 {
 	
 	UE_LOG(LogTemp,Log,TEXT("Sphere Overlap"));
-	if( Cast<ATManBase>(OtherActor))
+	if( OtherActor->IsA<ATManBase>())
 	{
 		UE_LOG(LogTemp,Log,TEXT("Sphere Overlap Cast Success"));
 		if(OtherActor->Destroy())

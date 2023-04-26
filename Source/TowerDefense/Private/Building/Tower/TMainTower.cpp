@@ -5,6 +5,7 @@
 
 #include "Character/TManBase.h"
 #include "Components/SphereComponent.h"
+#include "GamePlay/TDataTableManager.h"
 
 ATMainTower::ATMainTower()
 	:TargetMan(nullptr)
@@ -14,8 +15,10 @@ ATMainTower::ATMainTower()
 	AttackRangeSphere = CreateDefaultSubobject<USphereComponent>(TEXT("AttackRangeSphere"));
 	AttackRangeComps->SetupAttachment(RootComponent);
 	AttackRangeMesh->SetupAttachment(AttackRangeComps);
+	AttackRangeMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	AttackRangeSphere->SetupAttachment(AttackRangeComps);
 	AttackRangeSphere->SetGenerateOverlapEvents(true);
+
 }
 
 void ATMainTower::AttackRangeOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -50,6 +53,15 @@ void ATMainTower::BeginPlay()
 	// AttackRangeSphere->OnComponentEndOverlap.AddDynamic(this, &ATMainTower::AttackRangeEndOverlap);
 }
 
+void ATMainTower::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+	
+	TowerData = TDataTableManager::GetInstance()->GetTowerData(Name);
+	AttackRangeSphere->SetSphereRadius(TowerData.AttackRange);
+	UE_LOG(LogTemp,Log,TEXT("OnConstruction MainTower AttackRange %f"), TowerData.AttackRange);
+}
+
 void ATMainTower::Fire()
 {
 }
@@ -58,15 +70,21 @@ void ATMainTower::OnConstruct(ATMainAttachBase* AttachBase)
 {
 	Super::OnConstruct(AttachBase);
 
+	
+	
 	if( AttachBase == nullptr)
 	{
 		UE_LOG(LogTemp,Log,TEXT("AttachBase Null"));
+		AttackRangeMesh->SetVisibility(true);
+		// 动态设置攻击范围显示
+		AttackRangeMesh->SetWorldScale3D(FVector(TowerData.AttackRange / 200.0f));
 		return ;
 	}
 	else
 	{
 		UE_LOG(LogTemp,Log,TEXT("AttachBase Not Null"));
 	}
+	AttackRangeMesh->SetVisibility(false);
 	AttackRangeSphere->OnComponentBeginOverlap.AddDynamic(this, &ATMainTower::AttackRangeOverlap);
 	AttackRangeSphere->OnComponentEndOverlap.AddDynamic(this, &ATMainTower::AttackRangeEndOverlap);
 }

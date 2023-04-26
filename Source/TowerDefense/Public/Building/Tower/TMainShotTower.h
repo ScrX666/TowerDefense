@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Building/Tower/TMainTower.h"
+#include "Structure/FTShotTower.h"
 #include "TMainShotTower.generated.h"
 
 class ATMainBullet;
@@ -19,8 +20,9 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ATMainBullet> BulletClass;
+	UPROPERTY(EditAnywhere)
+	FTShotTower ShotTowerData;
 	
-
 private:
 	FTimerHandle FireTimerHandle;
 

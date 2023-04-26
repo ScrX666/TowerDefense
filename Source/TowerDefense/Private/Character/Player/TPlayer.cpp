@@ -16,6 +16,7 @@ ATPlayer::ATPlayer()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Root"));
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	RootComponent = SphereComponent;
 	CameraComponent->SetupAttachment(SpringArmComponent,USpringArmComponent::SocketName);
 	SpringArmComponent->SetupAttachment(RootComponent);

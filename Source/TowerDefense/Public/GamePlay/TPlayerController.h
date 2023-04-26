@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "TPlayerController.generated.h"
 
+class ATPlayerState;
 enum class EBuildingMode : uint8;
 class ATMainBuilding;
 /**
@@ -19,6 +20,9 @@ class TOWERDEFENSE_API ATPlayerController : public APlayerController
 
 public:
 	ATPlayerController();
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	ATPlayerState* TPlayerState;
+
 private:
 	EBuildingMode BuildingMode = EBuildingMode::E_NotInBuildMode;
 	TSubclassOf<ATMainBuilding> BuildingClass;
@@ -33,7 +37,7 @@ private:
 	class ATMainAttachBase* AttachBase;
 	UPROPERTY(EditAnywhere)
 	class UMaterialInterface* DecalMaterial;
-
+	
 	
 	bool CanConstruct;
 	
