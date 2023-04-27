@@ -5,6 +5,7 @@
 #include <mutex>
 
 #include "CoreMinimal.h"
+#include "Structure/FAISpawnStruct.h"
 #include "Structure/FTManState.h"
 #include "Structure/FTTower.h"
 
@@ -27,6 +28,7 @@ private:
 	UDataTable* ShotTowerTable;
 	UDataTable* TowerTable;
 	UDataTable* ManStateTable;
+	UDataTable* AISpawnTable;
 	
 public:
 	/*
@@ -41,6 +43,16 @@ public:
 	 * 获取人物信息
 	 */
 	FTManState GetManStateData(FName Name);
+
+	/*
+	 * 根据Name 获取
+	 */
+	FAISpawnStruct GetAISpawnStruct(FName Name);
+
+	/*
+	 * 根据index 获取
+	 */
+	FAISpawnStruct GetAISpawnStruct(int RowIndex);
 
 	
 	
