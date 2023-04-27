@@ -7,6 +7,7 @@
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
 #include "AI/TFirstAIController.h"
+#include "GamePlay/TDataTableManager.h"
 
 // Sets default values
 ATSplineMapActor::ATSplineMapActor()
@@ -84,8 +85,8 @@ void ATSplineMapActor::SpawnAI()
 			SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;//Ignore Collisions
 			FVector SpawnLoc = SplineComponent->GetLocationAtSplineInputKey(0,ESplineCoordinateSpace::World);
 			FRotator SpawnRot = SplineComponent->GetRotationAtSplineInputKey(0,ESplineCoordinateSpace::World);
-			// BP_AICharacter = FaiSpawnStruct.AICharacter;
-			AActor* AIActor = GetWorld()->SpawnActor<AActor>(BP_AICharacter,SpawnLoc,SpawnRot,SpawnParameters);
+			
+			AActor* AIActor = GetWorld()->SpawnActor<AActor>(FaiSpawnStruct.AICharacter,SpawnLoc,SpawnRot,SpawnParameters);
 	
 			APawn* AiPawn = Cast<APawn>(AIActor);
 			AiPawn->SpawnDefaultController();
@@ -103,7 +104,7 @@ void ATSplineMapActor::SpawnWave()
 {
 	// && CurrentWave < TotalWaveCount
 	// 如果当前已生成的敌人数量未达到本波敌人数量的上限
-	if (CurrentEnemyCount < WaveEnemyCount)
+	if (CurrentEnemyCount < FaiSpawnStruct.SpawnAINums && CurrentWave != 0)
 	{
 		
 		// 生成敌人
@@ -118,8 +119,9 @@ void ATSplineMapActor::SpawnWave()
 	// 如果当前已生成的敌人数量已经达到本波敌人数量的上限
 	else
 	{
-		if(CurrentWave < TotalWaveCount)
+		if(CurrentWave < TDataTableManager::GetInstance()->GetAISpawnStructNum())
 		{
+			FaiSpawnStruct = TDataTableManager::GetInstance()->GetAISpawnStruct(CurrentWave);
 			CurrentWave++;
 			// 重置已生成的敌人数量
 			CurrentEnemyCount = 0;

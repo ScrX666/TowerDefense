@@ -104,6 +104,7 @@ FAISpawnStruct TDataTableManager::GetAISpawnStruct(int RowIndex)
 	if( OutArray.Num() == 0)
 	{
 		AISpawnTable->GetAllRows<FAISpawnStruct>(ContextStr,OutArray);
+		AISpawnTableLenth = OutArray.Num();
 	}
 	if( RowIndex > OutArray.Num() - 1)
 	{
@@ -117,6 +118,13 @@ FAISpawnStruct TDataTableManager::GetAISpawnStruct(int RowIndex)
 		return FAISpawnStruct();
 	}
 	return *Res;
+}
+
+int TDataTableManager::GetAISpawnStructNum()
+{
+	if(AISpawnTableLenth == 0)
+		GetAISpawnStruct(0);
+	return AISpawnTableLenth;
 }
 
 TDataTableManager::TDataTableManager()

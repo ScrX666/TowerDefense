@@ -31,8 +31,6 @@ protected:
 protected:
 	UPROPERTY(VisibleAnywhere)
 	USplineComponent* SplineComponent;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_AICharacter;
 	FVector FirstMoveLoc;
 
 	FAISpawnStruct FaiSpawnStruct;
