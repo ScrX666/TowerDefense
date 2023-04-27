@@ -20,7 +20,8 @@ void ATSplineMapActor::BeginPlay()
 {
 	Super::BeginPlay();
 	// TODO: Timer
-	SpawnAI();
+	//SpawnAI();
+	SpawnWave();
 }
 
 void ATSplineMapActor::AddArrow()
@@ -78,18 +79,61 @@ void ATSplineMapActor::AIMove(ATFirstAIController* NPC)
 
 void ATSplineMapActor::SpawnAI()
 {
-	FActorSpawnParameters SpawnParameters;
-	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;//Ignore Collisions
-	FVector SpawnLoc = SplineComponent->GetLocationAtSplineInputKey(0,ESplineCoordinateSpace::World);
-	FRotator SpawnRot = SplineComponent->GetRotationAtSplineInputKey(0,ESplineCoordinateSpace::World);
-	AActor* AIActor = GetWorld()->SpawnActor<AActor>(BP_AICharacter,SpawnLoc,SpawnRot,SpawnParameters);
+
+			FActorSpawnParameters SpawnParameters;
+			SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;//Ignore Collisions
+			FVector SpawnLoc = SplineComponent->GetLocationAtSplineInputKey(0,ESplineCoordinateSpace::World);
+			FRotator SpawnRot = SplineComponent->GetRotationAtSplineInputKey(0,ESplineCoordinateSpace::World);
+			// BP_AICharacter = FaiSpawnStruct.AICharacter;
+			AActor* AIActor = GetWorld()->SpawnActor<AActor>(BP_AICharacter,SpawnLoc,SpawnRot,SpawnParameters);
 	
-	APawn* AiPawn = Cast<APawn>(AIActor);
-	AiPawn->SpawnDefaultController();
-	ATFirstAIController* moveController = Cast<ATFirstAIController >(AiPawn->GetController());
-	moveController->SplineMapActor = this;
-	// AIMove(moveController);
-	MoveTo(moveController, 1, moveController->NextPosition);
+			APawn* AiPawn = Cast<APawn>(AIActor);
+			AiPawn->SpawnDefaultController();
+			ATFirstAIController* moveController = Cast<ATFirstAIController >(AiPawn->GetController());
+	
+			moveController->SplineMapActor = this;
+			// AIMove(moveController);
+			MoveTo(moveController, 1, moveController->NextPosition);
+			// FPlatformProcess::Sleep(0.5);
+		
+
+}
+
+void ATSplineMapActor::SpawnWave()
+{
+	// && CurrentWave < TotalWaveCount
+	// 如果当前已生成的敌人数量未达到本波敌人数量的上限
+	if (CurrentEnemyCount < WaveEnemyCount)
+	{
+		
+		// 生成敌人
+		SpawnAI();
+
+		// 增加已生成的敌人数量
+		CurrentEnemyCount++;
+
+		// 设置计时器，等待一定时间后再生成下一个敌人
+		GetWorld()->GetTimerManager().SetTimer(WaveTimerHandle, this, &ATSplineMapActor::SpawnWave, 1, false);
+	}
+	// 如果当前已生成的敌人数量已经达到本波敌人数量的上限
+	else
+	{
+		if(CurrentWave < TotalWaveCount)
+		{
+			CurrentWave++;
+			// 重置已生成的敌人数量
+			CurrentEnemyCount = 0;
+
+			// 取消计时器
+			GetWorld()->GetTimerManager().ClearTimer(WaveTimerHandle);
+		
+
+			// 等待一段时间后生成下一波敌人
+			GetWorld()->GetTimerManager().SetTimer(WaveTimerHandle, this, &ATSplineMapActor::SpawnWave, 2, false);
+		}
+		
+		
+	}
 }
 
 void ATSplineMapActor::MoveTo(ATFirstAIController* AIController, int index, FVector& NextPosition)

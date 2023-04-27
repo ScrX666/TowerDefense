@@ -6,6 +6,7 @@
 
 #include "Components/SplineComponent.h"
 #include "GameFramework/Actor.h"
+#include "Structure/FAISpawnStruct.h"
 #include "TSplineMapActor.generated.h"
 
 UCLASS()
@@ -25,7 +26,7 @@ protected:
 	void AIMove(ATFirstAIController* NPC);
 	UFUNCTION()
 	void SpawnAI();
-
+	void SpawnWave();
 	
 protected:
 	UPROPERTY(VisibleAnywhere)
@@ -33,8 +34,21 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_AICharacter;
 	FVector FirstMoveLoc;
+
+	FAISpawnStruct FaiSpawnStruct;
 public:
 	UFUNCTION()
 	void MoveTo(ATFirstAIController* AIController, int index, FVector& NextPosition);
-	
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	int32 WaveEnemyCount = 3; // 每波敌人数量
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	int32 TotalWaveCount = 2; // 总波次数量
+
+	protected:
+	int32 CurrentWave = 0; // 当前波次
+	int32 CurrentEnemyCount = 0; // 当前波次已经生成的敌人数量
+	FTimerHandle WaveTimerHandle;
 };
