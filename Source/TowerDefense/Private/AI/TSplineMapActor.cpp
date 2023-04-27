@@ -101,10 +101,11 @@ void ATSplineMapActor::SpawnAI()
 
 void ATSplineMapActor::SpawnWave()
 {
+	// && CurrentWave < TotalWaveCount
 	// 如果当前已生成的敌人数量未达到本波敌人数量的上限
-	if (CurrentEnemyCount < WaveEnemyCount && CurrentWave < TotalWaveCount)
+	if (CurrentEnemyCount < WaveEnemyCount)
 	{
-		CurrentWave++;
+		
 		// 生成敌人
 		SpawnAI();
 
@@ -117,14 +118,21 @@ void ATSplineMapActor::SpawnWave()
 	// 如果当前已生成的敌人数量已经达到本波敌人数量的上限
 	else
 	{
-		// 重置已生成的敌人数量
-		CurrentEnemyCount = 0;
+		if(CurrentWave < TotalWaveCount)
+		{
+			CurrentWave++;
+			// 重置已生成的敌人数量
+			CurrentEnemyCount = 0;
 
-		// 取消计时器
-		GetWorld()->GetTimerManager().ClearTimer(WaveTimerHandle);
+			// 取消计时器
+			GetWorld()->GetTimerManager().ClearTimer(WaveTimerHandle);
+		
 
-		// 等待一段时间后生成下一波敌人
-		GetWorld()->GetTimerManager().SetTimer(WaveTimerHandle, this, &ATSplineMapActor::SpawnWave, 1, false);
+			// 等待一段时间后生成下一波敌人
+			GetWorld()->GetTimerManager().SetTimer(WaveTimerHandle, this, &ATSplineMapActor::SpawnWave, 2, false);
+		}
+		
+		
 	}
 }
 
