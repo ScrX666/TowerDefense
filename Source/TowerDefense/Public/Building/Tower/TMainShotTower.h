@@ -28,8 +28,18 @@ private:
 
 
 public:
+	/*
+	 * 继承接口
+	 */
 	virtual void OnConstruct(ATMainAttachBase* AttachBase) override;
 	virtual void BeginPlay() override;
+
+
+	/*
+	 * UE 自带
+	 */
+	virtual void OnConstruction(const FTransform& Transform) override;
+	
 private:
 	virtual void Fire() override;
 	virtual void OnDestory() override;

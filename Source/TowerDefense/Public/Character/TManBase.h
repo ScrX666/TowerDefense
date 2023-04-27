@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "TManBase.generated.h"
 
+class UWidgetComponent;
+class UTManStateAndBuffer;
+
 UCLASS()
 class TOWERDEFENSE_API ATManBase : public ACharacter
 {
@@ -14,8 +17,20 @@ class TOWERDEFENSE_API ATManBase : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ATManBase();
-
+	UPROPERTY(EditDefaultsOnly)
+	FName Name;
+	UPROPERTY(VisibleAnywhere)
+	UTManStateAndBuffer* ManStateAndBuffer;
+	UPROPERTY(VisibleAnywhere)
+	UWidgetComponent* HealthWidgetComponent;
+	
 protected:
+	UFUNCTION()
+	void UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* OwningComp, float NewHealth, float Delta);
+	UFUNCTION()
+	void DestorySelf();
+	UFUNCTION()
+	void AddCoins();
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -26,4 +41,20 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void OnConstruction(const FTransform& Transform) override;
+
+	UFUNCTION()
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	UFUNCTION(BlueprintCallable,BlueprintPure)
+	int GetMaxHealth();
+	UFUNCTION(BlueprintCallable,BlueprintPure)
+	int GetCurrentHealth();
+
+private:
+
+	/*
+	 * 更新UI朝向
+	 */
+	void UpdateHealthBarRotation();
 };

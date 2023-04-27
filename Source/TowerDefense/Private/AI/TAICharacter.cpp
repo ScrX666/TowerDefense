@@ -13,6 +13,7 @@ ATAICharacter::ATAICharacter()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
 }
 
 // Called when the game starts or when spawned

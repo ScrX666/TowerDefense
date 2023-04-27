@@ -40,7 +40,7 @@ void ATPlayerController::MouseClickDown()
 		// 建造模式
 		if( BuildingRefer != nullptr)
 		{
-			if( TPlayerState->CoinsEnough(10.0f))
+			if( TPlayerState && TPlayerState->CoinsEnough(10.0f))
 			{
 				if( CanConstruct)
 				{

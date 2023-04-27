@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
 #include "TPlayerState.generated.h"
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCoinChanged, float, NewHealth, float, Delta);
 /**
  * 
  */
@@ -15,6 +15,9 @@ class TOWERDEFENSE_API ATPlayerState : public APlayerState
 	GENERATED_BODY()
 public:
 	ATPlayerState();
+
+	UPROPERTY(BlueprintAssignable,BlueprintReadOnly)
+	FOnCoinChanged OnCoinChanged;
 	
 private:
 	UPROPERTY(EditDefaultsOnly)

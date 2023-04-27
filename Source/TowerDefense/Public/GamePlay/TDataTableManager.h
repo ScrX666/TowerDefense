@@ -5,6 +5,7 @@
 #include <mutex>
 
 #include "CoreMinimal.h"
+#include "Structure/FTManState.h"
 #include "Structure/FTTower.h"
 
 class UDataTable;
@@ -25,6 +26,7 @@ public:
 private:
 	UDataTable* ShotTowerTable;
 	UDataTable* TowerTable;
+	UDataTable* ManStateTable;
 	
 public:
 	/*
@@ -35,6 +37,11 @@ public:
 	 * 获取塔的信息
 	 */
 	FTTower GetTowerData(FName Name);
+	/*
+	 * 获取人物信息
+	 */
+	FTManState GetManStateData(FName Name);
+
 	
 	
 private:

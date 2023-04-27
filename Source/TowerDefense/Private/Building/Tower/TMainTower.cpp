@@ -56,7 +56,8 @@ void ATMainTower::BeginPlay()
 void ATMainTower::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
-	
+
+	// 根据Name加载信息
 	TowerData = TDataTableManager::GetInstance()->GetTowerData(Name);
 	AttackRangeSphere->SetSphereRadius(TowerData.AttackRange);
 	UE_LOG(LogTemp,Log,TEXT("OnConstruction MainTower AttackRange %f"), TowerData.AttackRange);

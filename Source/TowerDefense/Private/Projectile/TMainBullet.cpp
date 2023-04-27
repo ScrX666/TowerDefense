@@ -6,6 +6,7 @@
 #include "Character/TManBase.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ATMainBullet::ATMainBullet()
@@ -23,7 +24,7 @@ ATMainBullet::ATMainBullet()
 	ProjectileMovementComponent->MaxSpeed = 2000.0f;
 	ProjectileMovementComponent->InitialSpeed = 0.0f;
 	ProjectileMovementComponent->bIsHomingProjectile = true;
-	ProjectileMovementComponent->HomingAccelerationMagnitude = 10000000.0f;
+	ProjectileMovementComponent->HomingAccelerationMagnitude = 10000.0f;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
 	ProjectileMovementComponent->Velocity = FVector::ZeroVector;
 	
@@ -36,18 +37,19 @@ void ATMainBullet::SphereOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	
-	UE_LOG(LogTemp,Log,TEXT("Sphere Overlap"));
+	// UE_LOG(LogTemp,Log,TEXT("Sphere Overlap"));
 	if( OtherActor->IsA<ATManBase>())
 	{
 		UE_LOG(LogTemp,Log,TEXT("Sphere Overlap Cast Success"));
-		if(OtherActor->Destroy())
-		{
-			UE_LOG(LogTemp,Log,TEXT("Destory Bullet OtherActor Success"));
-		}
-		else
-		{
-			UE_LOG(LogTemp,Log,TEXT("Destory Bullet OtherActor Fail"));
-		}
+		// if(OtherActor->Destroy())
+		// {
+		// 	UE_LOG(LogTemp,Log,TEXT("Destory Bullet OtherActor Success"));
+		// }
+		// else
+		// {
+		// 	UE_LOG(LogTemp,Log,TEXT("Destory Bullet OtherActor Fail"));
+		// }
+		UGameplayStatics::ApplyDamage(OtherActor,50.0f, UGameplayStatics::GetPlayerController(this,0),this,UDamageType::StaticClass());
 		this->Destroy();
 	}
 }
@@ -58,6 +60,12 @@ void ATMainBullet::BeginPlay()
 	Super::BeginPlay();
 	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ATMainBullet::SphereOverlap);
 	
+}
+
+void ATMainBullet::Destroyed()
+{
+	Super::Destroyed();
+	SphereComponent->OnComponentBeginOverlap.Clear();
 }
 
 // Called every frame

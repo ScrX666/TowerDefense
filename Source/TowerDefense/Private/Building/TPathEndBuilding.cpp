@@ -24,6 +24,7 @@ void ATPathEndBuilding::RangeOverlap(UPrimitiveComponent* OverlappedComponent, A
 	if( OtherActor != nullptr && OtherActor->IsA<ATManBase>())
 	{
 		Health -= 10.0f;
+		OnHomeHealthChanged.Broadcast(Health,-10.0f);
 		OtherActor->Destroy();
 	}
 }

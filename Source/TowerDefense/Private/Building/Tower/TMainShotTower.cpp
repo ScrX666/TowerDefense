@@ -4,6 +4,7 @@
 #include "Building/Tower/TMainShotTower.h"
 
 #include "Engine/StaticMeshSocket.h"
+#include "GamePlay/TDataTableManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "Projectile/TMainBullet.h"
 
@@ -15,12 +16,21 @@ void ATMainShotTower::OnConstruct(ATMainAttachBase* AttachBase)
 {
 	Super::OnConstruct(AttachBase);
 
-	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,2.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,ShotTowerData.ShotRate, true);
 }
 
 void ATMainShotTower::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void ATMainShotTower::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+
+	// 动态加载数据
+	ShotTowerData = TDataTableManager::GetInstance()->GetShotTowerData(Name);
+	BulletClass = ShotTowerData.Bullet;
 }
 
 void ATMainShotTower::Fire()
@@ -39,11 +49,21 @@ void ATMainShotTower::Fire()
 		UE_LOG(LogTemp, Warning, TEXT("Socket NULL"));
 		return ;
 	}
-	auto Bullet = GetWorld()->SpawnActor<ATMainBullet>(BulletClass);
+	// 播放发射音效
+	if( ShotTowerData.ShotSound != nullptr)
+	{
+		UGameplayStatics::PlaySound2D(this,ShotTowerData.ShotSound);
+	}
+	auto Bullet = GetWorld()->SpawnActor<ATMainBullet>(BulletClass,BuildingMesh->GetSocketTransform(TEXT("BulletSocket")));
+	if( Bullet != nullptr)
+	{
+		Bullet->Init(TargetMan);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BulletClass NULL"));
+	}
 
-
-	Bullet->SetActorLocationAndRotation(Socket->RelativeLocation + BuildingMesh->GetComponentLocation(),FRotator::ZeroRotator);
-	Bullet->Init(TargetMan);
 }
 
 void ATMainShotTower::OnDestory()

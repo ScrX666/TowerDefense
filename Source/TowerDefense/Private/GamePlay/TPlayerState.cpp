@@ -11,11 +11,13 @@ ATPlayerState::ATPlayerState()
 void ATPlayerState::RemoveCoins(int RemoveCoin)
 {
 	Coins -= RemoveCoin;
+	OnCoinChanged.Broadcast(Coins,-RemoveCoin);
 }
 
 void ATPlayerState::AddCoins(int AddCoin)
 {
 	Coins += AddCoin;
+	OnCoinChanged.Broadcast(Coins,AddCoin);
 }
 
 bool ATPlayerState::CoinsEnough(int DesireCoin) const

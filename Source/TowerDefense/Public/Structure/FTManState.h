@@ -4,22 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
-#include "FTShotTower.generated.h"
+#include "FTManState.generated.h"
 
-class ATMainBullet;
-
-/*
- * 射击塔的信息
+/**
+ * 
  */
 USTRUCT(BlueprintType)
-struct FTShotTower : public FTableRowBase
+struct FTManState : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
-public:
+	FTManState();
+
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ATMainBullet> Bullet;
+	USkeletalMesh* SkeletalMesh;
 	UPROPERTY(EditDefaultsOnly)
-	float ShotRate = 2.0f;
+	int MaxHealth;
 	UPROPERTY(EditDefaultsOnly)
-	USoundBase* ShotSound;
+	int Coins;
 };
