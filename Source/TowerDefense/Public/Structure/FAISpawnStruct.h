@@ -19,7 +19,7 @@ public:
 	UPROPERTY(EditAnywhere,Category="AI")
 	TSubclassOf<AActor> AICharacter;
 	UPROPERTY(EditAnywhere,Category="AI")
-	float SpawnWave;
+	int32 SpawnAINums;
 	
 };
 
