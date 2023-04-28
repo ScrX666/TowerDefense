@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Character/TManBase.h"
 #include "Engine/DataTable.h"
 #include "FAISpawnStruct.generated.h"
 

@@ -3,6 +3,7 @@
 
 #include "Character/TManBase.h"
 
+#include "AI/TFirstAIController.h"
 #include "Component/ActorComp/TManStateAndBuffer.h"
 #include "Components/ProgressBar.h"
 #include "Components/WidgetComponent.h"
@@ -23,7 +24,8 @@ ATManBase::ATManBase()
 	HealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthWidgetComp"));
 	HealthWidgetComponent->SetupAttachment(RootComponent);
 	HealthWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
-	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+	//AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+	AIControllerClass = ATFirstAIController::StaticClass();
 }
 
 void ATManBase::UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* OwningComp, float NewHealth, float Delta)
