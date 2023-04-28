@@ -20,7 +20,10 @@ class TOWERDEFENSE_API ATHUD : public AHUD
 	TSubclassOf<UUserWidget> MainMeunClass;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> EndGamePanelClass;
+	UPROPERTY(EditAnywhere)
+	bool IsTest;
 
+	
 	UPROPERTY(VisibleAnywhere)
 	UUserWidget* TowerDefense;
 	UPROPERTY(VisibleAnywhere)

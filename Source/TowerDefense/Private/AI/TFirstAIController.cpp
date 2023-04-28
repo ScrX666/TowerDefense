@@ -16,10 +16,10 @@ void ATFirstAIController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	FVector CurPos =  this->GetPawn()->GetTargetLocation();
 	CurPos.Z = NextPosition.Z;
-	float size = (NextPosition - CurPos).Size();
-	UE_LOG(LogTemp,Log,TEXT("%f"),size);
-	UE_LOG(LogTemp,Log,TEXT("%s"),*NextPosition.ToString());
-	UE_LOG(LogTemp,Log,TEXT("%s"),*CurPos.ToString());
+	// float size = (NextPosition - CurPos).Size();
+	// UE_LOG(LogTemp,Log,TEXT("%f"),size);
+	// UE_LOG(LogTemp,Log,TEXT("%s"),*NextPosition.ToString());
+	// UE_LOG(LogTemp,Log,TEXT("%s"),*CurPos.ToString());
 	if( (NextPosition - CurPos).Size() < 1)
 	{
 		NextIndex++;

@@ -14,6 +14,7 @@ void ATHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if( IsTest) return ;
 	UE_LOG(LogTemp,Log,TEXT("ATHUD BeginPlay"));
 	auto TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
 	
@@ -44,7 +45,7 @@ void ATHUD::BeginPlay()
 
 void ATHUD::StartGame()
 {
-	UGameplayStatics::OpenLevel(this, TEXT("Map_Test"));
+	UGameplayStatics::OpenLevel(this, TEXT("Test"));
 }
 
 void ATHUD::Exit()

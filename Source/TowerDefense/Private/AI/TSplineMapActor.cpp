@@ -9,6 +9,8 @@
 #include "AI/TFirstAIController.h"
 #include "Character/TManBase.h"
 #include "GamePlay/TDataTableManager.h"
+#include "Kismet/GameplayStatics.h"
+#include "TowerDefense/TowerDefenseGameModeBase.h"
 
 // Sets default values
 ATSplineMapActor::ATSplineMapActor()
@@ -135,7 +137,10 @@ void ATSplineMapActor::SpawnWave()
 			// 等待一段时间后生成下一波敌人
 			GetWorld()->GetTimerManager().SetTimer(WaveTimerHandle, this, &ATSplineMapActor::SpawnWave, 2, false);
 		}
-		
+		else
+		{
+			// Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->OnGameEnd.Broadcast(false);
+		}
 		
 	}
 }
