@@ -7,6 +7,7 @@
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
 #include "AI/TFirstAIController.h"
+#include "Character/TManBase.h"
 #include "GamePlay/TDataTableManager.h"
 
 // Sets default values
@@ -20,9 +21,11 @@ ATSplineMapActor::ATSplineMapActor()
 void ATSplineMapActor::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	// TODO: Timer
 	//SpawnAI();
 	SpawnWave();
+	//GetWorld()->GetTimerManager().SetTimer(BeginplayTimerHandle,this,&ATSplineMapActor::SpawnWave,1,false);
 }
 
 void ATSplineMapActor::AddArrow()
@@ -87,11 +90,10 @@ void ATSplineMapActor::SpawnAI()
 			FRotator SpawnRot = SplineComponent->GetRotationAtSplineInputKey(0,ESplineCoordinateSpace::World);
 			
 			AActor* AIActor = GetWorld()->SpawnActor<AActor>(FaiSpawnStruct.AICharacter,SpawnLoc,SpawnRot,SpawnParameters);
-	
 			APawn* AiPawn = Cast<APawn>(AIActor);
 			AiPawn->SpawnDefaultController();
 			ATFirstAIController* moveController = Cast<ATFirstAIController >(AiPawn->GetController());
-	
+			if(ensure(moveController))
 			moveController->SplineMapActor = this;
 			// AIMove(moveController);
 			MoveTo(moveController, 1, moveController->NextPosition);

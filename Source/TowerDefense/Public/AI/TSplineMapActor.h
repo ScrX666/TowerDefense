@@ -49,4 +49,5 @@ public:
 	int32 CurrentWave = 0; // 当前波次
 	int32 CurrentEnemyCount = 0; // 当前波次已经生成的敌人数量
 	FTimerHandle WaveTimerHandle;
+	FTimerHandle BeginplayTimerHandle;
 };
