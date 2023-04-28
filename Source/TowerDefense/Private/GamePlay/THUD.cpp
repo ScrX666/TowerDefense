@@ -5,10 +5,98 @@
 
 
 #include "Blueprint/UserWidget.h"
+#include "Components/Button.h"
+#include "Components/TextBlock.h"
+#include "Kismet/GameplayStatics.h"
+#include "TowerDefense/TowerDefenseGameModeBase.h"
 
 void ATHUD::BeginPlay()
 {
 	Super::BeginPlay();
-	TowerDefense = CreateWidget(GetWorld(), TowerDefenseClass);
-	TowerDefense->AddToViewport();
+
+	UE_LOG(LogTemp,Log,TEXT("ATHUD BeginPlay"));
+	auto TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
+	
+	TDGameMode->OnGameEnd.AddDynamic(this, &ATHUD::ShowEndGamePanel);
+	if( UGameplayStatics::GetCurrentLevelName(GetWorld()) == TEXT("Map_Start"))
+	{
+		MainMeun = CreateWidget(GetWorld(), MainMeunClass);
+		if( MainMeun)
+		{
+			MainMeun->AddToViewport();
+			auto Button = Cast<UButton>(MainMeun->GetWidgetFromName(TEXT("BTN_StartGame")));
+			FScriptDelegate ButtonDelegate;
+			ButtonDelegate.BindUFunction(this,"StartGame");
+			Button->OnReleased.Add(ButtonDelegate);
+		}
+		else
+		{
+			UE_LOG(LogTemp,Log,TEXT("MainMeun NULL"));
+		}
+	}
+	else
+	{
+		LoadLevel(1);
+	}
+
+	// 绑定 结束游戏事件
+}
+
+void ATHUD::StartGame()
+{
+	UGameplayStatics::OpenLevel(this, TEXT("Map_Test"));
+}
+
+void ATHUD::Exit()
+{
+	UKismetSystemLibrary::QuitGame(this, UGameplayStatics::GetPlayerController(this, 0),EQuitPreference::Quit,true);
+}
+
+void ATHUD::LoadLevel(int LevelIndex)
+{
+	if( LevelIndex == 1)
+	{
+		TowerDefense = CreateWidget(GetWorld(), TowerDefenseClass);
+		if( TowerDefense)
+		{
+			TowerDefense->AddToViewport();
+		}
+		else
+		{
+			UE_LOG(LogTemp,Log,TEXT("TowerDefense NULL"));
+		}
+	}
+}
+
+void ATHUD::ShowEndGamePanel(bool IsWin)
+{
+	UE_LOG(LogTemp,Log,TEXT("End Game"));
+	EndGamePanel = CreateWidget(GetWorld(), EndGamePanelClass);
+	if( EndGamePanel)
+	{
+		EndGamePanel->AddToViewport();
+		auto TextBlock = Cast<UTextBlock>(EndGamePanel->GetWidgetFromName(TEXT("T_Tips")));
+		if( TextBlock)
+		{
+			FString Text = TEXT("Lose Game");
+			
+			if( IsWin)
+			{
+				Text = TEXT("Win Game");
+			}
+			UE_LOG(LogTemp,Log,TEXT("ShowEndGamePanel Game"));
+			TextBlock->SetText(FText::FromString(Text));
+		}
+		auto Button = Cast<UButton>(EndGamePanel->GetWidgetFromName(TEXT("BTN_Exit")));
+		if( Button)
+		{
+			FScriptDelegate ButtonDelegate;
+			ButtonDelegate.BindUFunction(this,"Exit");
+			Button->OnReleased.Add(ButtonDelegate);
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp,Log,TEXT("EndGamePanel NULL"));
+	}
 }

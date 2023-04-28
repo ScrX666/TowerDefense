@@ -16,9 +16,26 @@ class TOWERDEFENSE_API ATHUD : public AHUD
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> TowerDefenseClass;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> MainMeunClass;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> EndGamePanelClass;
 
 	UPROPERTY(VisibleAnywhere)
 	UUserWidget* TowerDefense;
+	UPROPERTY(VisibleAnywhere)
+	UUserWidget* MainMeun;
+	UPROPERTY(VisibleAnywhere)
+	UUserWidget* EndGamePanel;
 	
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void StartGame();
+	UFUNCTION()
+	void Exit();
+	void LoadLevel(int LevelIndex);
+
+	UFUNCTION()
+	void ShowEndGamePanel(bool IsWin);
 };

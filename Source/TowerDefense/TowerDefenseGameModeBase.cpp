@@ -7,6 +7,8 @@
 #include "GamePlay/THUD.h"
 #include "GamePlay/TPlayerController.h"
 #include "GamePlay/TPlayerState.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 ATowerDefenseGameModeBase::ATowerDefenseGameModeBase()
 {
@@ -14,4 +16,19 @@ ATowerDefenseGameModeBase::ATowerDefenseGameModeBase()
 	PlayerControllerClass =	ATPlayerController::StaticClass();
 	HUDClass = ATHUD::StaticClass();
 	PlayerStateClass = ATPlayerState::StaticClass();
+
+	
+}
+
+void ATowerDefenseGameModeBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	OnGameEnd.AddDynamic(this, &ATowerDefenseGameModeBase::GameEnd);
+}
+
+
+void ATowerDefenseGameModeBase::GameEnd(bool IsWin)
+{
+	UGameplayStatics::SetGamePaused(this,true);
 }

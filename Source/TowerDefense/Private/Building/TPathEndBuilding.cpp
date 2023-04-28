@@ -5,6 +5,8 @@
 
 #include "Character/TManBase.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "TowerDefense/TowerDefenseGameModeBase.h"
 
 ATPathEndBuilding::ATPathEndBuilding()
 	:MaxHealth(100.0f),Health(100.0f)
@@ -26,6 +28,12 @@ void ATPathEndBuilding::RangeOverlap(UPrimitiveComponent* OverlappedComponent, A
 		Health -= 10.0f;
 		OnHomeHealthChanged.Broadcast(Health,-10.0f);
 		OtherActor->Destroy();
+		
+		if( Health <= 0.0f)
+		{
+			UE_LOG(LogTemp,Log,TEXT("Gaem End"));
+			Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->OnGameEnd.Broadcast(false);	
+		}
 	}
 }
 
