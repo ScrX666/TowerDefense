@@ -30,6 +30,7 @@ void ATMainTower::AttackRangeOverlap(UPrimitiveComponent* OverlappedComponent, A
 		if( OthMan != nullptr && !IsValid(TargetMan))
 		{
 			TargetMan = OthMan;
+			TargetInRange();
 		}
 	}
 }
@@ -41,9 +42,25 @@ void ATMainTower::AttackRangeEndOverlap(UPrimitiveComponent* OverlappedComponent
 	{
 		TArray<AActor*> ManBases;
 		GetOverlappingActors(ManBases, ATManBase::StaticClass());
-		if( ManBases.Num() == 0) TargetMan = nullptr;
-		else TargetMan = Cast<ATManBase>(ManBases[0]);
+		if( ManBases.Num() == 0)
+		{
+			TargetMan = nullptr;
+			NoTargetInRange();
+		}
+		else
+		{
+			TargetMan = Cast<ATManBase>(ManBases[0]);
+			TargetInRange();
+		}
 	}
+}
+
+void ATMainTower::TargetInRange()
+{
+}
+
+void ATMainTower::NoTargetInRange()
+{
 }
 
 void ATMainTower::BeginPlay()

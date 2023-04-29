@@ -21,12 +21,14 @@ ATMainBullet::ATMainBullet()
 	SphereComponent->SetupAttachment(RootComponent);
 	SphereComponent->SetGenerateOverlapEvents(true);
 
-	ProjectileMovementComponent->MaxSpeed = 2000.0f;
+	ProjectileMovementComponent->MaxSpeed = 1000.0f;
 	ProjectileMovementComponent->InitialSpeed = 0.0f;
 	ProjectileMovementComponent->bIsHomingProjectile = true;
-	ProjectileMovementComponent->HomingAccelerationMagnitude = 10000.0f;
+	ProjectileMovementComponent->HomingAccelerationMagnitude = 1000.0f;
 	ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
 	ProjectileMovementComponent->Velocity = FVector::ZeroVector;
+    ProjectileMovementComponent->bRotationFollowsVelocity = true;
+	
 	
 	InitialLifeSpan = 2.0f;
 

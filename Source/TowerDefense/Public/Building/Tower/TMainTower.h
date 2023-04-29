@@ -50,6 +50,10 @@ public:
 	UFUNCTION()
 	void AttackRangeEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+protected:
+	virtual void TargetInRange();
+	virtual void NoTargetInRange();
+	
 private:
 		
 	

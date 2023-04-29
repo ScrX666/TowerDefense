@@ -23,6 +23,9 @@ public:
 	UTManStateAndBuffer* ManStateAndBuffer;
 	UPROPERTY(VisibleAnywhere)
 	UWidgetComponent* HealthWidgetComponent;
+	UPROPERTY(VisibleAnywhere)
+	TSubclassOf<UUserWidget> HealthBarWidget;
+
 	
 protected:
 	UFUNCTION()

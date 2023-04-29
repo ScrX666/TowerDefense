@@ -3,6 +3,7 @@
 
 #include "Character/TManBase.h"
 
+#include "ToolContextInterfaces.h"
 #include "AI/TFirstAIController.h"
 #include "Component/ActorComp/TManStateAndBuffer.h"
 #include "Components/ProgressBar.h"
@@ -26,6 +27,11 @@ ATManBase::ATManBase()
 	HealthWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
 	//AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = ATFirstAIController::StaticClass();
+
+	HealthWidgetComponent->SetDrawSize(FVector2D(200.0f, 50.0f));
+
+	HealthBarWidget = LoadClass<UUserWidget>(nullptr,TEXT("/Game/UI/U_ManHealth.U_ManHealth_C"));
+	
 }
 
 void ATManBase::UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* OwningComp, float NewHealth, float Delta)
@@ -66,7 +72,9 @@ void ATManBase::AddCoins()
 void ATManBase::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	HealthWidgetComponent->SetWidget(CreateWidget(GetWorld(),HealthBarWidget));
+	
 	// 绑定事件
 	ManStateAndBuffer->OnHealthChanged.AddDynamic(this, &ATManBase::UpdateHealthBar);
 

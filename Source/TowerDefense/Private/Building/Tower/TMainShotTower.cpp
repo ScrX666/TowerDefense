@@ -16,7 +16,7 @@ void ATMainShotTower::OnConstruct(ATMainAttachBase* AttachBase)
 {
 	Super::OnConstruct(AttachBase);
 
-	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,ShotTowerData.ShotRate, true);
+	
 }
 
 void ATMainShotTower::BeginPlay()
@@ -69,6 +69,19 @@ void ATMainShotTower::Fire()
 void ATMainShotTower::OnDestory()
 {
 	Super::OnDestory();
+	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
+}
+
+void ATMainShotTower::TargetInRange()
+{
+	Super::TargetInRange();
+	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
+	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,ShotTowerData.ShotRate, true);
+}
+
+void ATMainShotTower::NoTargetInRange()
+{
+	Super::NoTargetInRange();
 	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
 }
 

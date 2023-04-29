@@ -4,24 +4,26 @@
 
 #include "CoreMinimal.h"
 #include "Building/Tower/TMainTower.h"
-#include "Structure/FTShotTower.h"
-#include "TMainShotTower.generated.h"
+#include "Structure/FTBeamTower.h"
+#include "TMainBeamTower.generated.h"
 
-class ATMainBullet;
 /**
  * 
  */
 UCLASS()
-class TOWERDEFENSE_API ATMainShotTower : public ATMainTower
+class TOWERDEFENSE_API ATMainBeamTower : public ATMainTower
 {
 	GENERATED_BODY()
 public:
-	ATMainShotTower();
+	ATMainBeamTower();
 	
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<ATMainBullet> BulletClass;
+	TSubclassOf<ATLaserBeam> BeamClass;
 	UPROPERTY(EditAnywhere)
-	FTShotTower ShotTowerData;
+	FTBeamTower ShotTowerData;
+	UPROPERTY(VisibleAnywhere)
+	ATLaserBeam* LaserBeam;
+
 	
 private:
 	FTimerHandle FireTimerHandle;
