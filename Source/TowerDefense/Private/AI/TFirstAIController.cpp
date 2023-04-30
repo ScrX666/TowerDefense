@@ -26,3 +26,9 @@ void ATFirstAIController::Tick(float DeltaSeconds)
 		SplineMapActor->MoveTo(this, NextIndex, NextPosition);
 	}
 }
+
+void ATFirstAIController::Destroyed()
+{
+	Super::Destroyed();
+	SplineMapActor->OnManDead();
+}

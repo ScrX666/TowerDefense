@@ -37,7 +37,7 @@ class TOWERDEFENSE_API ATHUD : public AHUD
 	void StartGame();
 	UFUNCTION()
 	void Exit();
-	void LoadLevel(int LevelIndex);
+	void InitLevel(int LevelIndex);
 
 	UFUNCTION()
 	void ShowEndGamePanel(bool IsWin);

@@ -18,13 +18,14 @@ void ATHUD::BeginPlay()
 	UE_LOG(LogTemp,Log,TEXT("ATHUD BeginPlay"));
 	auto TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
 	
-	TDGameMode->OnGameEnd.AddDynamic(this, &ATHUD::ShowEndGamePanel);
 	if( UGameplayStatics::GetCurrentLevelName(GetWorld()) == TEXT("Map_Start"))
 	{
 		MainMeun = CreateWidget(GetWorld(), MainMeunClass);
 		if( MainMeun)
 		{
 			MainMeun->AddToViewport();
+
+			// 绑定开始游戏按钮
 			auto Button = Cast<UButton>(MainMeun->GetWidgetFromName(TEXT("BTN_StartGame")));
 			FScriptDelegate ButtonDelegate;
 			ButtonDelegate.BindUFunction(this,"StartGame");
@@ -37,10 +38,12 @@ void ATHUD::BeginPlay()
 	}
 	else
 	{
-		LoadLevel(1);
+		InitLevel(1);
 	}
 
 	// 绑定 结束游戏事件
+	
+	TDGameMode->OnGameEnd.AddDynamic(this, &ATHUD::ShowEndGamePanel);
 }
 
 void ATHUD::StartGame()
@@ -53,7 +56,7 @@ void ATHUD::Exit()
 	UKismetSystemLibrary::QuitGame(this, UGameplayStatics::GetPlayerController(this, 0),EQuitPreference::Quit,true);
 }
 
-void ATHUD::LoadLevel(int LevelIndex)
+void ATHUD::InitLevel(int LevelIndex)
 {
 	if( LevelIndex == 1)
 	{

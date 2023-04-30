@@ -100,7 +100,8 @@ FAISpawnStruct TDataTableManager::GetAISpawnStruct(int RowIndex)
 		return FAISpawnStruct();
 	}
 	const FString ContextStr;
-	static TArray<FAISpawnStruct*> OutArray;
+	// static TArray<FAISpawnStruct*> OutArray; 打包时使用
+	TArray<FAISpawnStruct*> OutArray;
 	if( OutArray.Num() == 0)
 	{
 		AISpawnTable->GetAllRows<FAISpawnStruct>(ContextStr,OutArray);

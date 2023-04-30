@@ -17,7 +17,11 @@ class TOWERDEFENSE_API ATSplineMapActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ATSplineMapActor();
+	UFUNCTION()
+	void MoveTo(ATFirstAIController* AIController, int index, FVector& NextPosition);
 
+	void OnManDead();
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -28,17 +32,7 @@ protected:
 	void SpawnAI();
 	void SpawnWave();
 	
-protected:
-	UPROPERTY(VisibleAnywhere)
-	USplineComponent* SplineComponent;
-	FVector FirstMoveLoc;
-
-	FAISpawnStruct FaiSpawnStruct;
 public:
-	UFUNCTION()
-	void MoveTo(ATFirstAIController* AIController, int index, FVector& NextPosition);
-
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	int32 WaveEnemyCount = 3; // 每波敌人数量
 
@@ -50,4 +44,14 @@ public:
 	int32 CurrentEnemyCount = 0; // 当前波次已经生成的敌人数量
 	FTimerHandle WaveTimerHandle;
 	FTimerHandle BeginplayTimerHandle;
+	
+protected:
+	UPROPERTY(VisibleAnywhere)
+	USplineComponent* SplineComponent;
+	FVector FirstMoveLoc;
+
+	FAISpawnStruct FaiSpawnStruct;
+private:
+	int CurrentExistEnemyCount = 0; // 场景中已经生成的敌人
+	bool bFinishSpawn = false; // 是否已经生成完了
 };

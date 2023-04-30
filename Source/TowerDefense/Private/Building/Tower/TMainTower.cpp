@@ -105,4 +105,9 @@ void ATMainTower::OnConstruct(ATMainAttachBase* AttachBase)
 	AttackRangeMesh->SetVisibility(false);
 	AttackRangeSphere->OnComponentBeginOverlap.AddDynamic(this, &ATMainTower::AttackRangeOverlap);
 	AttackRangeSphere->OnComponentEndOverlap.AddDynamic(this, &ATMainTower::AttackRangeEndOverlap);
+
+	//生成时 函数还没有绑定，TargetMan 没有指定，手动触发一次
+	AttackRangeSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	AttackRangeSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	
 }

@@ -86,22 +86,22 @@ void ATSplineMapActor::AIMove(ATFirstAIController* NPC)
 void ATSplineMapActor::SpawnAI()
 {
 
-			FActorSpawnParameters SpawnParameters;
-			SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;//Ignore Collisions
-			FVector SpawnLoc = SplineComponent->GetLocationAtSplineInputKey(0,ESplineCoordinateSpace::World);
-			FRotator SpawnRot = SplineComponent->GetRotationAtSplineInputKey(0,ESplineCoordinateSpace::World);
-			
-			AActor* AIActor = GetWorld()->SpawnActor<AActor>(FaiSpawnStruct.AICharacter,SpawnLoc,SpawnRot,SpawnParameters);
-			APawn* AiPawn = Cast<APawn>(AIActor);
-			AiPawn->SpawnDefaultController();
-			ATFirstAIController* moveController = Cast<ATFirstAIController >(AiPawn->GetController());
-			if(ensure(moveController))
-			moveController->SplineMapActor = this;
-			// AIMove(moveController);
-			MoveTo(moveController, 1, moveController->NextPosition);
-			// FPlatformProcess::Sleep(0.5);
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;//Ignore Collisions
+	FVector SpawnLoc = SplineComponent->GetLocationAtSplineInputKey(0,ESplineCoordinateSpace::World);
+	FRotator SpawnRot = SplineComponent->GetRotationAtSplineInputKey(0,ESplineCoordinateSpace::World);
+	
+	AActor* AIActor = GetWorld()->SpawnActor<AActor>(FaiSpawnStruct.AICharacter,SpawnLoc,SpawnRot,SpawnParameters);
+	APawn* AiPawn = Cast<APawn>(AIActor);
+	AiPawn->SpawnDefaultController();
+	ATFirstAIController* moveController = Cast<ATFirstAIController >(AiPawn->GetController());
+	if(ensure(moveController))
+	moveController->SplineMapActor = this;
+	// AIMove(moveController);
+	MoveTo(moveController, 1, moveController->NextPosition);
+	// FPlatformProcess::Sleep(0.5);
 		
-
+	CurrentExistEnemyCount++;
 }
 
 void ATSplineMapActor::SpawnWave()
@@ -139,7 +139,7 @@ void ATSplineMapActor::SpawnWave()
 		}
 		else
 		{
-			// Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->OnGameEnd.Broadcast(false);
+			bFinishSpawn = true;
 		}
 		
 	}
@@ -155,6 +155,15 @@ void ATSplineMapActor::MoveTo(ATFirstAIController* AIController, int index, FVec
 		AIController->MoveToLocation(MoveLoc,0,false);
 	}
 	NextPosition = MoveLoc;
+}
+
+void ATSplineMapActor::OnManDead()
+{
+	CurrentExistEnemyCount--;
+	if( CurrentExistEnemyCount == 0 && bFinishSpawn)
+	{
+		Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->OnGameEnd.Broadcast(true);
+	}
 }
 
 
