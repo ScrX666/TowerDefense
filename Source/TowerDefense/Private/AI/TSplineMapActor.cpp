@@ -151,7 +151,7 @@ void ATSplineMapActor::MoveTo(ATFirstAIController* AIController, int index, FVec
 
 	if(AIController)
 	{
-		UE_LOG(LogTemp,Log,TEXT("Spline %s"),*MoveLoc.ToString());
+		// UE_LOG(LogTemp,Log,TEXT("Spline %s"),*MoveLoc.ToString());
 		AIController->MoveToLocation(MoveLoc,0,false);
 	}
 	NextPosition = MoveLoc;

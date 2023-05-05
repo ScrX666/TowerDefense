@@ -30,10 +30,7 @@ public:
 protected:
 	UFUNCTION()
 	void UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* OwningComp, float NewHealth, float Delta);
-	UFUNCTION()
-	void DestorySelf();
-	UFUNCTION()
-	void AddCoins();
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

@@ -18,7 +18,17 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ATLaserBeam> Bullet;
 	UPROPERTY(EditDefaultsOnly)
-	float Damage = 2.0f;
+	float BaseDamage = 2.0f;
+	UPROPERTY(EditDefaultsOnly)
+	float DamageUpGrade = 1.5f;
+	
 	// UPROPERTY(EditDefaultsOnly)
 	// USoundBase* ShotSound;
+	UPROPERTY(EditDefaultsOnly)
+	float AttackRange = 100.0f;
+	UPROPERTY(EditDefaultsOnly)
+	float AttackRangeUpGrade = 1.5f;
+
+	UPROPERTY(EditDefaultsOnly)
+	int32 LevelUpExp = 100;
 };

@@ -55,6 +55,15 @@ void ATMainTower::AttackRangeEndOverlap(UPrimitiveComponent* OverlappedComponent
 	}
 }
 
+void ATMainTower::UpdateAttackRange(const float NewRange)
+{
+	AttackRange = NewRange;
+	AttackRangeSphere->SetSphereRadius(NewRange);
+	AttackRangeMesh->SetWorldScale3D(FVector(AttackRange / 200.0f));
+}
+
+
+#pragma region 留给子类实现
 void ATMainTower::TargetInRange()
 {
 }
@@ -62,6 +71,12 @@ void ATMainTower::TargetInRange()
 void ATMainTower::NoTargetInRange()
 {
 }
+
+void ATMainTower::GetExp(int Exp)
+{
+}
+#pragma endregion
+
 
 void ATMainTower::BeginPlay()
 {
@@ -75,39 +90,57 @@ void ATMainTower::OnConstruction(const FTransform& Transform)
 	Super::OnConstruction(Transform);
 
 	// 根据Name加载信息
-	TowerData = TDataTableManager::GetInstance()->GetTowerData(Name);
-	AttackRangeSphere->SetSphereRadius(TowerData.AttackRange);
-	UE_LOG(LogTemp,Log,TEXT("OnConstruction MainTower AttackRange %f"), TowerData.AttackRange);
+	// TowerData = TDataTableManager::GetInstance()->GetTowerData(Name);
+	// AttackRangeSphere->SetSphereRadius(TowerData.AttackRange);
+	// UE_LOG(LogTemp,Log,TEXT("OnConstruction MainTower AttackRange %f"), TowerData.AttackRange);
 }
 
 void ATMainTower::Fire()
 {
 }
 
+void ATMainTower::OnSelected(bool bSelected)
+{
+	if( bSelected)
+	{
+		if( Materials.Contains(TEXT("Range")))
+		{
+			AttackRangeMesh->SetMaterial(0,Materials[TEXT("Range")]);
+		}
+		
+		AttackRangeMesh->SetVisibility(true);
+		// 动态设置攻击范围显示
+		AttackRangeMesh->SetWorldScale3D(FVector(AttackRange / 200.0f));
+	}
+	else
+	{
+		AttackRangeMesh->SetVisibility(false);
+	}
+}
+
 void ATMainTower::OnConstruct(ATMainAttachBase* AttachBase)
 {
 	Super::OnConstruct(AttachBase);
-
-	
 	
 	if( AttachBase == nullptr)
 	{
 		UE_LOG(LogTemp,Log,TEXT("AttachBase Null"));
 		AttackRangeMesh->SetVisibility(true);
 		// 动态设置攻击范围显示
-		AttackRangeMesh->SetWorldScale3D(FVector(TowerData.AttackRange / 200.0f));
+		AttackRangeMesh->SetWorldScale3D(FVector(AttackRange / 200.0f));
 		return ;
 	}
 	else
 	{
 		UE_LOG(LogTemp,Log,TEXT("AttachBase Not Null"));
-	}
-	AttackRangeMesh->SetVisibility(false);
-	AttackRangeSphere->OnComponentBeginOverlap.AddDynamic(this, &ATMainTower::AttackRangeOverlap);
-	AttackRangeSphere->OnComponentEndOverlap.AddDynamic(this, &ATMainTower::AttackRangeEndOverlap);
 
-	//生成时 函数还没有绑定，TargetMan 没有指定，手动触发一次
-	AttackRangeSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	AttackRangeSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	
+		AttackRangeMesh->SetVisibility(false);
+		AttackRangeSphere->OnComponentBeginOverlap.AddDynamic(this, &ATMainTower::AttackRangeOverlap);
+		AttackRangeSphere->OnComponentEndOverlap.AddDynamic(this, &ATMainTower::AttackRangeEndOverlap);
+
+		//生成时 函数还没有绑定，TargetMan 没有指定，手动触发一次
+		AttackRangeSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		AttackRangeSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		return;
+	}
 }

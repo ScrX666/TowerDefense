@@ -16,18 +16,21 @@ class TOWERDEFENSE_API ATMainShotTower : public ATMainTower
 {
 	GENERATED_BODY()
 public:
-	ATMainShotTower();
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	class UTShotTowerState* ShotTowerStateComp;
 	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ATMainBullet> BulletClass;
-	UPROPERTY(EditAnywhere)
-	FTShotTower ShotTowerData;
+
 	
 private:
 	FTimerHandle FireTimerHandle;
 
 
 public:
+	
+	ATMainShotTower();
 	/*
 	 * 继承接口
 	 */
@@ -39,11 +42,13 @@ public:
 	 * UE 自带
 	 */
 	virtual void OnConstruction(const FTransform& Transform) override;
-	
+	void UpdateShotRate(float ShotRate);
+
 private:
 	virtual void Fire() override;
 	virtual void OnDestory() override;
 
 	virtual void TargetInRange() override;
 	virtual void NoTargetInRange() override;
+	virtual void GetExp(int Exp) override;
 };

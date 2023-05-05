@@ -52,22 +52,6 @@ void ATManBase::UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* Ow
 	}
 }
 
-void ATManBase::DestorySelf()
-{
-	UE_LOG(LogTemp,Log,TEXT("Destory Man"));
-	this->Destroy();
-}
-
-void ATManBase::AddCoins()
-{
-	UE_LOG(LogTemp,Log,TEXT("Destory Man AddCoins"));
-	auto TPlayerControl = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
-	if( TPlayerControl)
-	{
-		TPlayerControl->TPlayerState->AddCoins(ManStateAndBuffer->ManState.Coins);
-	}
-}
-
 // Called when the game starts or when spawned
 void ATManBase::BeginPlay()
 {
@@ -78,9 +62,6 @@ void ATManBase::BeginPlay()
 	// 绑定事件
 	ManStateAndBuffer->OnHealthChanged.AddDynamic(this, &ATManBase::UpdateHealthBar);
 
-	// 注意顺序 被销毁后不再执行
-	ManStateAndBuffer->OnDead.AddDynamic(this,&ATManBase::AddCoins);
-	ManStateAndBuffer->OnDead.AddDynamic(this,&ATManBase::DestorySelf);
 }
 
 // Called every frame
@@ -111,7 +92,8 @@ void ATManBase::OnConstruction(const FTransform& Transform)
 float ATManBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
-	ManStateAndBuffer->ApplyHealthChange(DamageCauser,-DamageAmount);
+	// DamageCauser->GetOwner() 即获取发射子弹的塔
+	ManStateAndBuffer->ApplyHealthChange(DamageCauser->GetOwner(),-DamageAmount);
 
 	return DamageAmount;
 }

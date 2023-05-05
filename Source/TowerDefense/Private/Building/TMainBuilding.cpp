@@ -50,6 +50,10 @@ void ATMainBuilding::OnHovered(bool bHovered)
 	
 }
 
+void ATMainBuilding::OnSelected(bool bSelected)
+{
+}
+
 void ATMainBuilding::ToggleBuildingMode(bool bBuildingMode)
 {
 }
