@@ -3,8 +3,11 @@
 
 #include "Building/Tower/TMainBeamTower.h"
 
+#include "Component/ActorComp/TBeamTowerState.h"
+
 ATMainBeamTower::ATMainBeamTower()
 {
+	BeamTowerStateComp = CreateDefaultSubobject<UTBeamTowerState>(TEXT("BeamTowerStateComp"));
 }
 
 void ATMainBeamTower::OnConstruct(ATMainAttachBase* AttachBase)
@@ -25,6 +28,20 @@ void ATMainBeamTower::OnConstruction(const FTransform& Transform)
 	// 动态加载数据
 	// ShotTowerData = TDataTableManager::GetInstance()->GetShotTowerData(Name);
 	// BulletClass = ShotTowerData.Bullet;
+	BeamTowerStateComp->Init(Name);
+}
+
+void ATMainBeamTower::UpdateBeamDamage(const float NewDamage)
+{
+	if( LaserBeam)
+	{
+		LaserBeam->SetDamage(NewDamage);
+	}
+}
+
+int32 ATMainBeamTower::GetCostCoins()
+{
+	return BeamTowerStateComp->GetCostCoins();
 }
 
 void ATMainBeamTower::Fire()
@@ -42,9 +59,12 @@ void ATMainBeamTower::Fire()
 	}
 	if( !LaserBeam && IsValid(BeamClass))
 	{
-		LaserBeam = GetWorld()->SpawnActor<ATLaserBeam>(BeamClass,BuildingMesh->GetSocketTransform(TEXT("BulletSocket")));
+		FActorSpawnParameters ActorSpawnParameters;
+		ActorSpawnParameters.Owner = this;
+		
+		LaserBeam = GetWorld()->SpawnActor<ATLaserBeam>(BeamClass,BuildingMesh->GetSocketTransform(TEXT("BulletSocket")),ActorSpawnParameters);
 	}
-	LaserBeam->Init(TargetMan);
+	LaserBeam->Init(TargetMan,BeamTowerStateComp->CurrentDamage);
 
 }
 
@@ -63,6 +83,14 @@ void ATMainBeamTower::TargetInRange()
 void ATMainBeamTower::NoTargetInRange()
 {
 	Super::NoTargetInRange();
-	LaserBeam->Destroy();
-	LaserBeam = nullptr;
+	if( LaserBeam)
+	{
+		LaserBeam->Destroy();
+		LaserBeam = nullptr;
+	}
+}
+void ATMainBeamTower::GetExp(int Exp)
+{
+	// Super::GetExp();
+	BeamTowerStateComp->GetExp(Exp);
 }

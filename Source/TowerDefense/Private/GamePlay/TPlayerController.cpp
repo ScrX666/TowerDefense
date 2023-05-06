@@ -5,6 +5,9 @@
 
 #include "Building/TMainAttachBase.h"
 #include "Building/TMainBuilding.h"
+#include "Building/Tower/TMainBeamTower.h"
+#include "Building/Tower/TMainShotTower.h"
+#include "Building/Tower/TMainTower.h"
 #include "Component/ActorComp/TUIManagerComponent.h"
 #include "Components/DecalComponent.h"
 #include "GamePlay/TPlayerState.h"
@@ -42,15 +45,15 @@ void ATPlayerController::MouseClickDown()
 		// 建造模式
 		if( BuildingRefer != nullptr)
 		{
-			if( TPlayerState && TPlayerState->CoinsEnough(10.0f))
+			if( TPlayerState && TPlayerState->CoinsEnough(BuildingRefer->GetCostCoins()))
 			{
 				if( CanConstruct)
 				{
 					auto Building = GetWorld()->SpawnActor<ATMainBuilding>(BuildingClass,BuildingRefer->GetTransform());
-					Building->ToggleBuildingMode(false);
+					Building->OnSelected(false);
 					AttachBase->OnConstructAttachBuilding(Building);
 					Building->OnConstruct(AttachBase);
-					TPlayerState->RemoveCoins(10.0f);
+					TPlayerState->RemoveCoins(Building->GetCostCoins());
 				}
 				else
 				{
@@ -78,7 +81,10 @@ void ATPlayerController::MouseClickDown()
 		{
 			CursorHitBuilding->OnSelected(true);
 			SelectedBuilding = CursorHitBuilding;
-			UIManagerComponent->PushUIState(TEXT("ShotTowerInfo"));
+			if( CursorHitBuilding->IsA<ATMainShotTower>())
+				UIManagerComponent->PushUIState(TEXT("ShotTowerInfo"));
+			if( CursorHitBuilding->IsA<ATMainBeamTower>())
+				UIManagerComponent->PushUIState(TEXT("BeamTowerInfo"));
 		}
 		else
 		{
@@ -186,7 +192,7 @@ void ATPlayerController::BuildingModeOff()
 void ATPlayerController::BuildingModeOn()
 {
 	BuildingRefer = GetWorld()->SpawnActor<ATMainBuilding>(BuildingClass, CursorLocation,FRotator::ZeroRotator);
-	BuildingRefer->ToggleBuildingMode(BuildingMode == EBuildingMode::E_InBuildMode);
+	BuildingRefer->OnSelected(BuildingMode == EBuildingMode::E_InBuildMode);
 	DecalComponent->SetHiddenInGame(true);
 	if( BuildingRefer->Implements<UTBuildingInterface>())
 	{

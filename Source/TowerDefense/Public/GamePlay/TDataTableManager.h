@@ -6,6 +6,7 @@
 
 #include "CoreMinimal.h"
 #include "Structure/FAISpawnStruct.h"
+#include "Structure/FTBeamTower.h"
 #include "Structure/FTManState.h"
 #include "Structure/FTTower.h"
 
@@ -26,6 +27,7 @@ public:
 	
 private:
 	UDataTable* ShotTowerTable;
+	UDataTable* BeamTowerTable;
 	UDataTable* TowerTable;
 	UDataTable* ManStateTable;
 	UDataTable* AISpawnTable;
@@ -35,6 +37,10 @@ public:
 	 * 获取射击塔的信息
 	 */
 	FTShotTower GetShotTowerData(FName Name);
+	/*
+	 * 获取激光塔的信息
+	 */
+	FTBeamTower GetBeamTowerData(FName Name);
 	/*
 	 * 获取塔的信息
 	 */

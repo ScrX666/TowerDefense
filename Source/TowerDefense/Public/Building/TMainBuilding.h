@@ -32,8 +32,7 @@ public:
 	virtual void OnDestory() override;
 	virtual void OnHovered(bool bHovered) override;
 	virtual void OnSelected(bool bSelected);
-	void ToggleBuildingMode(bool bBuildingMode);
-
+	virtual int32 GetCostCoins();
 	/*
 	 * 根据状态改变材质
 	 */

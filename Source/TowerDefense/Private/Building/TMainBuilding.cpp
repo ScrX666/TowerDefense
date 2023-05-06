@@ -54,8 +54,9 @@ void ATMainBuilding::OnSelected(bool bSelected)
 {
 }
 
-void ATMainBuilding::ToggleBuildingMode(bool bBuildingMode)
+int32 ATMainBuilding::GetCostCoins()
 {
+	return 100;
 }
 
 void ATMainBuilding::CanConstructBuilding(bool bCanConstructBuild)

@@ -35,6 +35,8 @@ private:
 	ATManBase* TargetMan;
 
 	FTimerHandle DamageTimerHandle;
+
+	float Damage;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -45,7 +47,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void OnConstruction(const FTransform& Transform) override;
-	void Init(ATManBase* Target);
+	void Init(ATManBase* Target, float InitDamage);
 	void DoDamge();
-	
+
+	void SetDamage(float NewDamage);
 };

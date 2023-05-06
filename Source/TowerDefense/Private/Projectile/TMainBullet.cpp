@@ -19,7 +19,7 @@ ATMainBullet::ATMainBullet()
 	SetRootComponent(Mesh);
 	SphereComponent->SetupAttachment(RootComponent);
 	SphereComponent->SetGenerateOverlapEvents(true);
-
+	SphereComponent->SetCollisionProfileName(TEXT("Bullet"));
 	
 	// ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMoveComp"));
 	// ProjectileMovementComponent->MaxSpeed = 1000.0f;
@@ -88,6 +88,12 @@ void ATMainBullet::BulletMove(float DeltaTime)
 void ATMainBullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if( !TargetMan || TargetMan->IsPendingKill())
+	{
+		this->Destroy();
+	}
+	
 	BulletMove(DeltaTime);
 }
 

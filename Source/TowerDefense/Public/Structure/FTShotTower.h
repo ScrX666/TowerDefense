@@ -22,7 +22,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	float ShotRate = 2.0f;
 	UPROPERTY(EditDefaultsOnly)
-	float ShotRateUpGrade = 1.5f;
+	float ShotRateUpGrade = 0.5f;
 	
 	UPROPERTY(EditDefaultsOnly)
 	USoundBase* ShotSound;
@@ -30,18 +30,20 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	float AttackRange = 100.0f;
 	UPROPERTY(EditDefaultsOnly)
-	float AttackRangeUpGrade = 1.5f;
+	float AttackRangeUpGrade = 0.5f;
 	
 	UPROPERTY(EditDefaultsOnly)
 	float BaseDamage = 10.0f;
 	UPROPERTY(EditDefaultsOnly)
-	float DamageUpGrade = 1.5f;
+	float DamageUpGrade = 0.5f;
 
 	UPROPERTY(EditDefaultsOnly)
 	float BulletSpeed = 200.0f;
 	UPROPERTY(EditDefaultsOnly)
-	float BulletSpeedUpGrade = 1.5f;
+	float BulletSpeedUpGrade = 0.5f;
 	
 	UPROPERTY(EditDefaultsOnly)
 	int32 LevelUpExp = 100;
+	UPROPERTY(EditDefaultsOnly)
+	int32 CostCoins = 100;
 };

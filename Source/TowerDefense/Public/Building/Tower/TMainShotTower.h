@@ -43,7 +43,8 @@ public:
 	 */
 	virtual void OnConstruction(const FTransform& Transform) override;
 	void UpdateShotRate(float ShotRate);
-
+	virtual int32 GetCostCoins() override;
+	
 private:
 	virtual void Fire() override;
 	virtual void OnDestory() override;

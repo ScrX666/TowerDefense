@@ -16,19 +16,21 @@ struct FTBeamTower : public FTableRowBase
 	GENERATED_USTRUCT_BODY()
 public:
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ATLaserBeam> Bullet;
+	USoundBase* ShotSound;
 	UPROPERTY(EditDefaultsOnly)
 	float BaseDamage = 2.0f;
 	UPROPERTY(EditDefaultsOnly)
-	float DamageUpGrade = 1.5f;
+	float DamageUpGrade = 0.5f;
 	
 	// UPROPERTY(EditDefaultsOnly)
 	// USoundBase* ShotSound;
 	UPROPERTY(EditDefaultsOnly)
 	float AttackRange = 100.0f;
 	UPROPERTY(EditDefaultsOnly)
-	float AttackRangeUpGrade = 1.5f;
+	float AttackRangeUpGrade = 0.5f;
 
 	UPROPERTY(EditDefaultsOnly)
 	int32 LevelUpExp = 100;
+	UPROPERTY(EditDefaultsOnly)
+	int32 CostCoins = 100;
 };

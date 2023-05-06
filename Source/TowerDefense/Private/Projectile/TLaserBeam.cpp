@@ -18,6 +18,7 @@ ATLaserBeam::ATLaserBeam()
 	AudioComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComp"));
 	NiagaraComp->SetupAttachment(RootComponent);
 	AudioComp->SetupAttachment(RootComponent);
+	Damage = 0.0f;
 }
 
 // Called when the game starts or when spawned
@@ -50,16 +51,23 @@ void ATLaserBeam::OnConstruction(const FTransform& Transform)
 	AudioComp->SetSound(Sound);
 }
 
-void ATLaserBeam::Init(ATManBase* Target)
+void ATLaserBeam::Init(ATManBase* Target, float InitDamage)
 {
 	UE_LOG(LogTemp,Log,TEXT("LaserBeam Change Target"));
 	TargetMan = Target;
 	GetWorld()->GetTimerManager().ClearTimer(DamageTimerHandle);
 	GetWorld()->GetTimerManager().SetTimer(DamageTimerHandle,this,&ATLaserBeam::DoDamge,0.1f,true);
+	SetDamage(InitDamage);
 }
+
 
 void ATLaserBeam::DoDamge()
 {
-	UGameplayStatics::ApplyDamage(TargetMan,2.0f, UGameplayStatics::GetPlayerController(this,0),this,UDamageType::StaticClass());
+	UGameplayStatics::ApplyDamage(TargetMan,Damage, UGameplayStatics::GetPlayerController(this,0),this,UDamageType::StaticClass());
+}
+
+void ATLaserBeam::SetDamage(float NewDamage)
+{
+	Damage = NewDamage;
 }
 

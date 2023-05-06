@@ -106,6 +106,7 @@ void ATSplineMapActor::SpawnAI()
 
 void ATSplineMapActor::SpawnWave()
 {
+	UE_LOG(LogTemp,Log,TEXT("SpawnWave"));
 	// && CurrentWave < TotalWaveCount
 	// 如果当前已生成的敌人数量未达到本波敌人数量的上限
 	if (CurrentEnemyCount < FaiSpawnStruct.SpawnAINums && CurrentWave != 0)
@@ -139,7 +140,11 @@ void ATSplineMapActor::SpawnWave()
 		}
 		else
 		{
+			UE_LOG(LogTemp,Log,TEXT("bFinishSpawn CurrentWave %d GetAISpawnStructNum %d"),CurrentWave,TDataTableManager::GetInstance()->GetAISpawnStructNum());
 			bFinishSpawn = true;
+			auto TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
+			if(TDGameMode)
+			TDGameMode->OnGameEnd.Broadcast(true);
 		}
 		
 	}

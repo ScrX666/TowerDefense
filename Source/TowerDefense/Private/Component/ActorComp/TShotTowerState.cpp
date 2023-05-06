@@ -45,7 +45,7 @@ void UTShotTowerState::UpdateDamage(const int32 NewLevel)
 	float AddDamage = 0.0f;
 	for( int i = 0; i < NewLevel; i++)
 	{
-		AddDamage += (ShotTowerData.DamageUpGrade - 1.0f) * ShotTowerData.BaseDamage;
+		AddDamage += ShotTowerData.DamageUpGrade * ShotTowerData.BaseDamage;
 	}
 	CurrentDamage = ShotTowerData.BaseDamage + AddDamage;
 }
@@ -55,7 +55,7 @@ void UTShotTowerState::UpdateAttackRange(const int32 NewLevel)
 	float AddAttackRange = 0.0f;
 	for( int i = 0; i < NewLevel; i++)
 	{
-		AddAttackRange += (ShotTowerData.AttackRangeUpGrade - 1.0f) * ShotTowerData.AttackRange;
+		AddAttackRange += ShotTowerData.AttackRangeUpGrade * ShotTowerData.AttackRange;
 	}
 	CurrentAttackRange = ShotTowerData.AttackRange + AddAttackRange;
 	ATMainTower* Tower = Cast<ATMainTower>(GetOwner());
@@ -70,7 +70,7 @@ void UTShotTowerState::UpdateBulletSpeed(const int32 NewLevel)
 	float AddBulletSpeed = 0.0f;
 	for( int i = 0; i < NewLevel; i++)
 	{
-		AddBulletSpeed += (ShotTowerData.BulletSpeedUpGrade - 1.0f) * ShotTowerData.BulletSpeed;
+		AddBulletSpeed += ShotTowerData.BulletSpeedUpGrade * ShotTowerData.BulletSpeed;
 	}
 	BulletSpeed = ShotTowerData.BulletSpeed + AddBulletSpeed;
 }
@@ -80,9 +80,10 @@ void UTShotTowerState::UpdateShotRate(const int32 NewLevel)
 	float AddShotRate = 0.0f;
 	for( int i = 0; i < NewLevel; i++)
 	{
-		AddShotRate += (ShotTowerData.ShotRateUpGrade - 1.0f) * ShotTowerData.ShotRate;
+		AddShotRate += ShotTowerData.ShotRateUpGrade * ShotTowerData.ShotRate;
 	}
-	ShotRate = ShotTowerData.ShotRate + AddShotRate;
+	ShotRate = ShotTowerData.ShotRate - AddShotRate;
+	if( ShotRate <= 0.1f) ShotRate = 0.1f;
 	ATMainShotTower* Tower = Cast<ATMainShotTower>(GetOwner());
 	if( Tower)
 	{
@@ -117,6 +118,7 @@ void UTShotTowerState::GetExp(const int Exp)
 	{
 		OnLevelUp.Broadcast(CurrentLevel + 1);
 	}
+	OnGetExp.Broadcast(this);
 }
 
 TSubclassOf<ATMainBullet> UTShotTowerState::GetBulletClass() const
@@ -127,5 +129,15 @@ TSubclassOf<ATMainBullet> UTShotTowerState::GetBulletClass() const
 USoundBase* UTShotTowerState::GetSoundClass() const
 {
 	return ShotTowerData.ShotSound;
+}
+
+int32 UTShotTowerState::GetLevelUpExp() const
+{
+	return ShotTowerData.LevelUpExp;
+}
+
+int32 UTShotTowerState::GetCostCoins() const
+{
+	return ShotTowerData.CostCoins;
 }
 

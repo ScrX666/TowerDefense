@@ -27,7 +27,7 @@ void ATMainShotTower::BeginPlay()
 void ATMainShotTower::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
-
+	if( !this || !ShotTowerStateComp) return ;
 	// 动态加载数据
 	ShotTowerStateComp->Init(Name);
 	BulletClass = ShotTowerStateComp->GetBulletClass();
@@ -35,11 +35,17 @@ void ATMainShotTower::OnConstruction(const FTransform& Transform)
 
 void ATMainShotTower::UpdateShotRate(float ShotRate)
 {
+	UE_LOG(LogTemp,Log,TEXT("UpdateShotRate %f"),ShotRate);
 	if( TargetMan)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
-		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,ShotTowerStateComp->ShotRate, true);
+		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,ShotRate, true);
 	}
+}
+
+int32 ATMainShotTower::GetCostCoins()
+{
+	return ShotTowerStateComp->GetCostCoins();
 }
 
 void ATMainShotTower::Fire()

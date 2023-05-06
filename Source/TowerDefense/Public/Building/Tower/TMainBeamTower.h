@@ -7,6 +7,7 @@
 #include "Structure/FTBeamTower.h"
 #include "TMainBeamTower.generated.h"
 
+class UTBeamTowerState;
 /**
  * 
  */
@@ -23,7 +24,8 @@ public:
 	FTBeamTower ShotTowerData;
 	UPROPERTY(VisibleAnywhere)
 	ATLaserBeam* LaserBeam;
-
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	UTBeamTowerState* BeamTowerStateComp;
 	
 private:
 	FTimerHandle FireTimerHandle;
@@ -35,12 +37,17 @@ public:
 	 */
 	virtual void OnConstruct(ATMainAttachBase* AttachBase) override;
 	virtual void BeginPlay() override;
-
+	
 
 	/*
 	 * UE 自带
 	 */
 	virtual void OnConstruction(const FTransform& Transform) override;
+
+	UFUNCTION()
+	void UpdateBeamDamage(float NewDamage);
+
+	virtual int32 GetCostCoins() override;
 	
 private:
 	virtual void Fire() override;
@@ -48,4 +55,5 @@ private:
 
 	virtual void TargetInRange() override;
 	virtual void NoTargetInRange() override;
+	virtual void GetExp(int Exp) override;
 };

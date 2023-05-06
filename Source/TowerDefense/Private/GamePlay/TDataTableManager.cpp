@@ -44,6 +44,22 @@ FTShotTower TDataTableManager::GetShotTowerData(FName Name)
 	return *Res;
 }
 
+FTBeamTower TDataTableManager::GetBeamTowerData(FName Name)
+{
+	if( BeamTowerTable == nullptr)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("BeamTowerTable NULL"));
+		return FTBeamTower();
+	}
+	const FString ContextStr;
+	auto Res = BeamTowerTable->FindRow<FTBeamTower>(Name,ContextStr);
+	if( Res == nullptr)
+	{
+		return FTBeamTower();
+	}
+	return *Res;
+}
+
 FTTower TDataTableManager::GetTowerData(FName Name)
 {
 	if( TowerTable == nullptr)
@@ -131,9 +147,11 @@ int TDataTableManager::GetAISpawnStructNum()
 TDataTableManager::TDataTableManager()
 {
 	ShotTowerTable = LoadObject<UDataTable>(nullptr, UTF8_TO_TCHAR("/Game/BluePrint/Table/T_ShotTower"));
+	BeamTowerTable = LoadObject<UDataTable>(nullptr, UTF8_TO_TCHAR("/Game/BluePrint/Table/T_BeamTower"));
 	TowerTable = LoadObject<UDataTable>(nullptr, UTF8_TO_TCHAR("/Game/BluePrint/Table/T_Tower"));
 	ManStateTable = LoadObject<UDataTable>(nullptr, UTF8_TO_TCHAR("/Game/BluePrint/Table/T_ManState"));
 	AISpawnTable = LoadObject<UDataTable>(nullptr, UTF8_TO_TCHAR("/Game/BluePrint/Table/T_AISpawn"));
+	AISpawnTableLenth = 0;
 	// TODO: 测试是否多次构造
 	UE_LOG(LogTemp, Log,TEXT("Construct DataTableManager"));
 }

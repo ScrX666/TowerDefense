@@ -8,6 +8,7 @@
 #include "TShotTowerState.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLevelUp,int32,NewLevel);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShotTowerGetExp,UTShotTowerState*,ShotTowerStateComp);
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TOWERDEFENSE_API UTShotTowerState : public UActorComponent
 {
@@ -26,6 +27,11 @@ public:
 	void GetExp(const int Exp);
 	TSubclassOf<ATMainBullet> GetBulletClass() const;
 	USoundBase* GetSoundClass() const;
+
+	UFUNCTION(BlueprintPure)
+	int32 GetLevelUpExp() const;
+	UFUNCTION(BlueprintPure)
+	int32 GetCostCoins() const;
 	
 protected:
 	// Called when the game starts
@@ -46,6 +52,8 @@ private:
 public:
 	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
 	FOnLevelUp OnLevelUp;
+	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
+	FOnShotTowerGetExp OnGetExp;
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	int32 CurrentLevel = 0;
