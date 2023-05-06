@@ -9,12 +9,12 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnHealthChanged, AActor*, InstigatorActor, UTManStateAndBuffer*, OwningComp, float, NewHealth, float, Delta);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDead);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDead, AActor*, InstigatorActor);
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TOWERDEFENSE_API UTManStateAndBuffer : public UActorComponent
 {
 	GENERATED_BODY()
-
+	
 public:	
 	// Sets default values for this component's properties
 	UTManStateAndBuffer();
@@ -24,6 +24,8 @@ public:
 	int CurrentHealth;
 	// TODO: 添加Buffer
 protected:
+	UFUNCTION()
+	void DestorySelf(AActor* InstigatorActor);
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
@@ -32,6 +34,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 	void ApplyHealthChange(AActor* Instigator, int Delta);
+
+	UFUNCTION()
+	void AddCoinsAndExp(AActor* InstigatorActor);
 
 	UPROPERTY(BlueprintAssignable,BlueprintReadOnly)
 	FOnHealthChanged OnHealthChanged;

@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerController.h"
 #include "TPlayerController.generated.h"
 
+class UTUIManagerComponent;
 class ATPlayerState;
 enum class EBuildingMode : uint8;
 class ATMainBuilding;
@@ -19,9 +20,12 @@ class TOWERDEFENSE_API ATPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
-	ATPlayerController();
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	ATPlayerState* TPlayerState;
+	UPROPERTY(VisibleAnywhere)
+	UTUIManagerComponent* UIManagerComponent;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	ATMainBuilding* SelectedBuilding; // 选中的建筑
 
 private:
 	EBuildingMode BuildingMode = EBuildingMode::E_NotInBuildMode;
@@ -42,6 +46,9 @@ private:
 	bool CanConstruct;
 	
 public:
+	ATPlayerController();
+	virtual void BeginPlay() override;
+	virtual void SetupInputComponent() override;
 	/*
 	 * 设置建造模式（拿起，放下）
 	 */
@@ -53,8 +60,6 @@ public:
 	UFUNCTION()
 	void MouseMove(float Value);
 
-	virtual void BeginPlay() override;
-	virtual void SetupInputComponent() override;
 private:
 	/*
 	 * 放下

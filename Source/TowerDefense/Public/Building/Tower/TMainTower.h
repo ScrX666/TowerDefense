@@ -18,26 +18,28 @@ public:
 	ATMainTower();
 	UPROPERTY()
 	class ATManBase* TargetMan;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	class USceneComponent* AttackRangeComps;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	class UStaticMeshComponent* AttackRangeMesh;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	class USphereComponent* AttackRangeSphere;
 	UPROPERTY(EditDefaultsOnly)
 	FName Name;
 	
-	UPROPERTY(VisibleAnywhere)
-	FTTower TowerData;
+	// UPROPERTY(VisibleAnywhere)
+	// FTTower TowerData;
 protected:
 	
 
 private:
-
+	float AttackRange;
 
 
 public:
 	virtual void Fire();
+	virtual void OnSelected(bool bSelected) override;
+	
 	// 接口
 	virtual void OnConstruct(ATMainAttachBase* AttachBase) override;
 	virtual void BeginPlay() override;
@@ -50,10 +52,13 @@ public:
 	UFUNCTION()
 	void AttackRangeEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	void UpdateAttackRange(const float NewRange);
+	
+	virtual void GetExp(int Exp);
+	
 protected:
 	virtual void TargetInRange();
 	virtual void NoTargetInRange();
-	
 private:
 		
 	

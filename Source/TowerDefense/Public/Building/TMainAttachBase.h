@@ -24,7 +24,7 @@ public:
 	UArrowComponent* Arrow;
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* AttachedBuildingPos;
-	
+	UPROPERTY(VisibleAnywhere)
 	ATMainBuilding* AttachedBuilding;
 	
 protected:

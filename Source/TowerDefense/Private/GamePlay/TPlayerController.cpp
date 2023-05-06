@@ -5,6 +5,7 @@
 
 #include "Building/TMainAttachBase.h"
 #include "Building/TMainBuilding.h"
+#include "Component/ActorComp/TUIManagerComponent.h"
 #include "Components/DecalComponent.h"
 #include "GamePlay/TPlayerState.h"
 #include "Kismet/GameplayStatics.h"
@@ -14,6 +15,7 @@ ATPlayerController::ATPlayerController() :
 BuildingMode(EBuildingMode::E_NotInBuildMode), BuildingRefer(nullptr), CursorHitBuilding(nullptr)
 {
 	this->SetShowMouseCursor(true);
+	UIManagerComponent = CreateDefaultSubobject<UTUIManagerComponent>(TEXT("UIManager"));
 }
 
 void ATPlayerController::SetBuildingMode(TSubclassOf<ATMainBuilding> BuildingCla)
@@ -65,7 +67,23 @@ void ATPlayerController::MouseClickDown()
 	else
 	{
 		// 非建造模式
+		if(SelectedBuilding)
+		{
+			SelectedBuilding->OnSelected(false);
+			UIManagerComponent->PopState();
+		}
+
 		
+		if( CursorHitBuilding)
+		{
+			CursorHitBuilding->OnSelected(true);
+			SelectedBuilding = CursorHitBuilding;
+			UIManagerComponent->PushUIState(TEXT("ShotTowerInfo"));
+		}
+		else
+		{
+			SelectedBuilding = nullptr;
+		}
 	}
 }
 
@@ -131,6 +149,8 @@ void ATPlayerController::MouseMove(float Value)
 void ATPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UIManagerComponent->PushUIState(TEXT("TowerDefense"));
 	//TODO 用事件替换
 	EnableInput(this);
 	TPlayerState = GetPlayerState<ATPlayerState>();

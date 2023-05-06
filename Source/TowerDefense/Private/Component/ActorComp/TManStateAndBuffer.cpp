@@ -3,6 +3,10 @@
 
 #include "Component/ActorComp/TManStateAndBuffer.h"
 
+#include "Building/Tower/TMainTower.h"
+#include "GamePlay/TPlayerController.h"
+#include "GamePlay/TPlayerState.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values for this component's properties
@@ -16,6 +20,11 @@ UTManStateAndBuffer::UTManStateAndBuffer()
 }
 
 
+void UTManStateAndBuffer::DestorySelf(AActor* InstigatorActor)
+{
+	GetOwner()->Destroy();
+}
+
 // Called when the game starts
 void UTManStateAndBuffer::BeginPlay()
 {
@@ -23,6 +32,9 @@ void UTManStateAndBuffer::BeginPlay()
 
 	// ...
 	
+	// 注意顺序 被销毁后不再执行
+	OnDead.AddDynamic(this,&UTManStateAndBuffer::AddCoinsAndExp);
+	OnDead.AddDynamic(this,&UTManStateAndBuffer::DestorySelf);
 }
 
 
@@ -41,6 +53,23 @@ void UTManStateAndBuffer::ApplyHealthChange(AActor* Instigator,int Delta)
 	OnHealthChanged.Broadcast(Instigator,this, CurrentHealth,Delta);
 	//TODO: 添加死亡事件
 	if( CurrentHealth == 0)
-		OnDead.Broadcast();
+		OnDead.Broadcast(Instigator);
 }
 
+void UTManStateAndBuffer::AddCoinsAndExp(AActor* InstigatorActor)
+{
+	UE_LOG(LogTemp,Log,TEXT("Destory Man AddCoins"));
+	auto TPlayerControl = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
+
+	// Get Coins
+	if( TPlayerControl)
+	{
+		TPlayerControl->TPlayerState->AddCoins(ManState.Coins);
+	}
+
+	// Get Exp
+	if( InstigatorActor && InstigatorActor->IsA<ATMainTower>())
+	{
+		Cast<ATMainTower>(InstigatorActor)->GetExp(ManState.Exp);
+	}
+}

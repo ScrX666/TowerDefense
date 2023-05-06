@@ -31,7 +31,7 @@ public:
 	virtual void OnConstruct(ATMainAttachBase* AttachBase) override;
 	virtual void OnDestory() override;
 	virtual void OnHovered(bool bHovered) override;
-	
+	virtual void OnSelected(bool bSelected);
 	void ToggleBuildingMode(bool bBuildingMode);
 
 	/*

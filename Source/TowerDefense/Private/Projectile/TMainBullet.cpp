@@ -16,21 +16,22 @@ ATMainBullet::ATMainBullet()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
-	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMoveComp"));
 	SetRootComponent(Mesh);
 	SphereComponent->SetupAttachment(RootComponent);
 	SphereComponent->SetGenerateOverlapEvents(true);
 
-	ProjectileMovementComponent->MaxSpeed = 1000.0f;
-	ProjectileMovementComponent->InitialSpeed = 0.0f;
-	ProjectileMovementComponent->bIsHomingProjectile = true;
-	ProjectileMovementComponent->HomingAccelerationMagnitude = 1000.0f;
-	ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
-	ProjectileMovementComponent->Velocity = FVector::ZeroVector;
-    ProjectileMovementComponent->bRotationFollowsVelocity = true;
+	
+	// ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMoveComp"));
+	// ProjectileMovementComponent->MaxSpeed = 1000.0f;
+	// ProjectileMovementComponent->InitialSpeed = 0.0f;
+	// ProjectileMovementComponent->bIsHomingProjectile = true;
+	// ProjectileMovementComponent->HomingAccelerationMagnitude = 1000.0f;
+	// ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
+	// ProjectileMovementComponent->Velocity = FVector::ZeroVector;
+	//ProjectileMovementComponent->bRotationFollowsVelocity = true;
 	
 	
-	InitialLifeSpan = 2.0f;
+	// InitialLifeSpan = 2.0f;
 
 	
 }
@@ -40,7 +41,7 @@ void ATMainBullet::SphereOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 {
 	
 	// UE_LOG(LogTemp,Log,TEXT("Sphere Overlap"));
-	if( OtherActor->IsA<ATManBase>())
+	if( OtherActor->IsA<ATManBase>() && OtherActor == TargetMan)
 	{
 		UE_LOG(LogTemp,Log,TEXT("Sphere Overlap Cast Success"));
 		// if(OtherActor->Destroy())
@@ -70,15 +71,29 @@ void ATMainBullet::Destroyed()
 	SphereComponent->OnComponentBeginOverlap.Clear();
 }
 
+/*
+ * 手动模拟移动
+ */
+void ATMainBullet::BulletMove(float DeltaTime)
+{
+	if( TargetMan)
+	{
+		FVector Direction = TargetMan->GetActorLocation() - this->GetActorLocation();
+		Direction.Normalize();
+		this->SetActorLocation(Direction * Speed * DeltaTime + this->GetActorLocation());
+	}
+}
+
 // Called every frame
 void ATMainBullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	BulletMove(DeltaTime);
 }
 
-void ATMainBullet::Init(ATManBase* Target)
+void ATMainBullet::Init(ATManBase* InitTarget, float InitSpeed, int32 InitDamage)
 {
-	ProjectileMovementComponent->HomingTargetComponent = Target->GetRootComponent();
+	TargetMan = InitTarget;
+	Speed = InitSpeed;
+	Damage = InitDamage;
 }
-

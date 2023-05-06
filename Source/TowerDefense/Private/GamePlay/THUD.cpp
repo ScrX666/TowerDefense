@@ -58,6 +58,7 @@ void ATHUD::Exit()
 
 void ATHUD::InitLevel(int LevelIndex)
 {
+	return ;
 	if( LevelIndex == 1)
 	{
 		TowerDefense = CreateWidget(GetWorld(), TowerDefenseClass);

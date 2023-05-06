@@ -15,14 +15,24 @@ class TOWERDEFENSE_API ATMainBullet : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
-	ATMainBullet();
 
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* Mesh;
 	UPROPERTY(VisibleAnywhere)
 	class USphereComponent* SphereComponent;
+
+private:
 	UPROPERTY(VisibleAnywhere)
-	class UProjectileMovementComponent* ProjectileMovementComponent;
+	ATManBase* TargetMan;
+
+	float Speed = 100.0f;
+	int32 Damage = 50.0f;
+	
+public:
+	ATMainBullet();
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+	virtual void Init(ATManBase* InitTarget, float InitSpeed, int32 InitDamage);
 	
 protected:
 	UFUNCTION()
@@ -31,9 +41,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	virtual void Init(ATManBase* Target);
+private:
+	/*
+	 * 手动模拟移动
+	 */
+	void BulletMove(float DeltaTime);
 };

@@ -21,4 +21,6 @@ struct FTManState : public FTableRowBase
 	int MaxHealth;
 	UPROPERTY(EditDefaultsOnly)
 	int Coins;
+	UPROPERTY(EditDefaultsOnly)
+	int Exp;
 };
