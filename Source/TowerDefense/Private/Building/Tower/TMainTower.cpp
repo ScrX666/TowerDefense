@@ -59,7 +59,7 @@ void ATMainTower::UpdateAttackRange(const float NewRange)
 {
 	AttackRange = NewRange;
 	AttackRangeSphere->SetSphereRadius(NewRange);
-	AttackRangeMesh->SetWorldScale3D(FVector(AttackRange / 200.0f));
+	AttackRangeMesh->SetWorldScale3D(FVector(AttackRange / 200.0f,AttackRange / 200.0f,3));
 }
 
 
@@ -110,7 +110,7 @@ void ATMainTower::OnSelected(bool bSelected)
 		
 		AttackRangeMesh->SetVisibility(true);
 		// 动态设置攻击范围显示
-		AttackRangeMesh->SetWorldScale3D(FVector(AttackRange / 200.0f));
+		// AttackRangeMesh->SetWorldScale3D(FVector(AttackRange / 200.0f));
 	}
 	else
 	{
@@ -127,7 +127,8 @@ void ATMainTower::OnConstruct(ATMainAttachBase* AttachBase)
 		UE_LOG(LogTemp,Log,TEXT("AttachBase Null"));
 		AttackRangeMesh->SetVisibility(true);
 		// 动态设置攻击范围显示
-		AttackRangeMesh->SetWorldScale3D(FVector(AttackRange / 200.0f));
+		//AttackRangeMesh->SetWorldScale3D(FVector(AttackRange / 200.0f,AttackRange / 200.0f,1));
+		UpdateAttackRange(AttackRange);
 		return ;
 	}
 	else

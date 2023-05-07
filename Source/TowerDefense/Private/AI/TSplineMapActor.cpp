@@ -142,9 +142,9 @@ void ATSplineMapActor::SpawnWave()
 		{
 			UE_LOG(LogTemp,Log,TEXT("bFinishSpawn CurrentWave %d GetAISpawnStructNum %d"),CurrentWave,TDataTableManager::GetInstance()->GetAISpawnStructNum());
 			bFinishSpawn = true;
-			auto TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
-			if(TDGameMode)
-			TDGameMode->OnGameEnd.Broadcast(true);
+			// auto TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
+			// if(TDGameMode)
+			// TDGameMode->OnGameEnd.Broadcast(true);
 		}
 		
 	}
