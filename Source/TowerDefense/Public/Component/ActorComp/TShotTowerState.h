@@ -37,7 +37,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 private:
-	// 更新状态
+	// 更新状态 升级时调用
 	UFUNCTION()
 	void UpdateLevel(const int32 NewLevel);
 	UFUNCTION()
@@ -49,6 +49,10 @@ private:
 	UFUNCTION()
 	void UpdateShotRate(const int32 NewLevel);
 
+	// 更新状态
+	UFUNCTION()
+	void UpdateParallelAttackCount(const int32 NewCount);
+	
 public:
 	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
 	FOnLevelUp OnLevelUp;
@@ -67,6 +71,8 @@ public:
 	float BulletSpeed;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	float ShotRate;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	int32 ParallelAttackCount;
 	
 	
 private:

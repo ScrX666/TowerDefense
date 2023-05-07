@@ -4,11 +4,10 @@
 #include "Building/Tower/TMainTower.h"
 
 #include "Character/TManBase.h"
+#include "Component/ActorComp/Tower/TAttackHandleComponent.h"
 #include "Components/SphereComponent.h"
-#include "GamePlay/TDataTableManager.h"
 
 ATMainTower::ATMainTower()
-	:TargetMan(nullptr)
 {
 	AttackRangeComps = CreateDefaultSubobject<USceneComponent>(TEXT("AttackRangeComps"));
 	AttackRangeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("AttackRangeMesh"));
@@ -19,6 +18,8 @@ ATMainTower::ATMainTower()
 	AttackRangeSphere->SetupAttachment(AttackRangeComps);
 	AttackRangeSphere->SetGenerateOverlapEvents(true);
 
+	AttackHandleComponent = CreateDefaultSubobject<UTAttackHandleComponent>(TEXT("AttackHandleComp"));
+	
 }
 
 void ATMainTower::AttackRangeOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -27,9 +28,9 @@ void ATMainTower::AttackRangeOverlap(UPrimitiveComponent* OverlappedComponent, A
 	if( OtherActor != nullptr)
 	{
 		auto OthMan = Cast<ATManBase>(OtherActor);
-		if( OthMan != nullptr && !IsValid(TargetMan))
+		if( OthMan != nullptr && AttackHandleComponent->TargetIsFull() == false)
 		{
-			TargetMan = OthMan;
+			AttackHandleComponent->AddTarget(OthMan);
 			TargetInRange();
 		}
 	}
@@ -40,17 +41,34 @@ void ATMainTower::AttackRangeEndOverlap(UPrimitiveComponent* OverlappedComponent
 {
 	if( OtherActor->IsA<ATManBase>())
 	{
+		AttackHandleComponent->RemoveAttackTarget(Cast<ATManBase>(OtherActor));
+		
 		TArray<AActor*> ManBases;
 		GetOverlappingActors(ManBases, ATManBase::StaticClass());
 		if( ManBases.Num() == 0)
 		{
-			TargetMan = nullptr;
+			// TargetMan = nullptr;
 			NoTargetInRange();
 		}
 		else
 		{
-			TargetMan = Cast<ATManBase>(ManBases[0]);
-			TargetInRange();
+			// TargetMan = Cast<ATManBase>(ManBases[0]);
+
+			UE_LOG(LogTemp,Log,TEXT("AttackRangeEndOverlap Man NUM %d"),ManBases.Num());
+			UE_LOG(LogTemp,Log,TEXT("AttackHandleComponent->TargetIsFull %d"),AttackHandleComponent->TargetIsFull());
+			
+			
+			// 添加敌人，可能重复添加，所以循环判断
+			if( AttackHandleComponent->TargetIsFull() == false)
+			{
+				for( int i = 0; i < ManBases.Num(); i++)
+				{
+					if( AttackHandleComponent->AddTarget(Cast<ATManBase>(ManBases[i])))
+						break;
+				}
+			
+				TargetInRange();
+			}
 		}
 	}
 }

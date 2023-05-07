@@ -31,7 +31,8 @@ ATManBase::ATManBase()
 	HealthWidgetComponent->SetDrawSize(FVector2D(200.0f, 50.0f));
 
 	HealthBarWidget = LoadClass<UUserWidget>(nullptr,TEXT("/Game/UI/U_ManHealth.U_ManHealth_C"));
-	
+	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
+	HealthWidgetComponent->SetCollisionProfileName(TEXT("NoCollision"));
 }
 
 void ATManBase::UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* OwningComp, float NewHealth, float Delta)

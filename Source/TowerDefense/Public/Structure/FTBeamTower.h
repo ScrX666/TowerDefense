@@ -33,4 +33,6 @@ public:
 	int32 LevelUpExp = 100;
 	UPROPERTY(EditDefaultsOnly)
 	int32 CostCoins = 100;
+	UPROPERTY(EditDefaultsOnly)
+	int32 ParallelAttackCount = 1;
 };

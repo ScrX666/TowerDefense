@@ -14,13 +14,6 @@ class TOWERDEFENSE_API ATPlayer : public APawn
 public:
 	// Sets default values for this pawn's properties
 	ATPlayer();
-	
-	UPROPERTY(VisibleAnywhere)
-	class UCameraComponent* CameraComponent;
-	UPROPERTY(VisibleAnywhere)
-	class USphereComponent* SphereComponent;
-	UPROPERTY(VisibleAnywhere)
-	class USpringArmComponent* SpringArmComponent;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -31,5 +24,36 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+private:
+	/*
+	 * 摄像机放大缩小
+	 */
+	UFUNCTION()
+	void CameraZoom(float Value);
+	/*
+	 * 摄像机移动
+	 */
+	UFUNCTION()
+	void CameraMoveRight(float Value);
+	UFUNCTION()
+	void CameraMoveFront(float Value);
+	
+public:
+	UPROPERTY(VisibleAnywhere)
+	class UCameraComponent* CameraComponent;
+	UPROPERTY(VisibleAnywhere)
+	class USphereComponent* SphereComponent;
+	UPROPERTY(VisibleAnywhere)
+	class USpringArmComponent* SpringArmComponent;
+private:
+	// 摄像机移动相关参数
+	UPROPERTY(EditDefaultsOnly)
+	float CameraMinZoom;
+	UPROPERTY(EditDefaultsOnly)
+	float CameraMaxZoom;
+	UPROPERTY(EditDefaultsOnly)
+	float CameraZoomSpeed;
+	UPROPERTY(EditDefaultsOnly)
+	float CameraMoveSpeed;
+	
 };

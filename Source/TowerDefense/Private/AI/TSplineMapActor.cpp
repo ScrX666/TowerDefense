@@ -7,8 +7,11 @@
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
 #include "AI/TFirstAIController.h"
+#include "Building/TPathEndBuilding.h"
 #include "Character/TManBase.h"
 #include "GamePlay/TDataTableManager.h"
+#include "GamePlay/TPlayerController.h"
+#include "GamePlay/TPlayerState.h"
 #include "Kismet/GameplayStatics.h"
 #include "TowerDefense/TowerDefenseGameModeBase.h"
 
@@ -142,9 +145,9 @@ void ATSplineMapActor::SpawnWave()
 		{
 			UE_LOG(LogTemp,Log,TEXT("bFinishSpawn CurrentWave %d GetAISpawnStructNum %d"),CurrentWave,TDataTableManager::GetInstance()->GetAISpawnStructNum());
 			bFinishSpawn = true;
-			auto TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
-			if(TDGameMode)
-			TDGameMode->OnGameEnd.Broadcast(true);
+			// auto TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
+			// if(TDGameMode)
+			// TDGameMode->OnGameEnd.Broadcast(true);
 		}
 		
 	}
@@ -165,9 +168,15 @@ void ATSplineMapActor::MoveTo(ATFirstAIController* AIController, int index, FVec
 void ATSplineMapActor::OnManDead()
 {
 	CurrentExistEnemyCount--;
-	if( CurrentExistEnemyCount == 0 && bFinishSpawn)
+
+	ATPlayerState* PlayerState = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(this,0))->TPlayerState;
+
+	if( !PlayerState || !PlayerState->EndBuilding) return ;
+	
+	if( CurrentExistEnemyCount == 0 && bFinishSpawn && PlayerState->EndBuilding->IsDead())
 	{
 		Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->OnGameEnd.Broadcast(true);
+		PlayerState->AllEnemyDead = true;
 	}
 }
 

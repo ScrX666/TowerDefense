@@ -3,9 +3,21 @@
 
 #include "GamePlay/TPlayerState.h"
 
+#include "Building/TPathEndBuilding.h"
+#include "Kismet/GameplayStatics.h"
+
 ATPlayerState::ATPlayerState()
 	:Coins(100)
 {
+	AllEnemyDead = false;
+}
+
+void ATPlayerState::BeginPlay()
+{
+	Super::BeginPlay();
+	TArray<AActor*> Out;
+	UGameplayStatics::GetAllActorsOfClass(this,ATPathEndBuilding::StaticClass(),Out);
+	EndBuilding = Cast<ATPathEndBuilding>(Out[0]);
 }
 
 void ATPlayerState::RemoveCoins(int RemoveCoin)

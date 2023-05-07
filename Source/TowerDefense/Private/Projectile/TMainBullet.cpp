@@ -52,7 +52,7 @@ void ATMainBullet::SphereOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 		// {
 		// 	UE_LOG(LogTemp,Log,TEXT("Destory Bullet OtherActor Fail"));
 		// }
-		UGameplayStatics::ApplyDamage(OtherActor,50.0f, UGameplayStatics::GetPlayerController(this,0),this,UDamageType::StaticClass());
+		UGameplayStatics::ApplyDamage(OtherActor,Damage, UGameplayStatics::GetPlayerController(this,0),this,UDamageType::StaticClass());
 		this->Destroy();
 	}
 }
@@ -96,7 +96,9 @@ void ATMainBullet::Tick(float DeltaTime)
 	
 	BulletMove(DeltaTime);
 }
-
+/*
+ * 创建时初始化属性
+ */
 void ATMainBullet::Init(ATManBase* InitTarget, float InitSpeed, int32 InitDamage)
 {
 	TargetMan = InitTarget;

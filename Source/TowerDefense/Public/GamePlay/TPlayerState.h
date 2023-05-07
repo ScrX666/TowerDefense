@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
 #include "TPlayerState.generated.h"
+class ATPathEndBuilding;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCoinChanged, float, NewHealth, float, Delta);
 /**
  * 
@@ -18,11 +19,17 @@ public:
 
 	UPROPERTY(BlueprintAssignable,BlueprintReadOnly)
 	FOnCoinChanged OnCoinChanged;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	ATPathEndBuilding* EndBuilding;
+
+	bool AllEnemyDead;
 	
 private:
 	UPROPERTY(EditDefaultsOnly)
 	int Coins;
 public:
+	virtual void BeginPlay() override;
+	
 	void RemoveCoins(int RemoveCoin);
 	void AddCoins(int AddCoin);
 	/*

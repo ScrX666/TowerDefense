@@ -121,7 +121,7 @@ FAISpawnStruct TDataTableManager::GetAISpawnStruct(int RowIndex)
 	if( OutArray.Num() == 0)
 	{
 		AISpawnTable->GetAllRows<FAISpawnStruct>(ContextStr,OutArray);
-		AISpawnTableLenth = OutArray.Num();
+		AISpawnTableLength = OutArray.Num();
 	}
 	if( RowIndex > OutArray.Num() - 1)
 	{
@@ -139,9 +139,9 @@ FAISpawnStruct TDataTableManager::GetAISpawnStruct(int RowIndex)
 
 int TDataTableManager::GetAISpawnStructNum()
 {
-	if(AISpawnTableLenth == 0)
+	if(AISpawnTableLength == 0)
 		GetAISpawnStruct(0);
-	return AISpawnTableLenth;
+	return AISpawnTableLength;
 }
 
 TDataTableManager::TDataTableManager()
@@ -151,7 +151,7 @@ TDataTableManager::TDataTableManager()
 	TowerTable = LoadObject<UDataTable>(nullptr, UTF8_TO_TCHAR("/Game/BluePrint/Table/T_Tower"));
 	ManStateTable = LoadObject<UDataTable>(nullptr, UTF8_TO_TCHAR("/Game/BluePrint/Table/T_ManState"));
 	AISpawnTable = LoadObject<UDataTable>(nullptr, UTF8_TO_TCHAR("/Game/BluePrint/Table/T_AISpawn"));
-	AISpawnTableLenth = 0;
+	AISpawnTableLength = 0;
 	// TODO: 测试是否多次构造
 	UE_LOG(LogTemp, Log,TEXT("Construct DataTableManager"));
 }

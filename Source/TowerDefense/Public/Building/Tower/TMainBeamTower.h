@@ -22,8 +22,10 @@ public:
 	TSubclassOf<ATLaserBeam> BeamClass;
 	UPROPERTY(EditAnywhere)
 	FTBeamTower ShotTowerData;
-	UPROPERTY(VisibleAnywhere)
-	ATLaserBeam* LaserBeam;
+	UPROPERTY()
+	TArray<ATLaserBeam*> LaserBeams;
+	UPROPERTY()
+	TArray<ATLaserBeam*> LaserBeamBeUsed;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	UTBeamTowerState* BeamTowerStateComp;
 	
@@ -44,10 +46,13 @@ public:
 	 */
 	virtual void OnConstruction(const FTransform& Transform) override;
 
+	virtual int32 GetCostCoins() override;
+
+	
 	UFUNCTION()
 	void UpdateBeamDamage(float NewDamage);
 
-	virtual int32 GetCostCoins() override;
+	void SetLaserBeamsNum(const int32 NewCount);
 	
 private:
 	virtual void Fire() override;

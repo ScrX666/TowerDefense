@@ -3,7 +3,9 @@
 
 #include "Component/ActorComp/TBeamTowerState.h"
 
+#include "Building/Tower/TMainBeamTower.h"
 #include "Building/Tower/TMainTower.h"
+#include "Component/ActorComp/Tower/TAttackHandleComponent.h"
 #include "GamePlay/TDataTableManager.h"
 
 // Sets default values for this component's properties
@@ -29,6 +31,7 @@ void UTBeamTowerState::BeginPlay()
 	
 	// 防止 CurrentExp = -ShotTowerData.LevelUpExp; 的BUG
 	CurrentExp = BeamTowerData.LevelUpExp;
+	UpdateParallelAttackCount(BeamTowerData.ParallelAttackCount);
 	OnLevelUp.Broadcast(0);
 }
 
@@ -60,6 +63,17 @@ void UTBeamTowerState::UpdateAttackRange(const int32 NewLevel)
 	if( Tower)
 	{
 		Tower->UpdateAttackRange(CurrentAttackRange);
+	}
+}
+
+void UTBeamTowerState::UpdateParallelAttackCount(const int32 NewCount)
+{
+	ParallelAttackCount = NewCount;
+	ATMainBeamTower* Tower = Cast<ATMainBeamTower>(GetOwner());
+	if( Tower)
+	{
+		Tower->AttackHandleComponent->SetParallelAttackCount(ParallelAttackCount);
+		Tower->SetLaserBeamsNum(ParallelAttackCount);
 	}
 }
 

@@ -35,4 +35,6 @@ private:
 	virtual void BeginPlay() override;
 
 public:
+	UFUNCTION(BlueprintCallable)
+	bool IsDead();
 };

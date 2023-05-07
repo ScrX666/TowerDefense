@@ -31,7 +31,7 @@ private:
 	UDataTable* TowerTable;
 	UDataTable* ManStateTable;
 	UDataTable* AISpawnTable;
-	int AISpawnTableLenth;
+	int AISpawnTableLength;
 public:
 	/*
 	 * 获取射击塔的信息

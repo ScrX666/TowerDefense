@@ -27,13 +27,13 @@ void ATPathEndBuilding::RangeOverlap(UPrimitiveComponent* OverlappedComponent, A
 	{
 		Health -= 10.0f;
 		OnHomeHealthChanged.Broadcast(Health,-10.0f);
-		OtherActor->Destroy();
 		
 		if( Health <= 0.0f)
 		{
 			UE_LOG(LogTemp,Log,TEXT("Gaem End"));
 			Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->OnGameEnd.Broadcast(false);	
 		}
+		OtherActor->Destroy();
 	}
 }
 
@@ -43,6 +43,11 @@ void ATPathEndBuilding::BeginPlay()
 	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &ATPathEndBuilding::RangeOverlap);
 	SphereComponent->OnComponentEndOverlap.AddDynamic(this, &ATPathEndBuilding::RangeEndOverlap);
 
+}
+
+bool ATPathEndBuilding::IsDead()
+{
+	return Health < 0.0f;
 }
 
 

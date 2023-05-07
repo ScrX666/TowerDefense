@@ -49,6 +49,10 @@ public:
 	void OnConstruction(const FTransform& Transform) override;
 	void Init(ATManBase* Target, float InitDamage);
 	void DoDamge();
-
+	void SetBeamLocation();
+	
 	void SetDamage(float NewDamage);
+	
+	
+	ATManBase* GetTargetMan() const;
 };

@@ -46,10 +46,10 @@ void UTManStateAndBuffer::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
-void UTManStateAndBuffer::ApplyHealthChange(AActor* Instigator,int Delta)
+void UTManStateAndBuffer::ApplyHealthChange(AActor* Instigator,float Delta)
 {
 	CurrentHealth += Delta;
-	CurrentHealth = FMath::Clamp(CurrentHealth, 0, ManState.MaxHealth);
+	CurrentHealth = FMath::Clamp(CurrentHealth, 0.0f, ManState.MaxHealth);
 	OnHealthChanged.Broadcast(Instigator,this, CurrentHealth,Delta);
 	//TODO: 添加死亡事件
 	if( CurrentHealth == 0)

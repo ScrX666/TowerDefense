@@ -33,11 +33,7 @@ void ATLaserBeam::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if( TargetMan && !TargetMan->IsPendingKill())
-	{
-		EndPos = TargetMan->GetActorLocation();
-		NiagaraComp->SetVectorParameter(TEXT("User.BeamEnd"),EndPos);
-	}
+	SetBeamLocation();
 	
 }
 
@@ -55,8 +51,18 @@ void ATLaserBeam::Init(ATManBase* Target, float InitDamage)
 {
 	UE_LOG(LogTemp,Log,TEXT("LaserBeam Change Target"));
 	TargetMan = Target;
+	if( TargetMan == nullptr)
+	{
+		SetActorHiddenInGame(true);
+		return;
+	}
+	else
+	{
+		SetBeamLocation();
+		SetActorHiddenInGame(false);
+	}
 	GetWorld()->GetTimerManager().ClearTimer(DamageTimerHandle);
-	GetWorld()->GetTimerManager().SetTimer(DamageTimerHandle,this,&ATLaserBeam::DoDamge,0.1f,true);
+	GetWorld()->GetTimerManager().SetTimer(DamageTimerHandle,this,&ATLaserBeam::DoDamge,0.1f,true,0.0f);
 	SetDamage(InitDamage);
 }
 
@@ -66,8 +72,22 @@ void ATLaserBeam::DoDamge()
 	UGameplayStatics::ApplyDamage(TargetMan,Damage, UGameplayStatics::GetPlayerController(this,0),this,UDamageType::StaticClass());
 }
 
+void ATLaserBeam::SetBeamLocation()
+{
+	if( TargetMan && !TargetMan->IsPendingKill())
+	{
+		EndPos = TargetMan->GetActorLocation();
+		NiagaraComp->SetVectorParameter(TEXT("User.BeamEnd"),EndPos);
+	}
+}
+
 void ATLaserBeam::SetDamage(float NewDamage)
 {
 	Damage = NewDamage;
+}
+
+ATManBase* ATLaserBeam::GetTargetMan() const
+{
+	return TargetMan;
 }
 

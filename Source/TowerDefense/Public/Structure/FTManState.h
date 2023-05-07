@@ -18,7 +18,7 @@ struct FTManState : public FTableRowBase
 	UPROPERTY(EditDefaultsOnly)
 	USkeletalMesh* SkeletalMesh;
 	UPROPERTY(EditDefaultsOnly)
-	int MaxHealth;
+	float MaxHealth;
 	UPROPERTY(EditDefaultsOnly)
 	int Coins;
 	UPROPERTY(EditDefaultsOnly)

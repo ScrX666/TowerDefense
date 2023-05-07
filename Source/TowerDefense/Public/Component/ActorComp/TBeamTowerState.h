@@ -44,7 +44,11 @@ private:
 	void UpdateDamage(const int32 NewLevel);
 	UFUNCTION()
 	void UpdateAttackRange(const int32 NewLevel);
-
+	
+	// 更新状态
+	UFUNCTION()
+	void UpdateParallelAttackCount(const int32 NewCount);
+	
 public:
 	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
 	FOnLevelUp OnLevelUp;
@@ -59,6 +63,8 @@ public:
 	float CurrentDamage;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	float CurrentAttackRange;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	int32 ParallelAttackCount;
 	
 private:
 	

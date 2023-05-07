@@ -5,6 +5,7 @@
 
 #include "Building/Tower/TMainShotTower.h"
 #include "Building/Tower/TMainTower.h"
+#include "Component/ActorComp/Tower/TAttackHandleComponent.h"
 #include "GamePlay/TDataTableManager.h"
 
 // Sets default values for this component's properties
@@ -31,6 +32,7 @@ void UTShotTowerState::BeginPlay()
 	// ...
 	// 防止 CurrentExp = -ShotTowerData.LevelUpExp; 的BUG
 	CurrentExp = ShotTowerData.LevelUpExp;
+	UpdateParallelAttackCount(ShotTowerData.ParallelAttackCount);
 	OnLevelUp.Broadcast(0);
 }
 
@@ -88,6 +90,16 @@ void UTShotTowerState::UpdateShotRate(const int32 NewLevel)
 	if( Tower)
 	{
 		Tower->UpdateShotRate(ShotRate);
+	}
+}
+
+void UTShotTowerState::UpdateParallelAttackCount(const int32 NewCount)
+{
+	ParallelAttackCount = NewCount;
+	ATMainShotTower* Tower = Cast<ATMainShotTower>(GetOwner());
+	if( Tower)
+	{
+		Tower->AttackHandleComponent->SetParallelAttackCount(ParallelAttackCount);
 	}
 }
 

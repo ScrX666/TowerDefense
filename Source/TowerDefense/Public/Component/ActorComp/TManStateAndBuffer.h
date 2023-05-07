@@ -21,7 +21,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	FTManState ManState;
 	UPROPERTY(VisibleAnywhere)
-	int CurrentHealth;
+	float CurrentHealth;
 	// TODO: 添加Buffer
 protected:
 	UFUNCTION()
@@ -33,7 +33,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
-	void ApplyHealthChange(AActor* Instigator, int Delta);
+	void ApplyHealthChange(AActor* Instigator, float Delta);
 
 	UFUNCTION()
 	void AddCoinsAndExp(AActor* InstigatorActor);

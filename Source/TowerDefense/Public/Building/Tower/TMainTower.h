@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Building/TMainBuilding.h"
-#include "Structure/FTTower.h"
 #include "TMainTower.generated.h"
 
+class UTAttackHandleComponent;
+class ATManBase;
+class USphereComponent;
 /**
  * 
  */
@@ -15,28 +17,27 @@ class TOWERDEFENSE_API ATMainTower : public ATMainBuilding
 {
 	GENERATED_BODY()
 public:
-	ATMainTower();
-	UPROPERTY()
-	class ATManBase* TargetMan;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	class USceneComponent* AttackRangeComps;
+	USceneComponent* AttackRangeComps;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	class UStaticMeshComponent* AttackRangeMesh;
+	UStaticMeshComponent* AttackRangeMesh;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	class USphereComponent* AttackRangeSphere;
+	USphereComponent* AttackRangeSphere;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	UTAttackHandleComponent* AttackHandleComponent;
 	UPROPERTY(EditDefaultsOnly)
 	FName Name;
 	
 	// UPROPERTY(VisibleAnywhere)
 	// FTTower TowerData;
 protected:
-	
+	// int32 ParallelAttackCount = 1;
 
 private:
 	float AttackRange;
 
-
 public:
+	ATMainTower();
 	virtual void Fire();
 	virtual void OnSelected(bool bSelected) override;
 	
