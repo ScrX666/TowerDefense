@@ -30,5 +30,6 @@ void ATowerDefenseGameModeBase::BeginPlay()
 
 void ATowerDefenseGameModeBase::GameEnd(bool IsWin)
 {
+	bGameEnd = true;
 	UGameplayStatics::SetGamePaused(this,true);
 }

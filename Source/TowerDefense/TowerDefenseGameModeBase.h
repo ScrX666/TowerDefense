@@ -20,7 +20,7 @@ protected:
 
 public:
 	int LevelIndex = 0;
-
+	bool bGameEnd = false;
 	UPROPERTY(BlueprintAssignable,EditAnywhere)
 	FOnGameEnd OnGameEnd;
 

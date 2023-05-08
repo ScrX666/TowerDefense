@@ -169,6 +169,10 @@ void ATSplineMapActor::OnManDead()
 {
 	CurrentExistEnemyCount--;
 
+	// 防止游戏结束 现存敌人销毁，引起的空指针引用
+	if(Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->bGameEnd)
+		return ;
+	
 	ATPlayerState* PlayerState = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(this,0))->TPlayerState;
 
 	if( !PlayerState || !PlayerState->EndBuilding) return ;
