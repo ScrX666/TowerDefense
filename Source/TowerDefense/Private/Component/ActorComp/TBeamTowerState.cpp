@@ -99,10 +99,20 @@ void UTBeamTowerState::Init(const FName Name)
  */
 void UTBeamTowerState::GetExp(const int Exp)
 {
+	if( CurrentLevel >= BeamTowerData.MaxLevel) return ;
+	
 	CurrentExp += Exp;
 	if( CurrentExp >= BeamTowerData.LevelUpExp)
 	{
 		OnLevelUp.Broadcast(CurrentLevel + 1);
+		if( CurrentLevel == BeamTowerData.MaxLevel)
+		{
+			// 满级后 解绑事件
+			OnLevelUp.Clear();
+			CurrentExp = BeamTowerData.LevelUpExp;
+			OnGetExp.Broadcast(this);
+			OnGetExp.Clear();
+		}
 	}
 	OnGetExp.Broadcast(this);
 }

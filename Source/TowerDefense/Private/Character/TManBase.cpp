@@ -5,6 +5,7 @@
 
 #include "ToolContextInterfaces.h"
 #include "AI/TFirstAIController.h"
+#include "Building/Tower/TMainTower.h"
 #include "Component/ActorComp/TManStateAndBuffer.h"
 #include "Components/ProgressBar.h"
 #include "Components/WidgetComponent.h"
@@ -84,6 +85,7 @@ void ATManBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void ATManBase::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
+	if( !IsValid(ManStateAndBuffer)) return ;
 	// 根据Name加载信息
 	ManStateAndBuffer->ManState = TDataTableManager::GetInstance()->GetManStateData(Name);
 	ManStateAndBuffer->CurrentHealth = ManStateAndBuffer->ManState.MaxHealth;
@@ -94,7 +96,14 @@ float ATManBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	AActor* DamageCauser)
 {
 	// DamageCauser->GetOwner() 即获取发射子弹的塔
-	ManStateAndBuffer->ApplyHealthChange(DamageCauser->GetOwner(),-DamageAmount);
+	if( DamageCauser->IsA<ATMainTower>())
+	{
+		ManStateAndBuffer->ApplyHealthChange(DamageCauser,-DamageAmount);
+	}
+	else
+	{
+		ManStateAndBuffer->ApplyHealthChange(DamageCauser->GetOwner(),-DamageAmount);
+	}
 
 	return DamageAmount;
 }

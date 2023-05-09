@@ -11,7 +11,9 @@ ATMainBuilding::ATMainBuilding()
 
 	BuildingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BuildingMesh"));
 	BuildingMesh->SetCollisionProfileName(TEXT("Building"));
-	RootComponent = BuildingMesh;
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	RootComponent = Root;
+	BuildingMesh->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned

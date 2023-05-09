@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Building/Tower/TMainTower.h"
+#include "Structure/FTManBuffer.h"
 #include "Structure/FTShotTower.h"
 #include "TMainShotTower.generated.h"
+
 
 class ATMainBullet;
 /**
@@ -23,10 +25,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ATMainBullet> BulletClass;
 
-	
 private:
 	FTimerHandle FireTimerHandle;
-
+	UPROPERTY()
+	TArray<FTManBuffer> ApplyBuffers;
 
 public:
 	

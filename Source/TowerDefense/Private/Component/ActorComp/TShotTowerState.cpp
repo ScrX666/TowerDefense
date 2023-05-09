@@ -125,10 +125,20 @@ void UTShotTowerState::Init(const FName Name)
  */
 void UTShotTowerState::GetExp(const int Exp)
 {
+	if( CurrentLevel >= ShotTowerData.MaxLevel) return ;
+	
 	CurrentExp += Exp;
 	if( CurrentExp >= ShotTowerData.LevelUpExp)
 	{
 		OnLevelUp.Broadcast(CurrentLevel + 1);
+		if( CurrentLevel == ShotTowerData.MaxLevel)
+		{
+			// 满级后 解绑事件
+			OnLevelUp.Clear();
+			CurrentExp = ShotTowerData.LevelUpExp;
+			OnGetExp.Broadcast(this);
+			OnGetExp.Clear();
+		}
 	}
 	OnGetExp.Broadcast(this);
 }
@@ -151,5 +161,10 @@ int32 UTShotTowerState::GetLevelUpExp() const
 int32 UTShotTowerState::GetCostCoins() const
 {
 	return ShotTowerData.CostCoins;
+}
+
+const TArray<FTManBuffer>& UTShotTowerState::GetApplyBuffers() const
+{
+	return ShotTowerData.Buffers;
 }
 
