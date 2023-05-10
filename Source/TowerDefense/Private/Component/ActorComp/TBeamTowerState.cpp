@@ -174,3 +174,8 @@ const TArray<FTTowerAbility>& UTBeamTowerState::GetAllAbility() const
 	return BeamTowerData.TowerAbilities;
 }
 
+int32 UTBeamTowerState::GetMaxLevel() const
+{
+	return BeamTowerData.MaxLevel;
+}
+
