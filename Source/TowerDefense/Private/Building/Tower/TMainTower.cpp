@@ -6,6 +6,7 @@
 #include "Character/TManBase.h"
 #include "Component/ActorComp/Tower/TAttackHandleComponent.h"
 #include "Components/SphereComponent.h"
+#include "Structure/FTManBuffer.h"
 
 ATMainTower::ATMainTower()
 {
@@ -95,6 +96,10 @@ void ATMainTower::GetExp(int Exp)
 }
 #pragma endregion
 
+void ATMainTower::AddBuffer(const FTManBuffer& Buffer)
+{
+	ApplyBuffers.Add(Buffer);
+}
 
 void ATMainTower::BeginPlay()
 {

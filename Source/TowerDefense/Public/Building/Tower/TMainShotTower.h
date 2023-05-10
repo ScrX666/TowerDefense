@@ -27,8 +27,6 @@ public:
 
 private:
 	FTimerHandle FireTimerHandle;
-	UPROPERTY()
-	TArray<FTManBuffer> ApplyBuffers;
 
 public:
 	

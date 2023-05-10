@@ -105,6 +105,7 @@ void UTManStateAndBuffer::ActivateBuffer(const TArray<FTManBuffer>& Buffers, AAc
 		case EManBufferType::E_Poison:
 			ActivePoison(Buffer);
 			break;
+		default: ;
 		}
 		if( BufferInstigators.Contains(Buffer.BufferType))
 		{
@@ -123,7 +124,7 @@ void UTManStateAndBuffer::ActiveIce(const FTManBuffer& Buffer)
 	{
 		if( CharacterMovementComp)
 		{
-			CharacterMovementComp->MaxWalkSpeed *= Buffer.EffectNum;
+			CharacterMovementComp->MaxWalkSpeed = OrignWalkSpeed * Buffer.EffectNum;
 		}
 	}
 

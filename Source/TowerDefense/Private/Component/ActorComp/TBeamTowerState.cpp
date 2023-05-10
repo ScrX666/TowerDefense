@@ -3,6 +3,7 @@
 
 #include "Component/ActorComp/TBeamTowerState.h"
 
+#include "Structure/FTTowerAbility.h"
 #include "Building/Tower/TMainBeamTower.h"
 #include "Building/Tower/TMainTower.h"
 #include "Component/ActorComp/Tower/TAttackHandleComponent.h"
@@ -24,6 +25,8 @@ UTBeamTowerState::UTBeamTowerState()
 void UTBeamTowerState::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	Tower = Cast<ATMainTower>(GetOwner());
 	
 	OnLevelUp.AddDynamic(this, &UTBeamTowerState::UpdateLevel);
 	OnLevelUp.AddDynamic(this, &UTBeamTowerState::UpdateDamage);
@@ -59,7 +62,6 @@ void UTBeamTowerState::UpdateAttackRange(const int32 NewLevel)
 		AddAttackRange += BeamTowerData.AttackRangeUpGrade * BeamTowerData.AttackRange;
 	}
 	CurrentAttackRange = BeamTowerData.AttackRange + AddAttackRange;
-	ATMainTower* Tower = Cast<ATMainTower>(GetOwner());
 	if( Tower)
 	{
 		Tower->UpdateAttackRange(CurrentAttackRange);
@@ -69,11 +71,10 @@ void UTBeamTowerState::UpdateAttackRange(const int32 NewLevel)
 void UTBeamTowerState::UpdateParallelAttackCount(const int32 NewCount)
 {
 	ParallelAttackCount = NewCount;
-	ATMainBeamTower* Tower = Cast<ATMainBeamTower>(GetOwner());
-	if( Tower)
+	if( Tower && Tower->IsA<ATMainBeamTower>())
 	{
 		Tower->AttackHandleComponent->SetParallelAttackCount(ParallelAttackCount);
-		Tower->SetLaserBeamsNum(ParallelAttackCount);
+		Cast<ATMainBeamTower>(Tower)->SetLaserBeamsNum(ParallelAttackCount);
 	}
 }
 
@@ -130,5 +131,46 @@ int32 UTBeamTowerState::GetLevelUpExp() const
 int32 UTBeamTowerState::GetCostCoins() const
 {
 	return BeamTowerData.CostCoins;
+}
+
+const TArray<FTManBuffer>& UTBeamTowerState::GetApplyBuffers() const
+{
+	return BeamTowerData.Buffers;
+}
+
+void UTBeamTowerState::ApplyAbility(const FTTowerAbility& TowerAbility)
+{
+	// Super::ApplyAbility(TowerAbility);
+	switch (TowerAbility.TowerAbilityType)
+	{
+	case ETowerAbility::E_Damage:
+		CurrentDamage *= TowerAbility.DamageUp;
+		break;
+	case ETowerAbility::E_AttackRange:
+		CurrentAttackRange *= TowerAbility.AttackRangeUp;
+		Tower->UpdateAttackRange(CurrentAttackRange);
+		break;
+	case ETowerAbility::E_ParallelAttack:
+		ParallelAttackCount += TowerAbility.AdditiveParallel;
+		Tower->AttackHandleComponent->SetParallelAttackCount(ParallelAttackCount);
+		break;
+	case ETowerAbility::E_ShotRate:
+		UE_LOG(LogTemp,Warning,TEXT("ShotRate Can not apply to BeamTower"));
+		break;
+	case ETowerAbility::E_BulletSpeed:
+		UE_LOG(LogTemp,Warning,TEXT("BulletSpeed Can not apply to BeamTower"));
+		break;
+	case ETowerAbility::E_Buff:
+		{
+			Tower->AddBuffer(TowerAbility.AdditiveBuff);
+		}
+		break;
+	default: ;
+	}
+}
+
+const TArray<FTTowerAbility>& UTBeamTowerState::GetAllAbility() const
+{
+	return BeamTowerData.TowerAbilities;
 }
 

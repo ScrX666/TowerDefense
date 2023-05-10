@@ -3,6 +3,7 @@
 
 #include "Component/ActorComp/TShotTowerState.h"
 
+#include "Structure/FTTowerAbility.h"
 #include "Building/Tower/TMainShotTower.h"
 #include "Building/Tower/TMainTower.h"
 #include "Component/ActorComp/Tower/TAttackHandleComponent.h"
@@ -23,6 +24,8 @@ UTShotTowerState::UTShotTowerState()
 void UTShotTowerState::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Tower = Cast<ATMainTower>(GetOwner());
 	
 	OnLevelUp.AddDynamic(this, &UTShotTowerState::UpdateLevel);
 	OnLevelUp.AddDynamic(this, &UTShotTowerState::UpdateDamage);
@@ -60,7 +63,6 @@ void UTShotTowerState::UpdateAttackRange(const int32 NewLevel)
 		AddAttackRange += ShotTowerData.AttackRangeUpGrade * ShotTowerData.AttackRange;
 	}
 	CurrentAttackRange = ShotTowerData.AttackRange + AddAttackRange;
-	ATMainTower* Tower = Cast<ATMainTower>(GetOwner());
 	if( Tower)
 	{
 		Tower->UpdateAttackRange(CurrentAttackRange);
@@ -86,17 +88,15 @@ void UTShotTowerState::UpdateShotRate(const int32 NewLevel)
 	}
 	ShotRate = ShotTowerData.ShotRate - AddShotRate;
 	if( ShotRate <= 0.1f) ShotRate = 0.1f;
-	ATMainShotTower* Tower = Cast<ATMainShotTower>(GetOwner());
-	if( Tower)
+	if( Tower && Tower->IsA<ATMainShotTower>())
 	{
-		Tower->UpdateShotRate(ShotRate);
+		Cast<ATMainShotTower>(Tower)->UpdateShotRate(ShotRate);
 	}
 }
 
 void UTShotTowerState::UpdateParallelAttackCount(const int32 NewCount)
 {
 	ParallelAttackCount = NewCount;
-	ATMainShotTower* Tower = Cast<ATMainShotTower>(GetOwner());
 	if( Tower)
 	{
 		Tower->AttackHandleComponent->SetParallelAttackCount(ParallelAttackCount);
@@ -166,5 +166,42 @@ int32 UTShotTowerState::GetCostCoins() const
 const TArray<FTManBuffer>& UTShotTowerState::GetApplyBuffers() const
 {
 	return ShotTowerData.Buffers;
+}
+
+void UTShotTowerState::ApplyAbility(const FTTowerAbility& TowerAbility)
+{
+	// Super::ApplyAbility(TowerAbility);
+	switch (TowerAbility.TowerAbilityType)
+	{
+	case ETowerAbility::E_Damage:
+		CurrentDamage *= TowerAbility.DamageUp;
+		break;
+	case ETowerAbility::E_AttackRange:
+		CurrentAttackRange *= TowerAbility.AttackRangeUp;
+		Tower->UpdateAttackRange(CurrentAttackRange);
+		break;
+	case ETowerAbility::E_ParallelAttack:
+		ParallelAttackCount += TowerAbility.AdditiveParallel;
+		Tower->AttackHandleComponent->SetParallelAttackCount(ParallelAttackCount);
+		break;
+	case ETowerAbility::E_ShotRate:
+		ShotRate *= TowerAbility.ShotRateUp;
+		Tower->UpdateAttackRange(CurrentAttackRange);
+		break;
+	case ETowerAbility::E_BulletSpeed:
+		BulletSpeed *= TowerAbility.BulletSpeedUp;
+		break;
+	case ETowerAbility::E_Buff:
+		{
+			Tower->AddBuffer(TowerAbility.AdditiveBuff);
+		}
+		break;
+	default: ;
+	}
+}
+
+const TArray<FTTowerAbility>& UTShotTowerState::GetAllAbility() const
+{
+	return ShotTowerData.TowerAbilities;
 }
 

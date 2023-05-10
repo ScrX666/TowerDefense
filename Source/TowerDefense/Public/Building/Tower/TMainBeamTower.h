@@ -33,7 +33,6 @@ public:
 private:
 	FTimerHandle FireTimerHandle;
 
-
 public:
 	/*
 	 * 继承接口
