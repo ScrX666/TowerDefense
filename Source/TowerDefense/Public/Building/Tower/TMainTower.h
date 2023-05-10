@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Building/TMainBuilding.h"
+#include "Structure/FTManBuffer.h"
 #include "TMainTower.generated.h"
 
+struct FTTowerAbility;
 class UTAttackHandleComponent;
 class ATManBase;
 class USphereComponent;
@@ -32,7 +34,9 @@ public:
 	// FTTower TowerData;
 protected:
 	// int32 ParallelAttackCount = 1;
-
+	UPROPERTY()
+	TArray<FTManBuffer> ApplyBuffers;
+	
 private:
 	float AttackRange;
 
@@ -54,8 +58,15 @@ public:
 	void AttackRangeEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	void UpdateAttackRange(const float NewRange);
-	
+
+	/*
+	 * 获取Exp
+	 */
 	virtual void GetExp(int Exp);
+	/*
+	 * 添加Buff
+	 */
+	virtual void AddBuffer(const FTManBuffer& Buffer);
 	
 protected:
 	virtual void TargetInRange();
