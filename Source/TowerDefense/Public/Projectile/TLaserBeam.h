@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Structure/FTManBuffer.h"
 #include "Character/TManBase.h"
 #include "GameFramework/Actor.h"
 #include "TLaserBeam.generated.h"
@@ -38,8 +37,6 @@ private:
 	FTimerHandle DamageTimerHandle;
 
 	float Damage;
-	// 要施加的Buff
-	const TArray<FTManBuffer>* BuffersPointer;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -50,7 +47,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void OnConstruction(const FTransform& Transform) override;
-	void Init(ATManBase* Target, float InitDamage,const TArray<FTManBuffer> &Buffers);
+	void Init(ATManBase* Target, float InitDamage);
 	void DoDamge();
 	void SetBeamLocation();
 	

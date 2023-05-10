@@ -20,10 +20,6 @@ void ATMainBeamTower::OnConstruct(ATMainAttachBase* AttachBase)
 void ATMainBeamTower::BeginPlay()
 {
 	Super::BeginPlay();
-	for( const FTManBuffer& Buffer : BeamTowerStateComp->GetApplyBuffers())
-	{
-		ApplyBuffers.Add(Buffer);
-	}
 }
 
 void ATMainBeamTower::OnConstruction(const FTransform& Transform)
@@ -111,7 +107,7 @@ void ATMainBeamTower::Fire()
 		
 			LaserBeams[i] = GetWorld()->SpawnActor<ATLaserBeam>(BeamClass,BuildingMesh->GetSocketTransform(TEXT("BulletSocket")),ActorSpawnParameters);
 		}
-		LaserBeams[i]->Init(TargetMan,BeamTowerStateComp->CurrentDamage,ApplyBuffers);
+		LaserBeams[i]->Init(TargetMan,BeamTowerStateComp->CurrentDamage);
 	}
 }
 

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "FTTowerAbility.h"
 #include "Engine/DataTable.h"
 #include "Structure/FTManBuffer.h"
 #include "FTBeamTower.generated.h"
@@ -43,8 +42,4 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	int32 MaxLevel = 3;
-
-	// 塔满级后可以加点的能力
-	UPROPERTY(EditDefaultsOnly)
-	TArray<FTTowerAbility> TowerAbilities;
 };
