@@ -32,8 +32,6 @@ public:
 	int32 GetLevelUpExp() const;
 	UFUNCTION(BlueprintPure)
 	int32 GetCostCoins() const;
-	UFUNCTION(BlueprintPure)
-	const TArray<FTManBuffer>& GetApplyBuffers() const;
 	
 protected:
 	// Called when the game starts
