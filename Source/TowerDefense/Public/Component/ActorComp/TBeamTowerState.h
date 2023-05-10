@@ -6,14 +6,12 @@
 #include "TShotTowerState.h"
 #include "Components/ActorComponent.h"
 #include "Structure/FTBeamTower.h"
-#include "Structure/FTTowerAbility.h"
-#include "Tower/TTowerStateComponent.h"
 #include "TBeamTowerState.generated.h"
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBeamTowerGetExp,UTBeamTowerState*,BeamTowerStateComp);
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TOWERDEFENSE_API UTBeamTowerState : public UTTowerStateComponent
+class TOWERDEFENSE_API UTBeamTowerState : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -34,15 +32,7 @@ public:
 	int32 GetLevelUpExp() const;
 	UFUNCTION(BlueprintPure)
 	int32 GetCostCoins() const;
-	UFUNCTION(BlueprintPure)
-	const TArray<FTManBuffer>& GetApplyBuffers() const;
-	// UFUNCTION(BlueprintCallable)
-	virtual void ApplyAbility(const FTTowerAbility& TowerAbility) override;
-	/*
-	 * 获取所有可加点能力
-	 */
-	// UFUNCTION(BlueprintCallable)
-	virtual const TArray<FTTowerAbility>& GetAllAbility() const override;
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -80,6 +70,5 @@ private:
 	
 	UPROPERTY(EditAnywhere)
 	FTBeamTower BeamTowerData;
-	UPROPERTY()
-	ATMainTower* Tower;
+		
 };
