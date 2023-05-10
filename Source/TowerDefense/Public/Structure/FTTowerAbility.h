@@ -16,7 +16,7 @@ struct FTTowerAbility : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly)
 	ETowerAbility TowerAbilityType;
 
 	UPROPERTY(EditDefaultsOnly)
