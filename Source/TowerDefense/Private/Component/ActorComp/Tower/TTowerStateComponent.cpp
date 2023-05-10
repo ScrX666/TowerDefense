@@ -22,11 +22,6 @@ void UTTowerStateComponent::ApplyAbility(const FTTowerAbility& TowerAbility)
 {
 }
 
-int32 UTTowerStateComponent::GetMaxLevel() const
-{
-	return 0;
-}
-
 
 // Called when the game starts
 void UTTowerStateComponent::BeginPlay()

@@ -205,8 +205,3 @@ const TArray<FTTowerAbility>& UTShotTowerState::GetAllAbility() const
 	return ShotTowerData.TowerAbilities;
 }
 
-int32 UTShotTowerState::GetMaxLevel() const
-{
-	return ShotTowerData.MaxLevel;
-}
-

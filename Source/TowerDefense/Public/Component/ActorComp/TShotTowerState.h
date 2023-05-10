@@ -46,7 +46,6 @@ public:
 	 */
 	// UFUNCTION(BlueprintCallable)
 	virtual const TArray<FTTowerAbility>& GetAllAbility() const override;
-	virtual int32 GetMaxLevel() const override;
 	
 protected:
 	// Called when the game starts
