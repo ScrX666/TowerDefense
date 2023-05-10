@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
-#include "Structure/FTManBuffer.h"
 #include "FTShotTower.generated.h"
 
 class ATMainBullet;
@@ -19,8 +18,6 @@ struct FTShotTower : public FTableRowBase
 public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ATMainBullet> Bullet;
-	UPROPERTY(EditDefaultsOnly)
-	TArray<FTManBuffer> Buffers;
 	
 	UPROPERTY(EditDefaultsOnly)
 	float ShotRate = 2.0f;
@@ -49,10 +46,6 @@ public:
 	int32 LevelUpExp = 100;
 	UPROPERTY(EditDefaultsOnly)
 	int32 CostCoins = 100;
-	// 同时攻击敌人数量
 	UPROPERTY(EditDefaultsOnly)
 	int32 ParallelAttackCount = 1;
-
-	UPROPERTY(EditDefaultsOnly)
-	int32 MaxLevel = 3;
 };

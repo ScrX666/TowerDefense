@@ -170,18 +170,17 @@ void ATSplineMapActor::OnManDead()
 	CurrentExistEnemyCount--;
 
 	// 防止游戏结束 现存敌人销毁，引起的空指针引用
-	if(!Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(this,0)) ||
-		Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->bGameEnd)
-		return ;
-	
-	ATPlayerState* PlayerState = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(this,0))->TPlayerState;
-
-	if( !PlayerState || !PlayerState->EndBuilding) return ;
-	
-	if( CurrentExistEnemyCount == 0 && bFinishSpawn && PlayerState->EndBuilding->IsDead())
+	// if(Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->bGameEnd)
+	// 	return ;
+	//
+	// ATPlayerState* PlayerState = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(this,0))->TPlayerState;
+	//
+	// if( !PlayerState || !PlayerState->EndBuilding) return ;
+	//
+	if( CurrentExistEnemyCount == 0 && bFinishSpawn )
 	{
 		Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->OnGameEnd.Broadcast(true);
-		PlayerState->AllEnemyDead = true;
+		//PlayerState->AllEnemyDead = true;
 	}
 }
 

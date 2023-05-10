@@ -4,7 +4,6 @@
 #include "Projectile/TMainBullet.h"
 
 #include "Character/TManBase.h"
-#include "Component/ActorComp/TManStateAndBuffer.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -53,15 +52,7 @@ void ATMainBullet::SphereOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 		// {
 		// 	UE_LOG(LogTemp,Log,TEXT("Destory Bullet OtherActor Fail"));
 		// }
-		
-		// Damage
 		UGameplayStatics::ApplyDamage(OtherActor,Damage, UGameplayStatics::GetPlayerController(this,0),this,UDamageType::StaticClass());
-		
-		// Buffer
-		if(OtherActor->GetComponentByClass(UTManStateAndBuffer::StaticClass()))
-		Cast<UTManStateAndBuffer>(OtherActor->GetComponentByClass(UTManStateAndBuffer::StaticClass()))
-		->ActivateBuffer(*BuffersPointer,this->GetOwner());
-		
 		this->Destroy();
 	}
 }
@@ -108,10 +99,9 @@ void ATMainBullet::Tick(float DeltaTime)
 /*
  * 创建时初始化属性
  */
-void ATMainBullet::Init(ATManBase* InitTarget, float InitSpeed, int32 InitDamage, const TArray<FTManBuffer> &Buffers)
+void ATMainBullet::Init(ATManBase* InitTarget, float InitSpeed, int32 InitDamage)
 {
 	TargetMan = InitTarget;
 	Speed = InitSpeed;
 	Damage = InitDamage;
-	BuffersPointer = &Buffers; 
 }
