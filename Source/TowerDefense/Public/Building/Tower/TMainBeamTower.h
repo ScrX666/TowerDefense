@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Building/Tower/TMainTower.h"
 #include "Structure/FTBeamTower.h"
+#include "Projectile/TLaserBeam.h"
 #include "TMainBeamTower.generated.h"
 
 class UTBeamTowerState;

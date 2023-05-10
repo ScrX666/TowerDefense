@@ -18,6 +18,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* BuildingMesh;
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* Root;
 	UPROPERTY(EditAnywhere)
 	TMap<FName, UMaterialInterface*> Materials;
 	

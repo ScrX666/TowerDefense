@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Structure/FTManBuffer.h"
 #include "TMainBullet.generated.h"
 
 class ATManBase;
@@ -27,12 +28,12 @@ private:
 
 	float Speed = 100.0f;
 	int32 Damage = 50.0f;
-	
+	const TArray<FTManBuffer>* BuffersPointer;
 public:
 	ATMainBullet();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	virtual void Init(ATManBase* InitTarget, float InitSpeed, int32 InitDamage);
+	virtual void Init(ATManBase* InitTarget, float InitSpeed, int32 InitDamage,const TArray<FTManBuffer> &Buffers);
 	
 protected:
 	UFUNCTION()
