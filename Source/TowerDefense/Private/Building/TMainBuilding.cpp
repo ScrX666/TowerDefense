@@ -11,8 +11,7 @@ ATMainBuilding::ATMainBuilding()
 
 	BuildingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BuildingMesh"));
 	BuildingMesh->SetCollisionProfileName(TEXT("Building"));
-	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-	RootComponent = Root;
+	//RootComponent = BuildingMesh;
 	BuildingMesh->SetupAttachment(RootComponent);
 }
 
