@@ -5,12 +5,16 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Structure/FTShotTower.h"
+#include "Structure/FTTowerAbility.h"
+#include "Tower/TTowerStateComponent.h"
 #include "TShotTowerState.generated.h"
+
+class ATMainTower;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLevelUp,int32,NewLevel);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShotTowerGetExp,UTShotTowerState*,ShotTowerStateComp);
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TOWERDEFENSE_API UTShotTowerState : public UActorComponent
+class TOWERDEFENSE_API UTShotTowerState : public UTTowerStateComponent
 {
 	GENERATED_BODY()
 
@@ -32,6 +36,17 @@ public:
 	int32 GetLevelUpExp() const;
 	UFUNCTION(BlueprintPure)
 	int32 GetCostCoins() const;
+	UFUNCTION(BlueprintPure)
+	const TArray<FTManBuffer>& GetApplyBuffers() const;
+	// UFUNCTION(BlueprintCallable)
+	virtual void ApplyAbility(const FTTowerAbility& TowerAbility) override;
+	
+	/*
+	 * 获取所有可加点能力
+	 */
+	// UFUNCTION(BlueprintCallable)
+	virtual const TArray<FTTowerAbility>& GetAllAbility() const override;
+	virtual int32 GetMaxLevel() const override;
 	
 protected:
 	// Called when the game starts
@@ -79,4 +94,6 @@ private:
 	
 	UPROPERTY(EditAnywhere)
 	FTShotTower ShotTowerData;
+	UPROPERTY()
+	ATMainTower* Tower;
 };
