@@ -45,8 +45,9 @@ bool UTAttackHandleComponent::AddTarget(ATManBase* ManBase)
 	for( int i = 0; i < ParallelAttackCount; i++)
 	{
 		const ATManBase* Man = TargetMans[i];
+		// std::unique_lock<std::mutex> lock(AddMutex);
 		if( IsValid(Man) == false)
-		{
+		{ 
 			TargetMans[i] = ManBase;
 			UE_LOG(LogTemp,Warning,TEXT("Add AttackTarget Success"));
 			return true;
@@ -115,6 +116,19 @@ void UTAttackHandleComponent::RemoveAttackTarget(const ATManBase* RemoveMan)
 bool UTAttackHandleComponent::ExistInAttackTarget(const ATManBase* TargetMan) const
 {
 	return TargetMans.Contains(TargetMan);
+}
+
+FVector UTAttackHandleComponent::ReturnTargetLocation() const
+{
+	for( int i = 0; i < ParallelAttackCount; i++)
+	{
+		const ATManBase* Man = TargetMans[i];
+		if( IsValid(Man) == true)
+		{
+			return Man->GetActorLocation();
+		}
+	}
+	return FVector::ZeroVector;
 }
 
 

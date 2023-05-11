@@ -12,7 +12,7 @@
 class ATMainTower;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLevelUp,int32,NewLevel);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShotTowerGetExp,UTShotTowerState*,ShotTowerStateComp);
+// DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShotTowerGetExp,UTShotTowerState*,ShotTowerStateComp);
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TOWERDEFENSE_API UTShotTowerState : public UTTowerStateComponent
 {
@@ -28,7 +28,7 @@ public:
 	 * 初始化
 	 */
 	void Init(const FName Name);
-	void GetExp(const int Exp);
+	virtual void GetExp(const int Exp) override;
 	TSubclassOf<ATMainBullet> GetBulletClass() const;
 	USoundBase* GetSoundClass() const;
 
@@ -47,7 +47,7 @@ public:
 	// UFUNCTION(BlueprintCallable)
 	virtual const TArray<FTTowerAbility>& GetAllAbility() const override;
 	virtual int32 GetMaxLevel() const override;
-	
+	virtual int32 GetCurrentLevel() const override;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -71,8 +71,8 @@ private:
 public:
 	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
 	FOnLevelUp OnLevelUp;
-	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
-	FOnShotTowerGetExp OnGetExp;
+	// UPROPERTY(VisibleAnywhere,BlueprintAssignable)
+	// FOnShotTowerGetExp OnGetExp;
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	int32 CurrentLevel = 0;

@@ -179,3 +179,8 @@ int32 UTBeamTowerState::GetMaxLevel() const
 	return BeamTowerData.MaxLevel;
 }
 
+int32 UTBeamTowerState::GetCurrentLevel() const
+{
+	return CurrentLevel;
+}
+

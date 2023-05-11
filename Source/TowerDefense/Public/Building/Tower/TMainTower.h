@@ -7,6 +7,7 @@
 #include "Structure/FTManBuffer.h"
 #include "TMainTower.generated.h"
 
+class UTTowerStateComponent;
 struct FTTowerAbility;
 class UTAttackHandleComponent;
 class ATManBase;
@@ -67,6 +68,9 @@ public:
 	 * 添加Buff
 	 */
 	virtual void AddBuffer(const FTManBuffer& Buffer);
+
+	UFUNCTION(BlueprintPure)
+	virtual UTTowerStateComponent* GetStateComp() const ;
 	
 protected:
 	virtual void TargetInRange();

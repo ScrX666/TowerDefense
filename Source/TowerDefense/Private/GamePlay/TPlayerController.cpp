@@ -156,7 +156,10 @@ void ATPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UIManagerComponent->PushUIState(TEXT("TowerDefense"));
+	if( UGameplayStatics::GetCurrentLevelName(GetWorld()) == TEXT("Map_Start"))
+		UIManagerComponent->PushUIState(TEXT("BeginUI"));
+	else
+		UIManagerComponent->PushUIState(TEXT("TowerDefense"));
 	//TODO 用事件替换
 	EnableInput(this);
 	TPlayerState = GetPlayerState<ATPlayerState>();

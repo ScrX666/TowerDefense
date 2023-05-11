@@ -210,3 +210,8 @@ int32 UTShotTowerState::GetMaxLevel() const
 	return ShotTowerData.MaxLevel;
 }
 
+int32 UTShotTowerState::GetCurrentLevel() const
+{
+	return CurrentLevel;
+}
+

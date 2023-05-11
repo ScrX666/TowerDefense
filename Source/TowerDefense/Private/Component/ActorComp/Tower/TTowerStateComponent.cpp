@@ -27,6 +27,15 @@ int32 UTTowerStateComponent::GetMaxLevel() const
 	return 0;
 }
 
+int32 UTTowerStateComponent::GetCurrentLevel() const
+{
+	return 0;
+}
+
+void UTTowerStateComponent::GetExp(const int Exp)
+{
+}
+
 
 // Called when the game starts
 void UTTowerStateComponent::BeginPlay()

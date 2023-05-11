@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <mutex>
+
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "TAttackHandleComponent.generated.h"
@@ -23,7 +25,7 @@ public:
 	 */
 	bool TargetIsFull();
 	/*
-	 * 能够攻击的敌人数量是否已经满了
+	 * 能够攻击的敌人数量是否为空
 	 */
 	bool TargetIsEmpty();
 	/*
@@ -49,6 +51,8 @@ public:
 	 * 移除攻击对象
 	 */
 	bool ExistInAttackTarget(const ATManBase* TargetMan) const;
+
+	FVector ReturnTargetLocation() const;
 	
 protected:
 	// Called when the game starts
@@ -63,4 +67,5 @@ private:
 	TArray<ATManBase*> TargetMans;
 		
 	int32 ParallelAttackCount = 1;
+	std::mutex AddMutex;
 };

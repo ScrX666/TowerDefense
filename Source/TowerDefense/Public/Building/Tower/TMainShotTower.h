@@ -44,6 +44,7 @@ public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 	void UpdateShotRate(float ShotRate);
 	virtual int32 GetCostCoins() override;
+	virtual UTTowerStateComponent* GetStateComp() const override;
 	
 private:
 	virtual void Fire() override;

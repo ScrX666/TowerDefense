@@ -21,6 +21,12 @@ public:
 	TSubclassOf<AActor> AICharacter;
 	UPROPERTY(EditAnywhere,Category="AI")
 	int32 SpawnAINums;
+	UPROPERTY(EditAnywhere,Category="AI")
+	float ManWalkSpeed = 250.0f;
+	UPROPERTY(EditAnywhere,Category="AI")
+	float TimeBetweenWave = 3.0f;
+	UPROPERTY(EditAnywhere,Category="AI")
+	float TimeBetweenSingle = 1.0f;
 	
 };
 

@@ -5,8 +5,10 @@
 
 #include "NiagaraComponent.h"
 #include "Character/TManBase.h"
+#include "Component/ActorComp/TManStateAndBuffer.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Structure/FTManBuffer.h"
 
 // Sets default values
 ATLaserBeam::ATLaserBeam()
@@ -47,7 +49,7 @@ void ATLaserBeam::OnConstruction(const FTransform& Transform)
 	AudioComp->SetSound(Sound);
 }
 
-void ATLaserBeam::Init(ATManBase* Target, float InitDamage)
+void ATLaserBeam::Init(ATManBase* Target, float InitDamage,const TArray<FTManBuffer> &Buffers)
 {
 	UE_LOG(LogTemp,Log,TEXT("LaserBeam Change Target"));
 	TargetMan = Target;
@@ -61,6 +63,7 @@ void ATLaserBeam::Init(ATManBase* Target, float InitDamage)
 		SetBeamLocation();
 		SetActorHiddenInGame(false);
 	}
+	BuffersPointer = &Buffers;
 	GetWorld()->GetTimerManager().ClearTimer(DamageTimerHandle);
 	GetWorld()->GetTimerManager().SetTimer(DamageTimerHandle,this,&ATLaserBeam::DoDamge,0.1f,true,0.0f);
 	SetDamage(InitDamage);
@@ -69,7 +72,13 @@ void ATLaserBeam::Init(ATManBase* Target, float InitDamage)
 
 void ATLaserBeam::DoDamge()
 {
+	// Damage
 	UGameplayStatics::ApplyDamage(TargetMan,Damage, UGameplayStatics::GetPlayerController(this,0),this,UDamageType::StaticClass());
+
+	// Buffer
+	if(TargetMan && TargetMan->GetComponentByClass(UTManStateAndBuffer::StaticClass()))
+		Cast<UTManStateAndBuffer>(TargetMan->GetComponentByClass(UTManStateAndBuffer::StaticClass()))
+		->ActivateBuffer(*BuffersPointer,this->GetOwner());
 }
 
 void ATLaserBeam::SetBeamLocation()

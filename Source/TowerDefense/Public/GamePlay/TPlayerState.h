@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
 #include "TPlayerState.generated.h"
+class UTTowerStateComponent;
 class ATPathEndBuilding;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCoinChanged, float, NewHealth, float, Delta);
 /**
@@ -39,4 +40,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int GetCoins() const ;
+	UFUNCTION(BlueprintCallable)
+	bool PurchaseExp(int32 ExpNum,UTTowerStateComponent* TowerState);
 };

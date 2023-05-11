@@ -38,6 +38,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
 	int32 TotalWaveCount = 2; // 总波次数量
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	float SpawnAIWalkSpeed = 500.0f; // 总波次数量
 
 	protected:
 	int32 CurrentWave = 0; // 当前波次

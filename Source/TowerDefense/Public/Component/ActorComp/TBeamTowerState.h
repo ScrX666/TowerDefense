@@ -11,7 +11,7 @@
 #include "TBeamTowerState.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBeamTowerGetExp,UTBeamTowerState*,BeamTowerStateComp);
+// DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnBeamTowerGetExp,UTBeamTowerState*,BeamTowerStateComp);
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TOWERDEFENSE_API UTBeamTowerState : public UTTowerStateComponent
 {
@@ -27,7 +27,7 @@ public:
 	 * 初始化
 	 */
 	void Init(const FName Name);
-	void GetExp(const int Exp);
+	virtual void GetExp(const int Exp) override;
 	USoundBase* GetSoundClass() const;
 
 	UFUNCTION(BlueprintPure)
@@ -44,6 +44,7 @@ public:
 	// UFUNCTION(BlueprintCallable)
 	virtual const TArray<FTTowerAbility>& GetAllAbility() const override;
 	virtual int32 GetMaxLevel() const override;
+	virtual int32 GetCurrentLevel() const override;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -63,8 +64,6 @@ private:
 public:
 	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
 	FOnLevelUp OnLevelUp;
-	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
-	FOnBeamTowerGetExp OnGetExp;
 	
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	int32 CurrentLevel = 0;

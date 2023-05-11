@@ -22,6 +22,10 @@ void ATMainShotTower::OnConstruct(ATMainAttachBase* AttachBase)
 void ATMainShotTower::BeginPlay()
 {
 	Super::BeginPlay();
+	for( const FTManBuffer& Buffer : ShotTowerStateComp->GetApplyBuffers())
+	{
+		ApplyBuffers.Add(Buffer);
+	}
 }
 
 void ATMainShotTower::OnConstruction(const FTransform& Transform)
@@ -46,6 +50,11 @@ void ATMainShotTower::UpdateShotRate(float ShotRate)
 int32 ATMainShotTower::GetCostCoins()
 {
 	return ShotTowerStateComp->GetCostCoins();
+}
+
+UTTowerStateComponent* ATMainShotTower::GetStateComp() const
+{
+	return ShotTowerStateComp;
 }
 
 void ATMainShotTower::Fire()
@@ -82,7 +91,7 @@ void ATMainShotTower::Fire()
 		auto Bullet = GetWorld()->SpawnActor<ATMainBullet>(BulletClass,BuildingMesh->GetSocketTransform(TEXT("BulletSocket")),ActorSpawnParameters);
 		if( Bullet != nullptr)
 		{
-			Bullet->Init(TargetMan,ShotTowerStateComp->BulletSpeed,ShotTowerStateComp->CurrentDamage);
+			Bullet->Init(TargetMan,ShotTowerStateComp->BulletSpeed,ShotTowerStateComp->CurrentDamage,ApplyBuffers);
 		}
 		else
 		{

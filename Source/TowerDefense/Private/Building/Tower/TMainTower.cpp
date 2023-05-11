@@ -29,7 +29,9 @@ void ATMainTower::AttackRangeOverlap(UPrimitiveComponent* OverlappedComponent, A
 	if( OtherActor != nullptr)
 	{
 		auto OthMan = Cast<ATManBase>(OtherActor);
-		if( OthMan != nullptr && AttackHandleComponent->TargetIsFull() == false)
+		if( OthMan != nullptr &&
+			AttackHandleComponent->TargetIsFull() == false &&
+			!AttackHandleComponent->ExistInAttackTarget(OthMan))
 		{
 			AttackHandleComponent->AddTarget(OthMan);
 			TargetInRange();
@@ -93,6 +95,10 @@ void ATMainTower::NoTargetInRange()
 
 void ATMainTower::GetExp(int Exp)
 {
+}
+UTTowerStateComponent* ATMainTower::GetStateComp() const
+{
+	return nullptr;
 }
 #pragma endregion
 

@@ -7,12 +7,14 @@
 #include "Components/ActorComponent.h"
 #include "TTowerStateComponent.generated.h"
 
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTowerGetExp,UTTowerStateComponent*,ShotTowerStateComp);
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TOWERDEFENSE_API UTTowerStateComponent : public UActorComponent
 {
 	GENERATED_BODY()
-
+public:
+	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
+	FOnTowerGetExp OnGetExp;
 public:	
 	// Sets default values for this component's properties
 	UTTowerStateComponent();
@@ -22,6 +24,10 @@ public:
 	virtual void ApplyAbility(const FTTowerAbility& TowerAbility);
 	UFUNCTION(BlueprintCallable)
 	virtual  int32 GetMaxLevel() const;
+	UFUNCTION(BlueprintCallable)
+	virtual  int32 GetCurrentLevel() const;
+	UFUNCTION(BlueprintCallable)
+	virtual void GetExp(const int Exp);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

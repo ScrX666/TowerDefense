@@ -4,6 +4,7 @@
 #include "GamePlay/TPlayerState.h"
 
 #include "Building/TPathEndBuilding.h"
+#include "Component/ActorComp/Tower/TTowerStateComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 ATPlayerState::ATPlayerState()
@@ -17,6 +18,7 @@ void ATPlayerState::BeginPlay()
 	Super::BeginPlay();
 	TArray<AActor*> Out;
 	UGameplayStatics::GetAllActorsOfClass(this,ATPathEndBuilding::StaticClass(),Out);
+	if( Out.Num() > 0)
 	EndBuilding = Cast<ATPathEndBuilding>(Out[0]);
 }
 
@@ -40,4 +42,18 @@ bool ATPlayerState::CoinsEnough(int DesireCoin) const
 int ATPlayerState::GetCoins() const
 {
 	return Coins;
+}
+
+bool ATPlayerState::PurchaseExp(int32 ExpNum,UTTowerStateComponent* TowerState)
+{
+	if( CoinsEnough(ExpNum) && TowerState->GetMaxLevel() > TowerState->GetCurrentLevel())
+	{
+		RemoveCoins(ExpNum);
+		TowerState->GetExp(ExpNum);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

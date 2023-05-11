@@ -13,31 +13,16 @@ UCLASS()
 class TOWERDEFENSE_API ATHUD : public AHUD
 {
 	GENERATED_BODY()
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<UUserWidget> TowerDefenseClass;
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<UUserWidget> MainMeunClass;
+	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> EndGamePanelClass;
-	UPROPERTY(EditAnywhere)
-	bool IsTest;
-
-	
-	UPROPERTY(VisibleAnywhere)
-	UUserWidget* TowerDefense;
-	UPROPERTY(VisibleAnywhere)
-	UUserWidget* MainMeun;
 	UPROPERTY(VisibleAnywhere)
 	UUserWidget* EndGamePanel;
 	
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
-	void StartGame();
-	UFUNCTION()
 	void Exit();
-	void InitLevel(int LevelIndex);
 
 	UFUNCTION()
 	void ShowEndGamePanel(bool IsWin);

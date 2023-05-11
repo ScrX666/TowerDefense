@@ -9,6 +9,7 @@
 #include "AI/TFirstAIController.h"
 #include "Building/TPathEndBuilding.h"
 #include "Character/TManBase.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GamePlay/TDataTableManager.h"
 #include "GamePlay/TPlayerController.h"
 #include "GamePlay/TPlayerState.h"
@@ -97,6 +98,11 @@ void ATSplineMapActor::SpawnAI()
 	AActor* AIActor = GetWorld()->SpawnActor<AActor>(FaiSpawnStruct.AICharacter,SpawnLoc,SpawnRot,SpawnParameters);
 	APawn* AiPawn = Cast<APawn>(AIActor);
 	AiPawn->SpawnDefaultController();
+	ACharacter* AICharacter = Cast<ACharacter>(AIActor);
+	if( AICharacter)
+	{
+		Cast<UCharacterMovementComponent>(AICharacter->GetMovementComponent())->MaxWalkSpeed = SpawnAIWalkSpeed;
+	}
 	ATFirstAIController* moveController = Cast<ATFirstAIController >(AiPawn->GetController());
 	if(ensure(moveController))
 	moveController->SplineMapActor = this;
@@ -117,12 +123,12 @@ void ATSplineMapActor::SpawnWave()
 		
 		// 生成敌人
 		SpawnAI();
-
+		SpawnAIWalkSpeed = FaiSpawnStruct.ManWalkSpeed;
 		// 增加已生成的敌人数量
 		CurrentEnemyCount++;
 
 		// 设置计时器，等待一定时间后再生成下一个敌人
-		GetWorld()->GetTimerManager().SetTimer(WaveTimerHandle, this, &ATSplineMapActor::SpawnWave, 1, false);
+		GetWorld()->GetTimerManager().SetTimer(WaveTimerHandle, this, &ATSplineMapActor::SpawnWave, FaiSpawnStruct.TimeBetweenSingle, false);
 	}
 	// 如果当前已生成的敌人数量已经达到本波敌人数量的上限
 	else
@@ -139,7 +145,7 @@ void ATSplineMapActor::SpawnWave()
 		
 
 			// 等待一段时间后生成下一波敌人
-			GetWorld()->GetTimerManager().SetTimer(WaveTimerHandle, this, &ATSplineMapActor::SpawnWave, 2, false);
+			GetWorld()->GetTimerManager().SetTimer(WaveTimerHandle, this, &ATSplineMapActor::SpawnWave, FaiSpawnStruct.TimeBetweenWave, false);
 		}
 		else
 		{
@@ -178,7 +184,7 @@ void ATSplineMapActor::OnManDead()
 
 	if( !PlayerState || !PlayerState->EndBuilding) return ;
 	
-	if( CurrentExistEnemyCount == 0 && bFinishSpawn && PlayerState->EndBuilding->IsDead())
+	if( CurrentExistEnemyCount == 0 && bFinishSpawn && !PlayerState->EndBuilding->IsDead())
 	{
 		Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->OnGameEnd.Broadcast(true);
 		PlayerState->AllEnemyDead = true;

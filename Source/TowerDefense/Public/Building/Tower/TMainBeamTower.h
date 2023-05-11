@@ -48,7 +48,7 @@ public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
 	virtual int32 GetCostCoins() override;
-
+	virtual UTTowerStateComponent* GetStateComp() const override;
 	
 	UFUNCTION()
 	void UpdateBeamDamage(float NewDamage);
