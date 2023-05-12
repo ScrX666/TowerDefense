@@ -21,8 +21,8 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ATLaserBeam> BeamClass;
-	UPROPERTY(EditAnywhere)
-	FTBeamTower ShotTowerData;
+	// UPROPERTY(EditAnywhere)
+	// FTBeamTower ShotTowerData;
 	UPROPERTY()
 	TArray<ATLaserBeam*> LaserBeams;
 	UPROPERTY()

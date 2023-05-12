@@ -4,6 +4,7 @@
 #include "AI/TAICharacter.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ATAICharacter::ATAICharacter()
@@ -13,7 +14,6 @@ ATAICharacter::ATAICharacter()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-
 }
 
 // Called when the game starts or when spawned

@@ -15,7 +15,7 @@ struct TOWERDEFENSE_API FTLevelInfo : public FTableRowBase
 {
  GENERATED_USTRUCT_BODY()
  UPROPERTY(EditDefaultsOnly)
- FName LevelName;
+ TSoftObjectPtr<UWorld> Level;
  UPROPERTY(EditDefaultsOnly)
- TArray<ATMainTower*> WinTowers;
+ TArray<TSubclassOf<ATMainTower>> WinTowers;
 };

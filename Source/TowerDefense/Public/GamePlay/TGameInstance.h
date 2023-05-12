@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Building/Tower/TMainTower.h"
 #include "Engine/GameInstance.h"
 #include "TGameInstance.generated.h"
 
-class ATMainTower;
 /**
  * 
  */
@@ -16,8 +16,13 @@ class TOWERDEFENSE_API UTGameInstance : public UGameInstance
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditDefaultsOnly)
-	TArray<ATMainTower*> InitTowers; // 初始时拥有的塔
+	TArray<TSubclassOf<ATMainTower>> InitTowers; // 初始时拥有的塔
 private:
-	UPROPERTY(EditDefaultsOnly)
-	TArray<ATMainTower*> OwnTowers; // 初始时拥有的塔
+	UPROPERTY(VisibleAnywhere)
+	TArray<TSubclassOf<ATMainTower>> OwnTowers; // 拥有的塔
+public:
+	UFUNCTION(BlueprintCallable)
+	bool AddTower(TSubclassOf<ATMainTower> Tower);
+	UFUNCTION(BlueprintCallable)
+	const TArray<TSubclassOf<ATMainTower>>& GetOwnTowers();
 };
