@@ -16,7 +16,7 @@ ATowerDefenseGameModeBase::ATowerDefenseGameModeBase()
 	PlayerControllerClass =	ATPlayerController::StaticClass();
 	HUDClass = ATHUD::StaticClass();
 	PlayerStateClass = ATPlayerState::StaticClass();
-
+	
 	
 }
 

@@ -18,4 +18,6 @@ class TOWERDEFENSE_API UTBlueprintFunctionLibrary : public UBlueprintFunctionLib
 	GENERATED_BODY()
 	UFUNCTION(BlueprintCallable)
 	static TArray<FTBoolArray> GetRandomPath(int32 Width, int32 Length, int32 N);
+	UFUNCTION(BlueprintCallable)
+	static FName GetNextLevelName(FString CurrentLevelName);
 };

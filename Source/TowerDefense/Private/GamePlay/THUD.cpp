@@ -15,10 +15,10 @@ void ATHUD::BeginPlay()
 	Super::BeginPlay();
 
 	UE_LOG(LogTemp,Log,TEXT("ATHUD BeginPlay"));
-	auto TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
-	// 绑定 结束游戏事件
-	
-	TDGameMode->OnGameEnd.AddDynamic(this, &ATHUD::ShowEndGamePanel);
+	// auto TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
+	// // 绑定 结束游戏事件
+	//
+	// TDGameMode->OnGameEnd.AddDynamic(this, &ATHUD::ShowEndGamePanel);
 }
 
 void ATHUD::Exit()
