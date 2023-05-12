@@ -155,7 +155,6 @@ void ATPlayerController::MouseMove(float Value)
 void ATPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
 	if( UGameplayStatics::GetCurrentLevelName(GetWorld()) == TEXT("Map_Start"))
 		UIManagerComponent->PushUIState(TEXT("BeginUI"));
 	else

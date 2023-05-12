@@ -42,6 +42,7 @@ bool UTAttackHandleComponent::TargetIsEmpty()
  */
 bool UTAttackHandleComponent::AddTarget(ATManBase* ManBase)
 {
+	// if( TargetMans.Contains(ManBase)) return false;
 	for( int i = 0; i < ParallelAttackCount; i++)
 	{
 		const ATManBase* Man = TargetMans[i];

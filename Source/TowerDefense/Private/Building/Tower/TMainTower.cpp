@@ -30,8 +30,7 @@ void ATMainTower::AttackRangeOverlap(UPrimitiveComponent* OverlappedComponent, A
 	{
 		auto OthMan = Cast<ATManBase>(OtherActor);
 		if( OthMan != nullptr &&
-			AttackHandleComponent->TargetIsFull() == false &&
-			!AttackHandleComponent->ExistInAttackTarget(OthMan))
+			AttackHandleComponent->TargetIsFull() == false)
 		{
 			AttackHandleComponent->AddTarget(OthMan);
 			TargetInRange();
@@ -66,7 +65,8 @@ void ATMainTower::AttackRangeEndOverlap(UPrimitiveComponent* OverlappedComponent
 			{
 				for( int i = 0; i < ManBases.Num(); i++)
 				{
-					if( AttackHandleComponent->AddTarget(Cast<ATManBase>(ManBases[i])))
+					if( !AttackHandleComponent->ExistInAttackTarget(Cast<ATManBase>(ManBases[i]))
+						&& AttackHandleComponent->AddTarget(Cast<ATManBase>(ManBases[i])))
 						break;
 				}
 			
