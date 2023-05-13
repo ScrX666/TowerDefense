@@ -14,8 +14,10 @@ USTRUCT(BlueprintType)
 struct TOWERDEFENSE_API FTLevelInfo : public FTableRowBase
 {
  GENERATED_USTRUCT_BODY()
- UPROPERTY(EditDefaultsOnly)
+ UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
  TSoftObjectPtr<UWorld> Level;
- UPROPERTY(EditDefaultsOnly)
+ UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
  TArray<TSubclassOf<ATMainTower>> WinTowers;
+ UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+ int32 InitCoins = 100;
 };

@@ -10,8 +10,10 @@
 #include "Building/Tower/TMainTower.h"
 #include "Component/ActorComp/TUIManagerComponent.h"
 #include "Components/DecalComponent.h"
+#include "GamePlay/TGameState.h"
 #include "GamePlay/TPlayerState.h"
 #include "Kismet/GameplayStatics.h"
+#include "TowerDefense/TowerDefenseGameModeBase.h"
 
 
 ATPlayerController::ATPlayerController() :
@@ -163,6 +165,13 @@ void ATPlayerController::BeginPlay()
 	EnableInput(this);
 	TPlayerState = GetPlayerState<ATPlayerState>();
 	DecalComponent = UGameplayStatics::SpawnDecalAtLocation(this,DecalMaterial, FVector(50.0f), CursorLocation);
+
+	// 绑定结束事件
+	ATowerDefenseGameModeBase* GameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
+	if( GameMode)
+	{
+		GameMode->OnGameEnd.AddDynamic(this,&ATPlayerController::OnGameEnd);
+	}
 }
 
 void ATPlayerController::SetupInputComponent()
@@ -200,4 +209,20 @@ void ATPlayerController::BuildingModeOn()
 	{
 		BuildingRefer->OnConstruct(nullptr);
 	}
+}
+
+void ATPlayerController::OnGameEnd(bool IsWin)
+{
+	ATGameState* GameState = Cast<ATGameState>(UGameplayStatics::GetGameState(this));
+	if( GameState)
+	{
+		// 留给 UI 使用
+		GameState->bIsWin = IsWin;
+	}
+	else
+	{
+		UE_LOG(LogTemp,Error,TEXT("GameState is Not TGameState"));
+	}
+	UIManagerComponent->PushUIState(TEXT("EndGame"));
+	// UIManagerComponent->GetCurrentUIState()
 }

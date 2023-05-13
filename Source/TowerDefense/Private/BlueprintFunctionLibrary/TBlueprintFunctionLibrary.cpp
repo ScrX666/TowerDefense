@@ -3,6 +3,7 @@
 
 #include "BlueprintFunctionLibrary/TBlueprintFunctionLibrary.h"
 
+#include "GamePlay/TDataTableManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "Structure/FTBoolArray.h"
 
@@ -103,11 +104,8 @@ TArray<FTBoolArray> UTBlueprintFunctionLibrary::GetRandomPath(int32 Width, int32
     return Grid;
 }
 
-FName UTBlueprintFunctionLibrary::GetNextLevelName(FString CurrentLevelName)
+FName UTBlueprintFunctionLibrary::GetNextLevel(const FName CurrentLevelName)
 {
-    //TODO:BUG
-    int CurrentLevelIndex = CurrentLevelName[CurrentLevelName.Len() - 1] - '0';
-    CurrentLevelIndex++;
-    CurrentLevelName.RemoveAt(CurrentLevelName.Len() - 1);
-    return FName(CurrentLevelName + FString::FromInt(CurrentLevelIndex));
+    return
+    TDataTableManager::GetInstance()->GetNextLevel(FName(CurrentLevelName));
 }

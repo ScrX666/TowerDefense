@@ -69,4 +69,7 @@ private:
 	 * 拿起
 	 */
 	void BuildingModeOn();
+	
+	UFUNCTION()
+	void OnGameEnd(bool IsWin);
 };

@@ -7,6 +7,7 @@
 #include "CoreMinimal.h"
 #include "Structure/FAISpawnStruct.h"
 #include "Structure/FTBeamTower.h"
+#include "Structure/FTLevelInfo.h"
 #include "Structure/FTManState.h"
 #include "Structure/FTTower.h"
 
@@ -31,6 +32,7 @@ private:
 	UDataTable* TowerTable;
 	UDataTable* ManStateTable;
 	UDataTable* AISpawnTable;
+	UDataTable* LevelInfoTable;
 	int AISpawnTableLength;
 public:
 	/*
@@ -59,6 +61,18 @@ public:
 	 * 根据index 获取
 	 */
 	FAISpawnStruct GetAISpawnStruct(int RowIndex);
+	/*
+	 * 获取下一个关卡
+	 */
+	FName GetNextLevel( const FName CurrentLevelName);
+	/*
+	 * 获取赢得关卡获得的塔
+	 */
+	TArray<TSubclassOf<ATMainTower>> GetWinTowers( const FName CurrentLevelName);
+	/*
+	 * 获取赢得关卡获得的塔
+	 */
+	int32 GetLevelInitCoins( const FName CurrentLevelName);
 
 	int GetAISpawnStructNum();
 	
