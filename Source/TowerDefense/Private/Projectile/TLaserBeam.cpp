@@ -49,17 +49,22 @@ void ATLaserBeam::OnConstruction(const FTransform& Transform)
 	AudioComp->SetSound(Sound);
 }
 
-void ATLaserBeam::Init(ATManBase* Target, float InitDamage,const TArray<FTManBuffer> &Buffers)
+void ATLaserBeam::Init(ATManBase* InTarget, float InitDamage,const TArray<FTManBuffer> &Buffers)
 {
 	UE_LOG(LogTemp,Log,TEXT("LaserBeam Change Target"));
-	TargetMan = Target;
-	if( TargetMan == nullptr)
+	if( InTarget == nullptr)
 	{
+		TargetMan = nullptr;
 		SetActorHiddenInGame(true);
 		return;
 	}
 	else
 	{
+		if(TargetMan == nullptr)
+		{
+			NiagaraComp->Activate(true);
+		}
+		TargetMan = InTarget;
 		SetBeamLocation();
 		SetActorHiddenInGame(false);
 	}
