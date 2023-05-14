@@ -50,7 +50,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void OnConstruction(const FTransform& Transform) override;
-	void Init(ATManBase* Target, float InitDamage,const TArray<FTManBuffer> &Buffers);
+	void Init(ATManBase* InTarget, float InitDamage,const TArray<FTManBuffer> &Buffers);
 	void DoDamge();
 	void SetBeamLocation();
 	

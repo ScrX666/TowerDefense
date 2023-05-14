@@ -5,6 +5,7 @@
 
 #include "Component/ActorComp/TBeamTowerState.h"
 #include "Component/ActorComp/Tower/TAttackHandleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 ATMainBeamTower::ATMainBeamTower()
 {
@@ -116,6 +117,9 @@ void ATMainBeamTower::Fire()
 			ActorSpawnParameters.Owner = this;
 		
 			LaserBeams[i] = GetWorld()->SpawnActor<ATLaserBeam>(BeamClass,BuildingMesh->GetSocketTransform(TEXT("BulletSocket")),ActorSpawnParameters);
+			// LaserBeams[i] = GetWorld()->SpawnActor<ATLaserBeam>(BeamClass,FTransform(),ActorSpawnParameters);
+			FAttachmentTransformRules AttachmentTransformRules(EAttachmentRule::KeepWorld,false);
+			LaserBeams[i]->AttachToActor(this,AttachmentTransformRules);
 		}
 		LaserBeams[i]->Init(TargetMan,BeamTowerStateComp->CurrentDamage,ApplyBuffers);
 	}
