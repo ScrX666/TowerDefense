@@ -27,11 +27,20 @@ ATSplineMapActor::ATSplineMapActor()
 void ATSplineMapActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if(bUseLevelNameAsTableSuffix)
+	{
+		// 使用关卡名查询
+		TDataTableManager::GetInstance()->GetAISpawnStructs(
+			FName(UGameplayStatics::GetCurrentLevelName(this)),AISpawnData);
+	}
+	else
+	{
+		// 使用自定义名字查询
+		TDataTableManager::GetInstance()->GetAISpawnStructs(TableNameSuffix,AISpawnData);
+	}
 	
-	// TODO: Timer
-	//SpawnAI();
 	SpawnWave();
-	//GetWorld()->GetTimerManager().SetTimer(BeginplayTimerHandle,this,&ATSplineMapActor::SpawnWave,1,false);
 }
 
 void ATSplineMapActor::AddArrow()
@@ -115,15 +124,15 @@ void ATSplineMapActor::SpawnAI()
 
 void ATSplineMapActor::SpawnWave()
 {
-	UE_LOG(LogTemp,Log,TEXT("SpawnWave"));
+	// UE_LOG(LogTemp,Log,TEXT("SpawnWave"));
 	// && CurrentWave < TotalWaveCount
 	// 如果当前已生成的敌人数量未达到本波敌人数量的上限
 	if (CurrentEnemyCount < FaiSpawnStruct.SpawnAINums && CurrentWave != 0)
 	{
 		
+		SpawnAIWalkSpeed = FaiSpawnStruct.ManWalkSpeed;
 		// 生成敌人
 		SpawnAI();
-		SpawnAIWalkSpeed = FaiSpawnStruct.ManWalkSpeed;
 		// 增加已生成的敌人数量
 		CurrentEnemyCount++;
 
@@ -133,9 +142,9 @@ void ATSplineMapActor::SpawnWave()
 	// 如果当前已生成的敌人数量已经达到本波敌人数量的上限
 	else
 	{
-		if(CurrentWave < TDataTableManager::GetInstance()->GetAISpawnStructNum())
+		if(CurrentWave < AISpawnData.Num())
 		{
-			FaiSpawnStruct = TDataTableManager::GetInstance()->GetAISpawnStruct(CurrentWave);
+			FaiSpawnStruct = *AISpawnData[CurrentWave];
 			CurrentWave++;
 			// 重置已生成的敌人数量
 			CurrentEnemyCount = 0;
@@ -149,7 +158,7 @@ void ATSplineMapActor::SpawnWave()
 		}
 		else
 		{
-			UE_LOG(LogTemp,Log,TEXT("bFinishSpawn CurrentWave %d GetAISpawnStructNum %d"),CurrentWave,TDataTableManager::GetInstance()->GetAISpawnStructNum());
+			//UE_LOG(LogTemp,Log,TEXT("bFinishSpawn CurrentWave %d GetAISpawnStructNum %d"),CurrentWave,TDataTableManager::GetInstance()->GetAISpawnStructNum());
 			bFinishSpawn = true;
 			// auto TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
 			// if(TDGameMode)

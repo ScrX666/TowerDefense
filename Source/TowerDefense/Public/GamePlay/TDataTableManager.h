@@ -34,6 +34,9 @@ private:
 	UDataTable* AISpawnTable;
 	UDataTable* LevelInfoTable;
 	int AISpawnTableLength;
+
+	TMap<FName,UDataTable*> AISpawnTables;
+	const static FString AISpawnPath;
 public:
 	/*
 	 * 获取射击塔的信息
@@ -53,14 +56,18 @@ public:
 	FTManState GetManStateData(FName Name);
 
 	/*
-	 * 根据Name 获取
+	 * 根据Name 获取 弃用
 	 */
 	FAISpawnStruct GetAISpawnStruct(FName Name);
 
 	/*
-	 * 根据index 获取
+	 * 根据index 获取 弃用
 	 */
 	FAISpawnStruct GetAISpawnStruct(int RowIndex);
+	/*
+	 * 根据Name 获取所有的AI生成信息
+	 */
+	void GetAISpawnStructs(FName PathSuffix, TArray<FAISpawnStruct*>& OutAISpawnStructs);
 	/*
 	 * 获取下一个关卡
 	 */
@@ -70,7 +77,7 @@ public:
 	 */
 	TArray<TSubclassOf<ATMainTower>> GetWinTowers( const FName CurrentLevelName);
 	/*
-	 * 获取赢得关卡获得的塔
+	 * 获取关卡初始拥有的Coins
 	 */
 	int32 GetLevelInitCoins( const FName CurrentLevelName);
 

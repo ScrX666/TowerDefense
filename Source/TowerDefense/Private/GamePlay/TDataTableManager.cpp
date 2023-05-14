@@ -11,6 +11,7 @@
 //初始化静态成员变量
 TDataTableManager *TDataTableManager::DataTableManager = nullptr;
 std::mutex TDataTableManager::Mutex;
+const FString TDataTableManager::AISpawnPath = UTF8_TO_TCHAR("/Game/BluePrint/Table/AISpawnTables/T_AISpawnTable_");
 
 // 不能返回指针的引用，否则存在外部被修改
 TDataTableManager* TDataTableManager::GetInstance()
@@ -138,6 +139,31 @@ FAISpawnStruct TDataTableManager::GetAISpawnStruct(int RowIndex)
 	return *Res;
 }
 
+void TDataTableManager::GetAISpawnStructs(FName PathSuffix, TArray<FAISpawnStruct*>& OutAISpawnStructs)
+{
+	OutAISpawnStructs.RemoveAll([](FAISpawnStruct*& FAISpawnStruct)
+	{
+		return true;
+	});
+	if( !AISpawnTables.Contains(PathSuffix))
+	{
+		// 此前没有加载过，就加载
+		UDataTable* AISpawnTB = LoadObject<UDataTable>(nullptr, *(AISpawnPath + PathSuffix.ToString()));
+		if( AISpawnTB == nullptr)
+		{
+			UE_LOG(LogTemp,Warning,TEXT("AISpawnStructs NULL "));
+			UE_LOG(LogTemp,Warning,TEXT("AISpawnStructs Path %s"),*(AISpawnPath + PathSuffix.ToString()));
+			return ;
+		}
+		else
+		{
+			AISpawnTables.Add(PathSuffix,AISpawnTB);
+		}
+	}
+	const FString ContextStr;
+	AISpawnTables[PathSuffix]->GetAllRows<FAISpawnStruct>(ContextStr,OutAISpawnStructs);
+}
+
 FName TDataTableManager::GetNextLevel( const FName CurrentLevelName)
 {
 	if( LevelInfoTable == nullptr)
@@ -256,6 +282,7 @@ TDataTableManager::TDataTableManager()
 	AISpawnTable = LoadObject<UDataTable>(nullptr, UTF8_TO_TCHAR("/Game/BluePrint/Table/T_AISpawn"));
 	LevelInfoTable = LoadObject<UDataTable>(nullptr, UTF8_TO_TCHAR("/Game/BluePrint/Table/T_LevelInfo"));
 	AISpawnTableLength = 0;
+	
 	// TODO: 测试是否多次构造
 	UE_LOG(LogTemp, Log,TEXT("Construct DataTableManager"));
 }
