@@ -15,14 +15,17 @@ class TOWERDEFENSE_API UTTowerRotateComponent : public UActorComponent
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditDefaultsOnly)
-	float RotateSpeed = 120.0f;
+	float RotateSpeed;
 	
 private:
-	// 默认为tower，
+	// UPROPERTY(EditDefaultsOnly)
+	// bool bUseRootAsRotate;
 	UPROPERTY(VisibleAnywhere)
-	ATMainTower* Tower;
+	USceneComponent* TowerRoot;
 	UPROPERTY(EditDefaultsOnly)
-	AActor* RotateActor;
+	USceneComponent* RotateComponent;
+	UPROPERTY()
+	ATMainTower* Tower;
 
 public:
 	UTTowerRotateComponent();

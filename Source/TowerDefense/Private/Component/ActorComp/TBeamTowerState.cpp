@@ -152,7 +152,7 @@ void UTBeamTowerState::ApplyAbility(const FTTowerAbility& TowerAbility)
 		break;
 	case ETowerAbility::E_ParallelAttack:
 		ParallelAttackCount += TowerAbility.AdditiveParallel;
-		Tower->AttackHandleComponent->SetParallelAttackCount(ParallelAttackCount);
+		UpdateParallelAttackCount(ParallelAttackCount);
 		break;
 	case ETowerAbility::E_ShotRate:
 		UE_LOG(LogTemp,Warning,TEXT("ShotRate Can not apply to BeamTower"));

@@ -12,7 +12,8 @@ UTTowerRotateComponent::UTTowerRotateComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
+	RotateSpeed = 120.0f;
+	// bUseRootAsRotate = true;
 	// ...
 }
 
@@ -22,11 +23,14 @@ void UTTowerRotateComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if( !Tower)
+	Tower = Cast<ATMainTower>(GetOwner());
+	if( !TowerRoot)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("The default rotate object is the tower"));
-		Tower = Cast<ATMainTower>(GetOwner());
-		if( !RotateActor) RotateActor = Tower;
+		UE_LOG(LogTemp,Warning,TEXT("The default rotate Comp is the tower RootComp"));
+		TowerRoot = GetOwner()->GetRootComponent();
+		// if( bUseRootAsRotate) RotateComponent = TowerRoot;
+		// else RotateComponent = this;
+		if( !RotateComponent) RotateComponent = TowerRoot;
 	}
 	
 }
@@ -37,17 +41,17 @@ void UTTowerRotateComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if( Tower &&
-		RotateActor &&
+	if( TowerRoot &&
+		RotateComponent &&
 		Tower->AttackHandleComponent &&
 		!Tower->AttackHandleComponent->TargetIsEmpty())
 	{
-		const FMatrix NewMatrix = FRotationMatrix::MakeFromX(Tower->AttackHandleComponent->ReturnTargetLocation() - RotateActor->GetActorLocation());
+		const FMatrix NewMatrix = FRotationMatrix::MakeFromX(Tower->AttackHandleComponent->ReturnTargetLocation() - RotateComponent->GetComponentLocation());
 		const float NewYawValue = NewMatrix.Rotator().Yaw;
 		FRotator TargetRotator = NewMatrix.Rotator();
 		TargetRotator.Pitch = 0;
 		TargetRotator.Roll = 0;
-		RotateActor->SetActorRotation(FMath::RInterpConstantTo(RotateActor->GetActorRotation(),TargetRotator,DeltaTime,RotateSpeed));
+		RotateComponent->SetWorldRotation(FMath::RInterpConstantTo(RotateComponent->GetComponentRotation(),TargetRotator,DeltaTime,RotateSpeed));
 		// CurRotator.Yaw = FMath::Clamp(DeltaTime* RotateSpeed,CurRotator.Yaw,NewYawValue);
 		// Tower->SetActorRotation(CurRotator);
 	}
