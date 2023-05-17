@@ -6,6 +6,7 @@
 #include "Character/TManBase.h"
 #include "Component/ActorComp/Tower/TAttackHandleComponent.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Structure/FTManBuffer.h"
 
 ATMainTower::ATMainTower()
@@ -21,6 +22,7 @@ ATMainTower::ATMainTower()
 
 	AttackHandleComponent = CreateDefaultSubobject<UTAttackHandleComponent>(TEXT("AttackHandleComp"));
 	
+	Name = FName(GetClass()->GetFName().ToString());
 }
 
 void ATMainTower::AttackRangeOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -32,8 +34,15 @@ void ATMainTower::AttackRangeOverlap(UPrimitiveComponent* OverlappedComponent, A
 		if( OthMan != nullptr &&
 			AttackHandleComponent->TargetIsFull() == false)
 		{
-			AttackHandleComponent->AddTarget(OthMan);
-			TargetInRange();
+			if( AttackHandleComponent->TargetIsEmpty())
+			{
+				AttackHandleComponent->AddTarget(OthMan);
+				TargetInRange();
+			}
+			else
+			{
+				AttackHandleComponent->AddTarget(OthMan);
+			}
 		}
 	}
 }
@@ -47,7 +56,7 @@ void ATMainTower::AttackRangeEndOverlap(UPrimitiveComponent* OverlappedComponent
 		
 		TArray<AActor*> ManBases;
 		GetOverlappingActors(ManBases, ATManBase::StaticClass());
-		if( ManBases.Num() == 0)
+		if( ManBases.Num() == 0 && AttackHandleComponent->TargetIsEmpty())
 		{
 			// TargetMan = nullptr;
 			NoTargetInRange();
@@ -112,6 +121,7 @@ void ATMainTower::BeginPlay()
 	Super::BeginPlay();
 	// AttackRangeSphere->OnComponentBeginOverlap.AddDynamic(this, &ATMainTower::AttackRangeOverlap);
 	// AttackRangeSphere->OnComponentEndOverlap.AddDynamic(this, &ATMainTower::AttackRangeEndOverlap);
+	UE_LOG(LogTemp,Log,TEXT("Class Name %s"),*Name.ToString());
 }
 
 void ATMainTower::OnConstruction(const FTransform& Transform)

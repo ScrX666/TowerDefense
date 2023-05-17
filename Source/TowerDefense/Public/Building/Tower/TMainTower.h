@@ -28,7 +28,7 @@ public:
 	USphereComponent* AttackRangeSphere;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	UTAttackHandleComponent* AttackHandleComponent;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	FName Name;
 	
 	// UPROPERTY(VisibleAnywhere)

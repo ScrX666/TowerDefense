@@ -17,7 +17,7 @@ class TOWERDEFENSE_API ATManBase : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ATManBase();
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(VisibleAnywhere)
 	FName Name;
 	UPROPERTY(VisibleAnywhere)
 	UTManStateAndBuffer* ManStateAndBuffer;
@@ -37,9 +37,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void OnConstruction(const FTransform& Transform) override;
 

@@ -9,6 +9,7 @@
 #include "Structure/FAISpawnStruct.h"
 #include "TSplineMapActor.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWaveChanged,int32,NewWave, int32, MaxWave);
 UCLASS()
 class TOWERDEFENSE_API ATSplineMapActor : public AActor
 {
@@ -19,7 +20,9 @@ public:
 	bool bUseLevelNameAsTableSuffix = true; // 是否通过关卡名查表
 	UPROPERTY(EditDefaultsOnly)
 	FName TableNameSuffix;
-
+	UPROPERTY(BlueprintAssignable)
+	FOnWaveChanged OnWaveChanged;
+	
 protected:
 	int32 CurrentWave = 0; // 当前波次
 	int32 CurrentEnemyCount = 0; // 当前波次已经生成的敌人数量
@@ -48,6 +51,9 @@ public:
 	void MoveTo(ATFirstAIController* AIController, int index, FVector& NextPosition);
 
 	void OnManDead();
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetMaxWaveCount();
 	
 protected:
 	// Called when the game starts or when spawned

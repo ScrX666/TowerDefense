@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "TAICharacter.generated.h"
-
+/*
+	弃用
+*/
 UCLASS()
 class TOWERDEFENSE_API ATAICharacter : public ACharacter
 {

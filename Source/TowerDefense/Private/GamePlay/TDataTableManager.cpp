@@ -164,13 +164,14 @@ void TDataTableManager::GetAISpawnStructs(FName PathSuffix, TArray<FAISpawnStruc
 	AISpawnTables[PathSuffix]->GetAllRows<FAISpawnStruct>(ContextStr,OutAISpawnStructs);
 }
 
-FName TDataTableManager::GetNextLevel( const FName CurrentLevelName)
+FName TDataTableManager::GetNextLevel(const FName CurrentLevelName)
 {
 	if( LevelInfoTable == nullptr)
 	{
 		UE_LOG(LogTemp,Warning,TEXT("LevelInfoTable NULL"));
 		return FName();
 	}
+	UE_LOG(LogTemp,Log,TEXT("CurrentLevelName %s"),*CurrentLevelName.ToString());
 	const FString ContextStr;
 	// static TArray<FAISpawnStruct*> OutArray; 打包时使用
 	TArray<FTLevelInfo*> OutArray;
@@ -180,6 +181,7 @@ FName TDataTableManager::GetNextLevel( const FName CurrentLevelName)
 	}
 	for( int i = 0; i < OutArray.Num(); i++)
 	{
+		// UE_LOG(LogTemp,Log,TEXT("CurrentLevelName %s"),*OutArray[i]->Level->GetName());
 		if( OutArray[i]->Level)
 		{
 			UE_LOG(LogTemp,Log,TEXT("Level Name %s"),*OutArray[i]->Level->GetName());
@@ -282,6 +284,8 @@ TDataTableManager::TDataTableManager()
 	AISpawnTable = LoadObject<UDataTable>(nullptr, UTF8_TO_TCHAR("/Game/BluePrint/Table/T_AISpawn"));
 	LevelInfoTable = LoadObject<UDataTable>(nullptr, UTF8_TO_TCHAR("/Game/BluePrint/Table/T_LevelInfo"));
 	AISpawnTableLength = 0;
+	
+	// ShotTowerTable->AddToRoot();
 	
 	// TODO: 测试是否多次构造
 	UE_LOG(LogTemp, Log,TEXT("Construct DataTableManager"));

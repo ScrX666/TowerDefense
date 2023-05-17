@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Enum/EBuildingMode.h"
 #include "GameFramework/PlayerController.h"
+#include "Interface/TBuildingInterface.h"
 #include "TPlayerController.generated.h"
 
 class UTUIManagerComponent;
@@ -29,12 +30,16 @@ public:
 
 private:
 	EBuildingMode BuildingMode = EBuildingMode::E_NotInBuildMode;
-	TSubclassOf<ATMainBuilding> BuildingClass;
+	TSubclassOf<AActor> BuildingClass;
 	FVector CursorLocation;
 	UPROPERTY()
-	ATMainBuilding* BuildingRefer; // 正在建造
+	TScriptInterface<ITBuildingInterface> BuildingReferInterface; // 正在建造
 	UPROPERTY()
-	ATMainBuilding* CursorHitBuilding; // 点击已经建造
+	AActor* BuildingReferActor; // 正在建造
+	UPROPERTY()
+	TScriptInterface<ITBuildingInterface> CursorHitBuildingInterface; // 点击已经建造
+	UPROPERTY()
+	AActor* CursorHitBuildingActor; // 点击已经建造
 	UPROPERTY()
 	class UDecalComponent* DecalComponent;
 	UPROPERTY()
@@ -53,7 +58,7 @@ public:
 	 * 设置建造模式（拿起，放下）
 	 */
 	UFUNCTION(BlueprintCallable)
-	void SetBuildingMode(TSubclassOf<ATMainBuilding> BuildingCla);
+	void SetBuildingMode(TSubclassOf<AActor> BuildingCla);
 
 	UFUNCTION()
 	void MouseClickDown();

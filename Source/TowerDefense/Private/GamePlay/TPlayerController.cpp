@@ -3,11 +3,13 @@
 
 #include "GamePlay/TPlayerController.h"
 
+#include "AIController.h"
 #include "Building/TMainAttachBase.h"
 #include "Building/TMainBuilding.h"
 #include "Building/Tower/TMainBeamTower.h"
 #include "Building/Tower/TMainShotTower.h"
 #include "Building/Tower/TMainTower.h"
+#include "Character/TSoldierBase.h"
 #include "Component/ActorComp/TUIManagerComponent.h"
 #include "Components/DecalComponent.h"
 #include "GamePlay/TGameState.h"
@@ -17,13 +19,13 @@
 
 
 ATPlayerController::ATPlayerController() :
-BuildingMode(EBuildingMode::E_NotInBuildMode), BuildingRefer(nullptr), CursorHitBuilding(nullptr)
+BuildingMode(EBuildingMode::E_NotInBuildMode)
 {
 	this->SetShowMouseCursor(true);
 	UIManagerComponent = CreateDefaultSubobject<UTUIManagerComponent>(TEXT("UIManager"));
 }
 
-void ATPlayerController::SetBuildingMode(TSubclassOf<ATMainBuilding> BuildingCla)
+void ATPlayerController::SetBuildingMode(TSubclassOf<AActor> BuildingCla)
 {
 	this->BuildingClass = BuildingCla;
 	if( BuildingMode == EBuildingMode::E_InBuildMode)
@@ -45,33 +47,59 @@ void ATPlayerController::MouseClickDown()
 	if( EBuildingMode::E_InBuildMode == BuildingMode)
 	{
 		// 建造模式
-		if( BuildingRefer != nullptr)
+		if( BuildingReferActor != nullptr)
 		{
-			if( TPlayerState && TPlayerState->CoinsEnough(BuildingRefer->GetCostCoins()))
+			if( BuildingReferActor->IsA<ATMainBuilding>())
 			{
-				if( CanConstruct)
+				// 建造 建筑物
+				if( TPlayerState && TPlayerState->CoinsEnough(BuildingReferInterface->GetCostCoins()))
 				{
-					auto Building = GetWorld()->SpawnActor<ATMainBuilding>(BuildingClass,BuildingRefer->GetTransform());
-					Building->OnSelected(false);
-					AttachBase->OnConstructAttachBuilding(Building);
-					Building->OnConstruct(AttachBase);
-					TPlayerState->RemoveCoins(Building->GetCostCoins());
+					if( CanConstruct)
+					{
+						auto Building = GetWorld()->SpawnActor<ATMainBuilding>(BuildingClass,BuildingReferActor->GetTransform());
+						Building->OnSelected(false);
+						AttachBase->OnConstructAttachBuilding(Building);
+						Building->OnConstruct(AttachBase);
+						TPlayerState->RemoveCoins(Building->GetCostCoins());
+					}
+					else
+					{
+						UE_LOG(LogTemp,Log,TEXT("Build ERROR"));
+					}
 				}
 				else
 				{
-					UE_LOG(LogTemp,Log,TEXT("Build ERROR"));
+				
 				}
 			}
 			else
 			{
+				// 创建 角色
+				if( TPlayerState && TPlayerState->CoinsEnough(BuildingReferInterface->GetCostCoins()))
+				{
+					if( CanConstruct)
+					{
+						auto Building = GetWorld()->SpawnActor<ATSoldierBase>(BuildingClass,BuildingReferActor->GetTransform());
+						Building->OnSelected(false);
+						Building->OnConstruct(nullptr);
+						TPlayerState->RemoveCoins(Building->GetCostCoins());
+					}
+					else
+					{
+						UE_LOG(LogTemp,Log,TEXT("Build ERROR"));
+					}
+				}
+				else
+				{
 				
+				}
 			}
 			SetBuildingMode(nullptr);
 		}
 	}
 	else
 	{
-		// 非建造模式
+		// 非建造模式 点击
 		if(SelectedBuilding)
 		{
 			SelectedBuilding->OnSelected(false);
@@ -79,13 +107,13 @@ void ATPlayerController::MouseClickDown()
 		}
 
 		
-		if( CursorHitBuilding)
+		if( CursorHitBuildingActor)
 		{
-			CursorHitBuilding->OnSelected(true);
-			SelectedBuilding = CursorHitBuilding;
-			if( CursorHitBuilding->IsA<ATMainShotTower>())
+			CursorHitBuildingInterface->OnSelected(true);
+			SelectedBuilding = Cast<ATMainBuilding>(CursorHitBuildingActor);
+			if( CursorHitBuildingActor->IsA<ATMainShotTower>())
 				UIManagerComponent->PushUIState(TEXT("ShotTowerInfo"));
-			if( CursorHitBuilding->IsA<ATMainBeamTower>())
+			if( CursorHitBuildingActor->IsA<ATMainBeamTower>())
 				UIManagerComponent->PushUIState(TEXT("BeamTowerInfo"));
 		}
 		else
@@ -103,16 +131,22 @@ void ATPlayerController::MouseMove(float Value)
 		TraceTypeQuery3 : TraceTypeQuery1;
 	GetHitResultUnderCursorByChannel(Type, true, HitResult);
 	
-	if( HitResult.bBlockingHit) CursorLocation = HitResult.Location;
-	if( CursorHitBuilding != HitResult.Actor)
+	if( HitResult.bBlockingHit)
 	{
-		if( CursorHitBuilding != nullptr)
+		CursorLocation = HitResult.Location;
+	}
+	if( CursorHitBuildingActor != HitResult.Actor)
+	{
+		if( CursorHitBuildingActor != nullptr)
 		{
-			CursorHitBuilding->OnHovered(false);
+			CursorHitBuildingInterface->OnHovered(false);
 		}
-		CursorHitBuilding = Cast<ATMainBuilding>(HitResult.Actor);
-		if( CursorHitBuilding)
-			CursorHitBuilding->OnHovered(true);
+		//---------------------------------------- CursorHitBuildingActor 赋值
+		CursorHitBuildingActor = Cast<ATMainBuilding>(HitResult.Actor);
+		CursorHitBuildingInterface = Cast<ATMainBuilding>(HitResult.Actor);
+		
+		if( CursorHitBuildingActor)
+			CursorHitBuildingInterface->OnHovered(true);
 	}
 #pragma endregion
 
@@ -126,29 +160,49 @@ void ATPlayerController::MouseMove(float Value)
 #pragma endregion 
 	
 #pragma region 设置建筑物位置
-	if( BuildingMode == EBuildingMode::E_InBuildMode && BuildingRefer != nullptr)
+	if( BuildingMode == EBuildingMode::E_InBuildMode && BuildingReferActor != nullptr)
 	{
-		AttachBase = Cast<ATMainAttachBase>(HitResult.Actor);
-		CanConstruct = false;
-		if( AttachBase != nullptr)
+		if(BuildingReferActor->IsA<ATMainBuilding>())
 		{
-			if( AttachBase->AttachedBuilding != nullptr)
+			// 建筑物
+			AttachBase = Cast<ATMainAttachBase>(HitResult.Actor);
+			CanConstruct = false;
+			if( AttachBase != nullptr)
 			{
-				BuildingRefer->CanConstructBuilding(false);
-				BuildingRefer->SetActorLocation(CursorLocation);
+				if( AttachBase->AttachedBuilding != nullptr)
+				{
+					BuildingReferInterface->CanConstructBuilding(false);
+					BuildingReferActor->SetActorLocation(CursorLocation);
+				}
+				else
+				{
+					CanConstruct = true;
+					BuildingReferInterface->CanConstructBuilding(true);
+					BuildingReferActor->SetActorLocation(AttachBase->AttachedBuildingPos->GetComponentLocation());
+					BuildingReferActor->SetActorRotation(AttachBase->AttachedBuildingPos->GetComponentRotation());
+				}
 			}
 			else
 			{
-				CanConstruct = true;
-				BuildingRefer->CanConstructBuilding(true);
-				BuildingRefer->SetActorLocation(AttachBase->AttachedBuildingPos->GetComponentLocation());
-				BuildingRefer->SetActorRotation(AttachBase->AttachedBuildingPos->GetComponentRotation());
+				BuildingReferInterface->CanConstructBuilding(false);
+				BuildingReferActor->SetActorLocation(CursorLocation);
 			}
 		}
 		else
 		{
-			BuildingRefer->CanConstructBuilding(false);
-			BuildingRefer->SetActorLocation(CursorLocation);
+			// 创建角色
+			CanConstruct = false;
+			if( HitResult.Actor.IsValid())
+			{
+				CanConstruct = true;
+				BuildingReferInterface->CanConstructBuilding(true);
+				BuildingReferActor->SetActorLocation(CursorLocation);
+			}
+			else
+			{
+				BuildingReferInterface->CanConstructBuilding(false);
+				BuildingReferActor->SetActorLocation(CursorLocation);
+			}
 		}
 	}
 #pragma endregion 
@@ -185,29 +239,39 @@ void ATPlayerController::SetupInputComponent()
 void ATPlayerController::BuildingModeOff()
 {
 	DecalComponent->SetHiddenInGame(false);
-	if( BuildingRefer)
+	if( BuildingReferActor)
 	{
 		UE_LOG(LogTemp,Log,TEXT("Destory Building"));
-		if(BuildingRefer->Destroy())
+		if( BuildingReferActor)
 		{
-			UE_LOG(LogTemp,Log,TEXT("Destory Building Success"));
+			if(BuildingReferActor->Destroy())
+			{
+				UE_LOG(LogTemp,Log,TEXT("Destory Building Success"));
+			}
+			else
+			{
+				UE_LOG(LogTemp,Log,TEXT("Destory Building Fail"));
+			}
 		}
-		else
-		{
-			UE_LOG(LogTemp,Log,TEXT("Destory Building Fail"));
-		}
-		BuildingRefer = nullptr;
+		//------------------------------ BuildingRefer 赋值
+		BuildingReferInterface = nullptr;
+		BuildingReferActor = nullptr;
 	}
 }
 
 void ATPlayerController::BuildingModeOn()
 {
-	BuildingRefer = GetWorld()->SpawnActor<ATMainBuilding>(BuildingClass, CursorLocation,FRotator::ZeroRotator);
-	BuildingRefer->OnSelected(BuildingMode == EBuildingMode::E_InBuildMode);
+	//------------------------------ BuildingRefer 赋值
+	FActorSpawnParameters ActorSpawnParameters;
+	ActorSpawnParameters.Instigator = this->GetPawn();
+	ActorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	BuildingReferActor = GetWorld()->SpawnActor<AActor>(BuildingClass, CursorLocation,FRotator::ZeroRotator,ActorSpawnParameters);
+	BuildingReferInterface = BuildingReferActor;
 	DecalComponent->SetHiddenInGame(true);
-	if( BuildingRefer->Implements<UTBuildingInterface>())
+	if( BuildingReferInterface)
 	{
-		BuildingRefer->OnConstruct(nullptr);
+		BuildingReferInterface->OnSelected(BuildingMode == EBuildingMode::E_InBuildMode);
+		BuildingReferInterface->OnConstruct(nullptr);
 	}
 }
 

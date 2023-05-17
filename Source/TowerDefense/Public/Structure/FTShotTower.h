@@ -48,7 +48,7 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly)
 	int32 LevelUpExp = 100;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	int32 CostCoins = 100;
 	// 同时攻击敌人数量
 	UPROPERTY(EditDefaultsOnly)

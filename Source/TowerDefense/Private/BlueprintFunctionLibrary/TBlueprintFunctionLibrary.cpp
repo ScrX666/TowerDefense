@@ -107,5 +107,17 @@ TArray<FTBoolArray> UTBlueprintFunctionLibrary::GetRandomPath(int32 Width, int32
 FName UTBlueprintFunctionLibrary::GetNextLevel(const FName CurrentLevelName)
 {
     return
-    TDataTableManager::GetInstance()->GetNextLevel(FName(CurrentLevelName));
+    TDataTableManager::GetInstance()->GetNextLevel(CurrentLevelName);
+}
+
+int32 UTBlueprintFunctionLibrary::GetTowerCoinsByClassAndName(TSubclassOf<ATMainTower> Tower, FName Name)
+{
+    if( Tower == ATMainBeamTower::StaticClass())
+    {
+        return TDataTableManager::GetInstance()->GetBeamTowerData(Name).CostCoins;
+    }
+    else
+    {
+        return TDataTableManager::GetInstance()->GetShotTowerData(Name).CostCoins;
+    }
 }

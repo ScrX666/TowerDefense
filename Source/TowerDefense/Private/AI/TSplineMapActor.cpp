@@ -131,6 +131,9 @@ void ATSplineMapActor::SpawnWave()
 	{
 		
 		SpawnAIWalkSpeed = FaiSpawnStruct.ManWalkSpeed;
+		if( CurrentEnemyCount == 0)
+			OnWaveChanged.Broadcast(CurrentWave,AISpawnData.Num());
+		
 		// 生成敌人
 		SpawnAI();
 		// 增加已生成的敌人数量
@@ -198,6 +201,11 @@ void ATSplineMapActor::OnManDead()
 		Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->OnGameEnd.Broadcast(true);
 		PlayerState->AllEnemyDead = true;
 	}
+}
+
+int32 ATSplineMapActor::GetMaxWaveCount()
+{
+	return AISpawnData.Num();
 }
 
 

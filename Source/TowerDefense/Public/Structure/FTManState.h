@@ -20,7 +20,11 @@ struct FTManState : public FTableRowBase
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth;
 	UPROPERTY(EditDefaultsOnly)
-	int Coins;
+	int32 Coins;
 	UPROPERTY(EditDefaultsOnly)
-	int Exp;
+	int32 Exp;
+	UPROPERTY(EditDefaultsOnly)
+	int32 Cost;
+	UPROPERTY(EditDefaultsOnly)
+	int32 Damage;
 };

@@ -8,7 +8,7 @@
 #include "TBlueprintFunctionLibrary.generated.h"
 
 
-
+class ATMainTower;
 /**
  * 
  */
@@ -20,4 +20,6 @@ class TOWERDEFENSE_API UTBlueprintFunctionLibrary : public UBlueprintFunctionLib
 	static TArray<FTBoolArray> GetRandomPath(int32 Width, int32 Length, int32 N);
 	UFUNCTION(BlueprintCallable)
 	static FName GetNextLevel(const FName CurrentLevelName);
+	UFUNCTION(BlueprintCallable)
+	static int32 GetTowerCoinsByClassAndName(TSubclassOf<ATMainTower> Tower,FName Name);
 };

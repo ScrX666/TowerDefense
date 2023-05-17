@@ -36,6 +36,8 @@ ATManBase::ATManBase()
 	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
 	HealthWidgetComponent->SetCollisionProfileName(TEXT("NoCollision"));
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Man"));
+
+	Name = FName(GetClass()->GetFName().ToString());
 }
 
 void ATManBase::UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* OwningComp, float NewHealth, float Delta)
@@ -74,13 +76,6 @@ void ATManBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	UpdateHealthBarRotation();
-
-}
-
-// Called to bind functionality to input
-void ATManBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
 

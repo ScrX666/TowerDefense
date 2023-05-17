@@ -5,6 +5,8 @@
 #include <mutex>
 
 #include "CoreMinimal.h"
+#include "Building/Tower/TMainBeamTower.h"
+#include "Building/Tower/TMainShotTower.h"
 #include "Structure/FAISpawnStruct.h"
 #include "Structure/FTBeamTower.h"
 #include "Structure/FTLevelInfo.h"
