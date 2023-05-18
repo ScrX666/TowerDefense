@@ -89,7 +89,7 @@ void ATMainTower::UpdateAttackRange(const float NewRange)
 {
 	AttackRange = NewRange;
 	AttackRangeSphere->SetSphereRadius(NewRange);
-	AttackRangeMesh->SetWorldScale3D(FVector(AttackRange / 200.0f,AttackRange / 200.0f,3));
+	AttackRangeMesh->SetWorldScale3D(FVector(AttackRange / 50.0f));
 }
 
 
