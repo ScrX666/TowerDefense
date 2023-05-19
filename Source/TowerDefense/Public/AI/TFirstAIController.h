@@ -15,11 +15,16 @@ class TOWERDEFENSE_API ATFirstAIController : public AAIController
 {
 	GENERATED_BODY()
 public:
+	UPROPERTY(EditDefaultsOnly)
+	UBehaviorTree* BTEnemy;
+	UPROPERTY(VisibleAnywhere)
 	ATSplineMapActor* SplineMapActor;
+	
 	FVector NextPosition;
-	int NextIndex = 1;
+	int NextIndex = 0;
 public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void Destroyed() override;
+	FVector GetNextPosition();
 };

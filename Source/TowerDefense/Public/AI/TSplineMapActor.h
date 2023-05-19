@@ -54,6 +54,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int32 GetMaxWaveCount();
+	UFUNCTION(BlueprintCallable)
+	FVector GetTargetPos(int32 index);
 	
 protected:
 	// Called when the game starts or when spawned

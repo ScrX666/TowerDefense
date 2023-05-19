@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TManBase.generated.h"
 
+class UAIPerceptionComponent;
+class UPawnSensingComponent;
 class UWidgetComponent;
 class UTManStateAndBuffer;
 
@@ -25,12 +27,17 @@ public:
 	UWidgetComponent* HealthWidgetComponent;
 	UPROPERTY(VisibleAnywhere)
 	TSubclassOf<UUserWidget> HealthBarWidget;
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
+	class UAIPerceptionComponent* PerceptionComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
+	class UAISenseConfig_Sight* SightConfig;
 	
 protected:
 	UFUNCTION()
 	void UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* OwningComp, float NewHealth, float Delta);
 
+	UFUNCTION()
+	void OnPerceptionUpdated(const TArray<AActor*>& Actors);
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
