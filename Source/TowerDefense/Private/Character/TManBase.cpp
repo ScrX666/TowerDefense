@@ -15,6 +15,10 @@
 #include "GamePlay/TPlayerController.h"
 #include "GamePlay/TPlayerState.h"
 #include "Kismet/GameplayStatics.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig.h"
+#include "Perception/AISenseConfig_Sight.h"
+#include "Perception/PawnSensingComponent.h"
 
 // Sets default values
 ATManBase::ATManBase()
@@ -37,6 +41,17 @@ ATManBase::ATManBase()
 	HealthWidgetComponent->SetCollisionProfileName(TEXT("NoCollision"));
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Man"));
 
+	// 配置AI感知组件
+	PerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("PerceptionComponent"));
+
+	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
+	PerceptionComponent->ConfigureSense(*SightConfig);
+	PerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
+	SightConfig->SightRadius = 1000.0f;  // 设置视野范围
+	SightConfig->LoseSightRadius = 1200.0f;  // 设置失去目标的视野范围
+	SightConfig->PeripheralVisionAngleDegrees = 90.0f;  // 设置感知角度
+	SightConfig->SetMaxAge(5.0f);  // 设置感知信息的最大存活时间
+	
 	Name = FName(GetClass()->GetFName().ToString());
 }
 
@@ -58,6 +73,11 @@ void ATManBase::UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* Ow
 	}
 }
 
+void ATManBase::OnPerceptionUpdated(const TArray<AActor*>& Actors)
+{
+	
+}
+
 // Called when the game starts or when spawned
 void ATManBase::BeginPlay()
 {
@@ -67,7 +87,8 @@ void ATManBase::BeginPlay()
 	
 	// 绑定事件
 	ManStateAndBuffer->OnHealthChanged.AddDynamic(this, &ATManBase::UpdateHealthBar);
-
+	
+	PerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &ATManBase::OnPerceptionUpdated);
 }
 
 // Called every frame

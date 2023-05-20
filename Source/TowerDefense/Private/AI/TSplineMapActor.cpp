@@ -90,10 +90,6 @@ void ATSplineMapActor::AIMove(ATFirstAIController* NPC)
 			}
 		}
 	}
-
-
-
-	
 }
 
 void ATSplineMapActor::SpawnAI()
@@ -116,7 +112,7 @@ void ATSplineMapActor::SpawnAI()
 	if(ensure(moveController))
 	moveController->SplineMapActor = this;
 	// AIMove(moveController);
-	MoveTo(moveController, 1, moveController->NextPosition);
+	//MoveTo(moveController, 1, moveController->NextPosition); 原AI移动逻辑
 	// FPlatformProcess::Sleep(0.5);
 		
 	CurrentExistEnemyCount++;
@@ -170,7 +166,9 @@ void ATSplineMapActor::SpawnWave()
 		
 	}
 }
-
+/*
+ * 弃用 原AI移动逻辑
+ */
 void ATSplineMapActor::MoveTo(ATFirstAIController* AIController, int index, FVector& NextPosition)
 {
 	FVector MoveLoc = SplineComponent->GetLocationAtSplineInputKey(index,ESplineCoordinateSpace::World);
@@ -206,6 +204,12 @@ void ATSplineMapActor::OnManDead()
 int32 ATSplineMapActor::GetMaxWaveCount()
 {
 	return AISpawnData.Num();
+}
+
+FVector ATSplineMapActor::GetTargetPos(int32 index)
+{
+	FVector NextPos = SplineComponent->GetLocationAtSplineInputKey(index,ESplineCoordinateSpace::World);
+	return NextPos;
 }
 
 
