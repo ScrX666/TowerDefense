@@ -19,6 +19,7 @@ public:
 	TMap<FName, UMaterialInterface*> Materials;
 	
 public:
+	ATSoldierBase();
 	virtual void OnConstruct(ATMainAttachBase* AttachBase) override;
 	virtual void OnDestory() override;
 	virtual void OnHovered(bool bHovered) override;

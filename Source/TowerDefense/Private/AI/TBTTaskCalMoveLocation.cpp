@@ -4,15 +4,16 @@
 #include "AI/TBTTaskCalMoveLocation.h"
 
 #include "AIController.h"
-#include "AI/TFirstAIController.h"
+#include "AI/TAIBaseController.h"
+#include "AI/Enemy/TEnemyAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 EBTNodeResult::Type UTBTTaskCalMoveLocation::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	ATFirstAIController* FAI = Cast<ATFirstAIController>(OwnerComp.GetAIOwner());
-	if(FAI)
+	ATEnemyAIController* EnemyAIController = Cast<ATEnemyAIController>(OwnerComp.GetAIOwner());
+	if(EnemyAIController)
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsVector(TEXT("MoveToLocation"),FAI->GetNextPosition());
+		OwnerComp.GetBlackboardComponent()->SetValueAsVector(TEXT("MoveToLocation"),EnemyAIController->GetNextPosition());
 		return EBTNodeResult::Succeeded;
 	}
 	return EBTNodeResult::Failed;

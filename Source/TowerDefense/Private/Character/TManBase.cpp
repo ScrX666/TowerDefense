@@ -4,8 +4,11 @@
 #include "Character/TManBase.h"
 
 #include "ToolContextInterfaces.h"
-#include "AI/TFirstAIController.h"
+#include "AI/TAIBaseController.h"
+#include "AI/Enemy/TEnemyAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Building/Tower/TMainTower.h"
+#include "Character/TSoldierBase.h"
 #include "Component/ActorComp/TManStateAndBuffer.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/ProgressBar.h"
@@ -32,7 +35,7 @@ ATManBase::ATManBase()
 	HealthWidgetComponent->SetupAttachment(RootComponent);
 	HealthWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
 	//AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
-	AIControllerClass = ATFirstAIController::StaticClass();
+	AIControllerClass = ATAIBaseController::StaticClass();
 
 	HealthWidgetComponent->SetDrawSize(FVector2D(200.0f, 50.0f));
 
@@ -51,6 +54,9 @@ ATManBase::ATManBase()
 	SightConfig->LoseSightRadius = 1200.0f;  // 设置失去目标的视野范围
 	SightConfig->PeripheralVisionAngleDegrees = 90.0f;  // 设置感知角度
 	SightConfig->SetMaxAge(5.0f);  // 设置感知信息的最大存活时间
+	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
 	
 	Name = FName(GetClass()->GetFName().ToString());
 }
@@ -72,16 +78,52 @@ void ATManBase::UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* Ow
 		UE_LOG(LogTemp,Warning,TEXT("Info Widge NULL"));
 	}
 }
-
+/*
+ * 感知到敌人
+ */
 void ATManBase::OnPerceptionUpdated(const TArray<AActor*>& Actors)
 {
+	if( !AIController || !AIController->CanBeSoloed()) return ; // 自己在对战的情况下 不设置对战对象
 	
+	for( AActor* const & SeenActor: Actors)
+	{
+		if( SeenActor->IsA(AttackManCla))
+		{
+			ATManBase* Man = Cast<ATManBase>(SeenActor);
+			ATEnemyAIController* TargetAIC = Cast<ATEnemyAIController>(Man->GetController());
+			if( TargetAIC && Man)
+			{
+				if( TargetAIC->CanBeSoloed() && AIController->CanBeSoloed())
+				{
+					AIController->SetSoloTarget(Man);
+					TargetAIC->SetSoloTarget(this);
+				}
+			}
+		}
+	}
+}
+
+void ATManBase::ManualPerceptionUpdated()
+{
+	TArray<AActor*> Actors;
+	PerceptionComponent->GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(),Actors);
+	OnPerceptionUpdated(Actors);
+}
+
+void ATManBase::Destroyed()
+{
+	Super::Destroyed();
+	//TODO: 与动画绑定
+	if( AIController && AIController->GetAttackMan())
+	AIController->GetAttackMan()->ManStateAndBuffer->OnDead.RemoveDynamic(AIController,&ATAIBaseController::DisableSolo);
 }
 
 // Called when the game starts or when spawned
 void ATManBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	AIController = Cast<ATAIBaseController>(GetController());
 	
 	HealthWidgetComponent->SetWidget(CreateWidget(GetWorld(),HealthBarWidget));
 	
@@ -114,13 +156,16 @@ float ATManBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	AActor* DamageCauser)
 {
 	// DamageCauser->GetOwner() 即获取发射子弹的塔
-	if( DamageCauser->IsA<ATMainTower>())
+	if( DamageCauser)
 	{
-		ManStateAndBuffer->ApplyHealthChange(DamageCauser,-DamageAmount);
-	}
-	else
-	{
-		ManStateAndBuffer->ApplyHealthChange(DamageCauser->GetOwner(),-DamageAmount);
+		if( DamageCauser && DamageCauser->IsA<ATMainTower>())
+		{
+			ManStateAndBuffer->ApplyHealthChange(DamageCauser,-DamageAmount);
+		}
+		else
+		{
+			ManStateAndBuffer->ApplyHealthChange(DamageCauser->GetOwner(),-DamageAmount);
+		}
 	}
 
 	return DamageAmount;
@@ -135,6 +180,21 @@ int ATManBase::GetCurrentHealth()
 {
 	return ManStateAndBuffer->CurrentHealth;
 }
+
+void ATManBase::Attack()
+{
+	if(AttackMontage)
+		GetMesh()->GetAnimInstance()->Montage_Play(AttackMontage);
+}
+/*
+ * 由动画通知事件触发
+ */
+void ATManBase::ApplyDamageInAnim()
+{
+	UGameplayStatics::ApplyDamage(AIController->GetAttackMan(),10,nullptr,this,UDamageType::StaticClass());
+}
+
+
 
 void ATManBase::UpdateHealthBarRotation()
 {

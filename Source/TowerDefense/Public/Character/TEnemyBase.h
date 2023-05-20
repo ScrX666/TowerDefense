@@ -13,5 +13,6 @@ UCLASS()
 class TOWERDEFENSE_API ATEnemyBase : public ATManBase
 {
 	GENERATED_BODY()
-	
+public:
+	ATEnemyBase();
 };
