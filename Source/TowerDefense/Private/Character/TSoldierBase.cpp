@@ -3,6 +3,14 @@
 
 #include "Character/TSoldierBase.h"
 
+#include "Character/TEnemyBase.h"
+
+ATSoldierBase::ATSoldierBase()
+{
+	Tags.Add(TEXT("Soldier"));
+	AttackManCla = ATEnemyBase::StaticClass();
+}
+
 void ATSoldierBase::OnConstruct(ATMainAttachBase* AttachBase)
 {
 	// if( AttachBase == nullptr)

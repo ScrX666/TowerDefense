@@ -48,7 +48,7 @@ public:
 	// Sets default values for this actor's properties
 	ATSplineMapActor();
 	UFUNCTION()
-	void MoveTo(ATFirstAIController* AIController, int index, FVector& NextPosition);
+	void MoveTo(ATAIBaseController* AIController, int index, FVector& NextPosition);
 
 	void OnManDead();
 
@@ -62,7 +62,7 @@ protected:
 	virtual void BeginPlay() override;
 	void AddArrow();
 	UFUNCTION()
-	void AIMove(ATFirstAIController* NPC);
+	void AIMove(ATAIBaseController* NPC);
 	UFUNCTION()
 	void SpawnAI();
 	void SpawnWave();

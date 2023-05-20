@@ -3,28 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AIController.h"
-#include "TFirstAIController.generated.h"
+#include "AI/TAIBaseController.h"
+#include "TEnemyAIController.generated.h"
 
-class ATSplineMapActor;
 /**
  * 
  */
 UCLASS()
-class TOWERDEFENSE_API ATFirstAIController : public AAIController
+class TOWERDEFENSE_API ATEnemyAIController : public ATAIBaseController
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(EditDefaultsOnly)
-	UBehaviorTree* BTEnemy;
 	UPROPERTY(VisibleAnywhere)
 	ATSplineMapActor* SplineMapActor;
 	
 	FVector NextPosition;
 	int NextIndex = 0;
 public:
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
-	virtual void Destroyed() override;
 	FVector GetNextPosition();
+	virtual void BeginPlay() override;
+	virtual void Destroyed() override;
 };

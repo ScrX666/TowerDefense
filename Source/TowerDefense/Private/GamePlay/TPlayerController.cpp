@@ -4,11 +4,14 @@
 #include "GamePlay/TPlayerController.h"
 
 #include "AIController.h"
+#include "AI/Hero/THeroController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Building/TMainAttachBase.h"
 #include "Building/TMainBuilding.h"
 #include "Building/Tower/TMainBeamTower.h"
 #include "Building/Tower/TMainShotTower.h"
 #include "Building/Tower/TMainTower.h"
+#include "Character/THero.h"
 #include "Character/TSoldierBase.h"
 #include "Component/ActorComp/TUIManagerComponent.h"
 #include "Components/DecalComponent.h"
@@ -54,7 +57,7 @@ void ATPlayerController::MouseClickDown()
 				// 建造 建筑物
 				if( TPlayerState && TPlayerState->CoinsEnough(BuildingReferInterface->GetCostCoins()))
 				{
-					if( CanConstruct)
+					if( bCanConstruct)
 					{
 						auto Building = GetWorld()->SpawnActor<ATMainBuilding>(BuildingClass,BuildingReferActor->GetTransform());
 						Building->OnSelected(false);
@@ -77,7 +80,7 @@ void ATPlayerController::MouseClickDown()
 				// 创建 角色
 				if( TPlayerState && TPlayerState->CoinsEnough(BuildingReferInterface->GetCostCoins()))
 				{
-					if( CanConstruct)
+					if( bCanConstruct)
 					{
 						auto Building = GetWorld()->SpawnActor<ATSoldierBase>(BuildingClass,BuildingReferActor->GetTransform());
 						Building->OnSelected(false);
@@ -100,25 +103,39 @@ void ATPlayerController::MouseClickDown()
 	else
 	{
 		// 非建造模式 点击
-		if(SelectedBuilding)
+		if(bInHeroControlMode)
 		{
-			SelectedBuilding->OnSelected(false);
-			UIManagerComponent->PopState();
-		}
-
-		
-		if( CursorHitBuildingActor)
-		{
-			CursorHitBuildingInterface->OnSelected(true);
-			SelectedBuilding = Cast<ATMainBuilding>(CursorHitBuildingActor);
-			if( CursorHitBuildingActor->IsA<ATMainShotTower>())
-				UIManagerComponent->PushUIState(TEXT("ShotTowerInfo"));
-			if( CursorHitBuildingActor->IsA<ATMainBeamTower>())
-				UIManagerComponent->PushUIState(TEXT("BeamTowerInfo"));
+			// 控制英雄的模式
+			if(HitResult.Actor != nullptr)
+			{
+				SelectedBuilding->OnSelected(false);
+				if( HeroAIC)
+				HeroAIC->HeroMove(HitResult.Location);
+			}
 		}
 		else
 		{
-			SelectedBuilding = nullptr;
+			// 如果是塔 关闭UI面板
+			if(SelectedBuilding && SelectedBuilding.GetObject()->IsA<ATMainBuilding>())
+			{
+				SelectedBuilding->OnSelected(false);
+				UIManagerComponent->PopState();
+			}
+
+		
+			if( CursorHitBuildingInterface)
+			{
+				CursorHitBuildingInterface->OnSelected(true);
+				SelectedBuilding = CursorHitBuildingActor;
+				if( CursorHitBuildingActor->IsA<ATMainShotTower>())
+					UIManagerComponent->PushUIState(TEXT("ShotTowerInfo"));
+				if( CursorHitBuildingActor->IsA<ATMainBeamTower>())
+					UIManagerComponent->PushUIState(TEXT("BeamTowerInfo"));
+			}
+			else
+			{
+				SelectedBuilding = nullptr;
+			}
 		}
 	}
 }
@@ -126,7 +143,6 @@ void ATPlayerController::MouseClickDown()
 void ATPlayerController::MouseMove(float Value)
 {
 #pragma region 获取鼠标碰撞信息
-	FHitResult HitResult;
 	ETraceTypeQuery Type = EBuildingMode::E_InBuildMode == BuildingMode ?
 		TraceTypeQuery3 : TraceTypeQuery1;
 	GetHitResultUnderCursorByChannel(Type, true, HitResult);
@@ -137,15 +153,15 @@ void ATPlayerController::MouseMove(float Value)
 	}
 	if( CursorHitBuildingActor != HitResult.Actor)
 	{
-		if( CursorHitBuildingActor != nullptr)
+		if( CursorHitBuildingInterface)
 		{
 			CursorHitBuildingInterface->OnHovered(false);
 		}
 		//---------------------------------------- CursorHitBuildingActor 赋值
-		CursorHitBuildingActor = Cast<ATMainBuilding>(HitResult.Actor);
-		CursorHitBuildingInterface = Cast<ATMainBuilding>(HitResult.Actor);
+		CursorHitBuildingActor = Cast<AActor>(HitResult.Actor);
+		CursorHitBuildingInterface = CursorHitBuildingActor;
 		
-		if( CursorHitBuildingActor)
+		if( CursorHitBuildingInterface)
 			CursorHitBuildingInterface->OnHovered(true);
 	}
 #pragma endregion
@@ -166,7 +182,7 @@ void ATPlayerController::MouseMove(float Value)
 		{
 			// 建筑物
 			AttachBase = Cast<ATMainAttachBase>(HitResult.Actor);
-			CanConstruct = false;
+			bCanConstruct = false;
 			if( AttachBase != nullptr)
 			{
 				if( AttachBase->AttachedBuilding != nullptr)
@@ -176,7 +192,7 @@ void ATPlayerController::MouseMove(float Value)
 				}
 				else
 				{
-					CanConstruct = true;
+					bCanConstruct = true;
 					BuildingReferInterface->CanConstructBuilding(true);
 					BuildingReferActor->SetActorLocation(AttachBase->AttachedBuildingPos->GetComponentLocation());
 					BuildingReferActor->SetActorRotation(AttachBase->AttachedBuildingPos->GetComponentRotation());
@@ -191,10 +207,10 @@ void ATPlayerController::MouseMove(float Value)
 		else
 		{
 			// 创建角色
-			CanConstruct = false;
+			bCanConstruct = false;
 			if( HitResult.Actor.IsValid())
 			{
-				CanConstruct = true;
+				bCanConstruct = true;
 				BuildingReferInterface->CanConstructBuilding(true);
 				BuildingReferActor->SetActorLocation(CursorLocation);
 			}
@@ -211,6 +227,23 @@ void ATPlayerController::MouseMove(float Value)
 void ATPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	TArray<AActor*> Actors;
+	UGameplayStatics::GetAllActorsOfClass(this,ATHero::StaticClass(),Actors);
+	if( Actors.Num())
+	{
+		ATHero* Hero = Cast<ATHero>(Actors[0]);
+		if( Hero)
+		{
+			Hero->OnSelectHero.AddDynamic(this,&ATPlayerController::OnSelectHero);
+			HeroAIC = Cast<ATHeroController>(Hero->GetController());
+			if( HeroAIC)
+			{
+				HeroBlackboardComponent = HeroAIC->GetBlackboardComponent();
+			}
+		}
+	}
+	
 	if( UGameplayStatics::GetCurrentLevelName(GetWorld()) == TEXT("Map_Start"))
 		UIManagerComponent->PushUIState(TEXT("BeginUI"));
 	else
@@ -275,13 +308,13 @@ void ATPlayerController::BuildingModeOn()
 	}
 }
 
-void ATPlayerController::OnGameEnd(bool IsWin)
+void ATPlayerController::OnGameEnd(bool bIsWin)
 {
 	ATGameState* GameState = Cast<ATGameState>(UGameplayStatics::GetGameState(this));
 	if( GameState)
 	{
 		// 留给 UI 使用
-		GameState->bIsWin = IsWin;
+		GameState->bIsWin = bIsWin;
 	}
 	else
 	{
@@ -289,4 +322,9 @@ void ATPlayerController::OnGameEnd(bool IsWin)
 	}
 	UIManagerComponent->PushUIState(TEXT("EndGame"));
 	// UIManagerComponent->GetCurrentUIState()
+}
+
+void ATPlayerController::OnSelectHero(bool bSelectHero)
+{
+	bInHeroControlMode = bSelectHero;
 }

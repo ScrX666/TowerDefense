@@ -3,16 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Character/TManBase.h"
-#include "TEnemyBase.generated.h"
+#include "AI/TAIBaseController.h"
+#include "TSoliderAIController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TOWERDEFENSE_API ATEnemyBase : public ATManBase
+class TOWERDEFENSE_API ATSoliderAIController : public ATAIBaseController
 {
 	GENERATED_BODY()
-public:
-	ATEnemyBase();
+	
 };

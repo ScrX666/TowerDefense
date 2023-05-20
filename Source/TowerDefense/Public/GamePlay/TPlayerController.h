@@ -8,6 +8,8 @@
 #include "Interface/TBuildingInterface.h"
 #include "TPlayerController.generated.h"
 
+class ATHeroController;
+class UBlackboardComponent;
 class UTUIManagerComponent;
 class ATPlayerState;
 enum class EBuildingMode : uint8;
@@ -26,7 +28,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UTUIManagerComponent* UIManagerComponent;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	ATMainBuilding* SelectedBuilding; // 选中的建筑
+	TScriptInterface<ITBuildingInterface> SelectedBuilding; // 选中的建筑
 
 private:
 	EBuildingMode BuildingMode = EBuildingMode::E_NotInBuildMode;
@@ -46,9 +48,15 @@ private:
 	class ATMainAttachBase* AttachBase;
 	UPROPERTY(EditAnywhere)
 	class UMaterialInterface* DecalMaterial;
-	
-	
-	bool CanConstruct;
+
+
+	FHitResult HitResult;
+	bool bCanConstruct;
+	bool bInHeroControlMode; // 是否在操控英雄的模式
+	UPROPERTY(VisibleAnywhere)
+	UBlackboardComponent* HeroBlackboardComponent;
+	UPROPERTY(VisibleAnywhere)
+	ATHeroController* HeroAIC;
 	
 public:
 	ATPlayerController();
@@ -76,5 +84,7 @@ private:
 	void BuildingModeOn();
 	
 	UFUNCTION()
-	void OnGameEnd(bool IsWin);
+	void OnGameEnd(bool bIsWin);
+	UFUNCTION()
+	void OnSelectHero(bool bSelectHero);
 };

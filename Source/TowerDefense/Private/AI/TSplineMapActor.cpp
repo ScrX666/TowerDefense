@@ -6,7 +6,8 @@
 #include "AIController.h"
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
-#include "AI/TFirstAIController.h"
+#include "AI/TAIBaseController.h"
+#include "AI/Enemy/TEnemyAIController.h"
 #include "Building/TPathEndBuilding.h"
 #include "Character/TManBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -55,7 +56,7 @@ void ATSplineMapActor::AddArrow()
 	}
 }
 
-void ATSplineMapActor::AIMove(ATFirstAIController* NPC)
+void ATSplineMapActor::AIMove(ATAIBaseController* NPC)
 {
 	int SplinePointNums = SplineComponent->GetNumberOfSplinePoints();
 	FInterpCurveVector SplinePos = SplineComponent->GetSplinePointsPosition();
@@ -108,7 +109,7 @@ void ATSplineMapActor::SpawnAI()
 	{
 		Cast<UCharacterMovementComponent>(AICharacter->GetMovementComponent())->MaxWalkSpeed = SpawnAIWalkSpeed;
 	}
-	ATFirstAIController* moveController = Cast<ATFirstAIController >(AiPawn->GetController());
+	ATEnemyAIController* moveController = Cast<ATEnemyAIController >(AiPawn->GetController());
 	if(ensure(moveController))
 	moveController->SplineMapActor = this;
 	// AIMove(moveController);
@@ -169,7 +170,7 @@ void ATSplineMapActor::SpawnWave()
 /*
  * 弃用 原AI移动逻辑
  */
-void ATSplineMapActor::MoveTo(ATFirstAIController* AIController, int index, FVector& NextPosition)
+void ATSplineMapActor::MoveTo(ATAIBaseController* AIController, int index, FVector& NextPosition)
 {
 	FVector MoveLoc = SplineComponent->GetLocationAtSplineInputKey(index,ESplineCoordinateSpace::World);
 

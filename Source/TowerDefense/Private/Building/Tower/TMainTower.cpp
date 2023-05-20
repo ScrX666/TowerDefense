@@ -3,6 +3,7 @@
 
 #include "Building/Tower/TMainTower.h"
 
+#include "Character/TEnemyBase.h"
 #include "Character/TManBase.h"
 #include "Component/ActorComp/Tower/TAttackHandleComponent.h"
 #include "Components/SphereComponent.h"
@@ -30,7 +31,7 @@ void ATMainTower::AttackRangeOverlap(UPrimitiveComponent* OverlappedComponent, A
 {
 	if( OtherActor != nullptr)
 	{
-		auto OthMan = Cast<ATManBase>(OtherActor);
+		auto OthMan = Cast<ATEnemyBase>(OtherActor);
 		if( OthMan != nullptr &&
 			AttackHandleComponent->TargetIsFull() == false)
 		{
@@ -50,7 +51,7 @@ void ATMainTower::AttackRangeOverlap(UPrimitiveComponent* OverlappedComponent, A
 void ATMainTower::AttackRangeEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if( OtherActor->IsA<ATManBase>())
+	if( OtherActor->IsA<ATEnemyBase>())
 	{
 		AttackHandleComponent->RemoveAttackTarget(Cast<ATManBase>(OtherActor));
 		

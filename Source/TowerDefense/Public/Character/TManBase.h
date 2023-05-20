@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "TManBase.generated.h"
 
+class ATAIBaseController;
 class UAIPerceptionComponent;
 class UPawnSensingComponent;
 class UWidgetComponent;
@@ -17,8 +18,6 @@ class TOWERDEFENSE_API ATManBase : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
-	ATManBase();
 	UPROPERTY(VisibleAnywhere)
 	FName Name;
 	UPROPERTY(VisibleAnywhere)
@@ -31,17 +30,15 @@ public:
 	class UAIPerceptionComponent* PerceptionComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
 	class UAISenseConfig_Sight* SightConfig;
-	
-protected:
-	UFUNCTION()
-	void UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* OwningComp, float NewHealth, float Delta);
-
-	UFUNCTION()
-	void OnPerceptionUpdated(const TArray<AActor*>& Actors);
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
+	UPROPERTY(EditDefaultsOnly)
+	UAnimMontage* AttackMontage;
+	UPROPERTY(VisibleAnywhere)
+	TSubclassOf<ATManBase> AttackManCla;
+private:
+	ATAIBaseController* AIController;
 public:	
+	// Sets default values for this character's properties
+	ATManBase();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -54,7 +51,30 @@ public:
 	int GetMaxHealth();
 	UFUNCTION(BlueprintCallable,BlueprintPure)
 	int GetCurrentHealth();
+	UFUNCTION()
+	virtual void Attack();
+	/*
+	 * 由动画通知事件触发
+	 */
+	UFUNCTION(BlueprintCallable)
+	virtual void ApplyDamageInAnim();
+	/*
+	 * 手动更新感知组件，用于hero更新
+	 */
+	UFUNCTION()
+	void ManualPerceptionUpdated();
+	
+protected:
+	UFUNCTION()
+	void UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* OwningComp, float NewHealth, float Delta);
+	UFUNCTION()
+	void OnPerceptionUpdated(const TArray<AActor*>& Actors);
 
+
+	virtual void Destroyed() override;
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	
 private:
 
 	/*
