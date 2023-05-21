@@ -13,6 +13,7 @@
 #include "Building/Tower/TMainTower.h"
 #include "Character/THero.h"
 #include "Character/TSoldierBase.h"
+#include "Component/ActorComp/TSkillManagerComponent.h"
 #include "Component/ActorComp/TUIManagerComponent.h"
 #include "Components/DecalComponent.h"
 #include "GamePlay/TGameState.h"
@@ -26,6 +27,7 @@ BuildingMode(EBuildingMode::E_NotInBuildMode)
 {
 	this->SetShowMouseCursor(true);
 	UIManagerComponent = CreateDefaultSubobject<UTUIManagerComponent>(TEXT("UIManager"));
+	SkillManagerComponent = CreateDefaultSubobject<UTSkillManagerComponent>(TEXT("SkillManager"));
 }
 
 void ATPlayerController::SetBuildingMode(TSubclassOf<AActor> BuildingCla)
@@ -82,10 +84,11 @@ void ATPlayerController::MouseClickDown()
 				{
 					if( bCanConstruct)
 					{
-						auto Building = GetWorld()->SpawnActor<ATSoldierBase>(BuildingClass,BuildingReferActor->GetTransform());
-						Building->OnSelected(false);
-						Building->OnConstruct(nullptr);
-						TPlayerState->RemoveCoins(Building->GetCostCoins());
+						// auto Building = GetWorld()->SpawnActor<ATSoldierBase>(BuildingClass,BuildingReferActor->GetTransform());
+						// Building->OnSelected(false);
+						// Building->OnConstruct(nullptr);
+						// TPlayerState->RemoveCoins(Building->GetCostCoins());
+						SkillManagerComponent->Execute(TEXT("SpawnSolider"));
 					}
 					else
 					{
@@ -222,6 +225,11 @@ void ATPlayerController::MouseMove(float Value)
 		}
 	}
 #pragma endregion 
+}
+
+FVector ATPlayerController::GetCursorHitLoc() const
+{
+	return HitResult.Location;
 }
 
 void ATPlayerController::BeginPlay()

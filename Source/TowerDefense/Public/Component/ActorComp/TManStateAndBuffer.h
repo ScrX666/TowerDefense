@@ -45,6 +45,7 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	// BUFF
 	TMap<EManBufferType,FTimerHandle> BufferTimerHandles;
 	UPROPERTY()
 	TMap<EManBufferType,AActor*> BufferInstigators;

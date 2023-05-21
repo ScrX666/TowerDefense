@@ -5,12 +5,14 @@
 
 #include "NiagaraComponent.h"
 #include "AI/Hero/THeroController.h"
+#include "Components/CapsuleComponent.h"
 
 ATHero::ATHero()
 {
 	SelectedEffect = CreateDefaultSubobject<UNiagaraComponent>("SelectedEffect");
 	SelectedEffect->SetupAttachment(RootComponent);
 	AIControllerClass = ATHeroController::StaticClass();
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Hero"));
 }
 
 void ATHero::OnSelected(bool bIsSelected)

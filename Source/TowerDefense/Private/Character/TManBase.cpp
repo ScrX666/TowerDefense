@@ -34,7 +34,7 @@ ATManBase::ATManBase()
 	HealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthWidgetComp"));
 	HealthWidgetComponent->SetupAttachment(RootComponent);
 	HealthWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
-	//AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+	AutoPossessAI = EAutoPossessAI::Spawned;
 	AIControllerClass = ATAIBaseController::StaticClass();
 
 	HealthWidgetComponent->SetDrawSize(FVector2D(200.0f, 50.0f));
@@ -44,6 +44,12 @@ ATManBase::ATManBase()
 	HealthWidgetComponent->SetCollisionProfileName(TEXT("NoCollision"));
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Man"));
 
+	// 配置运动组件
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+	bUseControllerRotationYaw = false;
+
+	
 	// 配置AI感知组件
 	PerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("PerceptionComponent"));
 
@@ -83,19 +89,21 @@ void ATManBase::UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* Ow
  */
 void ATManBase::OnPerceptionUpdated(const TArray<AActor*>& Actors)
 {
-	if( !AIController || !AIController->CanBeSoloed()) return ; // 自己在对战的情况下 不设置对战对象
+	if( !ManAIC)
+		ManAIC = Cast<ATAIBaseController>(GetController());
+	if( !ManAIC || !ManAIC->CanBeSoloed()) return ; // 自己在对战的情况下 不设置对战对象
 	
 	for( AActor* const & SeenActor: Actors)
 	{
 		if( SeenActor->IsA(AttackManCla))
 		{
 			ATManBase* Man = Cast<ATManBase>(SeenActor);
-			ATEnemyAIController* TargetAIC = Cast<ATEnemyAIController>(Man->GetController());
+			ATAIBaseController* TargetAIC = Cast<ATAIBaseController>(Man->GetController());
 			if( TargetAIC && Man)
 			{
-				if( TargetAIC->CanBeSoloed() && AIController->CanBeSoloed())
+				if( TargetAIC->CanBeSoloed() && ManAIC->CanBeSoloed())
 				{
-					AIController->SetSoloTarget(Man);
+					ManAIC->SetSoloTarget(Man);
 					TargetAIC->SetSoloTarget(this);
 				}
 			}
@@ -114,16 +122,16 @@ void ATManBase::Destroyed()
 {
 	Super::Destroyed();
 	//TODO: 与动画绑定
-	if( AIController && AIController->GetAttackMan())
-	AIController->GetAttackMan()->ManStateAndBuffer->OnDead.RemoveDynamic(AIController,&ATAIBaseController::DisableSolo);
+	if( ManAIC && ManAIC->GetAttackMan())
+	ManAIC->GetAttackMan()->ManStateAndBuffer->OnDead.RemoveDynamic(ManAIC,&ATAIBaseController::DisableSolo);
 }
 
 // Called when the game starts or when spawned
 void ATManBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	AIController = Cast<ATAIBaseController>(GetController());
+	
+	ManAIC = Cast<ATAIBaseController>(Controller); // 运行时生成获取不到Controller
 	
 	HealthWidgetComponent->SetWidget(CreateWidget(GetWorld(),HealthBarWidget));
 	
@@ -149,7 +157,6 @@ void ATManBase::OnConstruction(const FTransform& Transform)
 	// 根据Name加载信息
 	ManStateAndBuffer->ManState = TDataTableManager::GetInstance()->GetManStateData(Name);
 	ManStateAndBuffer->CurrentHealth = ManStateAndBuffer->ManState.MaxHealth;
-	GetMesh()->SetSkeletalMesh(ManStateAndBuffer->ManState.SkeletalMesh);
 }
 
 float ATManBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -183,15 +190,28 @@ int ATManBase::GetCurrentHealth()
 
 void ATManBase::Attack()
 {
+	if( !ManAIC)
+		ManAIC = Cast<ATAIBaseController>(GetController());
+	
 	if(AttackMontage)
 		GetMesh()->GetAnimInstance()->Montage_Play(AttackMontage);
+	if( ManAIC)
+	{
+		FVector Direction = ManAIC->GetAttackMan()->GetActorLocation() - this->GetActorLocation();
+		Direction.Z = 0;
+		FRotator NewRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
+		this->SetActorRotation(NewRotation);
+	}
 }
 /*
  * 由动画通知事件触发
  */
 void ATManBase::ApplyDamageInAnim()
 {
-	UGameplayStatics::ApplyDamage(AIController->GetAttackMan(),10,nullptr,this,UDamageType::StaticClass());
+	if( !ManAIC) return ;
+	
+	AActor* TargetActor = ManAIC->GetAttackMan();
+	UGameplayStatics::ApplyDamage(TargetActor,ManStateAndBuffer->ManState.Damage,nullptr,this,UDamageType::StaticClass());
 }
 
 

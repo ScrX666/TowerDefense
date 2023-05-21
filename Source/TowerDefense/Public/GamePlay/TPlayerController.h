@@ -8,6 +8,7 @@
 #include "Interface/TBuildingInterface.h"
 #include "TPlayerController.generated.h"
 
+class UTSkillManagerComponent;
 class ATHeroController;
 class UBlackboardComponent;
 class UTUIManagerComponent;
@@ -27,6 +28,8 @@ public:
 	ATPlayerState* TPlayerState;
 	UPROPERTY(VisibleAnywhere)
 	UTUIManagerComponent* UIManagerComponent;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	UTSkillManagerComponent* SkillManagerComponent;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TScriptInterface<ITBuildingInterface> SelectedBuilding; // 选中的建筑
 
@@ -72,7 +75,9 @@ public:
 	void MouseClickDown();
 	UFUNCTION()
 	void MouseMove(float Value);
-
+	UFUNCTION()
+	FVector GetCursorHitLoc() const;
+	
 private:
 	/*
 	 * 放下

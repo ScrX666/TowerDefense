@@ -4,6 +4,8 @@
 #include "Character/TSoldierBase.h"
 
 #include "Character/TEnemyBase.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig_Sight.h"
 
 ATSoldierBase::ATSoldierBase()
 {
@@ -13,28 +15,7 @@ ATSoldierBase::ATSoldierBase()
 
 void ATSoldierBase::OnConstruct(ATMainAttachBase* AttachBase)
 {
-	// if( AttachBase == nullptr)
-	// {
-	// 	UE_LOG(LogTemp,Log,TEXT("AttachBase Null"));
-	// 	AttackRangeMesh->SetVisibility(true);
-	// 	// 动态设置攻击范围显示
-	// 	//AttackRangeMesh->SetWorldScale3D(FVector(AttackRange / 200.0f,AttackRange / 200.0f,1));
-	// 	UpdateAttackRange(AttackRange);
-	// 	return ;
-	// }
-	// else
-	// {
-	// 	UE_LOG(LogTemp,Log,TEXT("AttachBase Not Null"));
-	//
-	// 	AttackRangeMesh->SetVisibility(false);
-	// 	AttackRangeSphere->OnComponentBeginOverlap.AddDynamic(this, &ATMainTower::AttackRangeOverlap);
-	// 	AttackRangeSphere->OnComponentEndOverlap.AddDynamic(this, &ATMainTower::AttackRangeEndOverlap);
-	//
-	// 	//生成时 函数还没有绑定，TargetMan 没有指定，手动触发一次
-	// 	AttackRangeSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	// 	AttackRangeSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	// 	return;
-	// }
+	PerceptionComponent->SetSenseEnabled(UAISenseConfig_Sight::StaticClass(),false);
 }
 
 void ATSoldierBase::OnDestory()

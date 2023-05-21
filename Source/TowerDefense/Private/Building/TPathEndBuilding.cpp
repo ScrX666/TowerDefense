@@ -33,6 +33,9 @@ void ATPathEndBuilding::RangeOverlap(UPrimitiveComponent* OverlappedComponent, A
 			UE_LOG(LogTemp,Log,TEXT("Gaem End"));
 			Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->OnGameEnd.Broadcast(false);	
 		}
+		ATManBase* Man = Cast<ATManBase>(OtherActor);
+		Man->ManStateAndBuffer->OnDead.Broadcast(this);
+		//TODO: Destory 绑定到OnDead 上 就不用Destory
 		OtherActor->Destroy();
 	}
 }

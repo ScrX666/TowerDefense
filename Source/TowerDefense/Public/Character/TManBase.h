@@ -35,7 +35,8 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TSubclassOf<ATManBase> AttackManCla;
 private:
-	ATAIBaseController* AIController;
+	UPROPERTY(VisibleAnywhere)
+	ATAIBaseController* ManAIC;
 public:	
 	// Sets default values for this character's properties
 	ATManBase();

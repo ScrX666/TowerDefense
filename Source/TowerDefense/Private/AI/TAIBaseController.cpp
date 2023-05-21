@@ -12,7 +12,6 @@ void ATAIBaseController::BeginPlay()
 	Super::BeginPlay();
 	if( ensureMsgf(BehaviorTree,TEXT("BTEnemy is Null, please assign BehaviorTree")))
 	{
-		
 		RunBehaviorTree(BehaviorTree);
 	}
 }

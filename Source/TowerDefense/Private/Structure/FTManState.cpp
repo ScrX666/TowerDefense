@@ -6,7 +6,6 @@
 FTManState::FTManState()
 {
 	// static ConstructorHelpers::FObjectFinder<USkeletalMesh> DefaultSKMesh(TEXT("/Game/Mesh/Character/Default/TutorialTPP"));
-	SkeletalMesh = nullptr;
 	MaxHealth = 100;
 	Coins = 10;
 }
