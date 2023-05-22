@@ -21,7 +21,7 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig.h"
 #include "Perception/AISenseConfig_Sight.h"
-#include "Perception/PawnSensingComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 
 // Sets default values
 ATManBase::ATManBase()
@@ -93,9 +93,10 @@ void ATManBase::OnPerceptionUpdated(const TArray<AActor*>& Actors)
 		ManAIC = Cast<ATAIBaseController>(GetController());
 	if( !ManAIC || !ManAIC->CanBeSoloed()) return ; // 自己在对战的情况下 不设置对战对象
 	
-	for( auto SeenActorIt = Actors.end(); SeenActorIt != Actors.begin(); SeenActorIt.operator--())
+	// for( auto SeenActorIt = Actors.end(),SeenActorIt.operator--(); SeenActorIt != Actors.begin(); SeenActorIt.operator--())
+	for( int32 i = Actors.Num() - 1; i >= 0; i--)
 	{
-		const auto SeenActor = *SeenActorIt;
+		const auto SeenActor = Actors[i];
 		if( SeenActor->IsA(AttackManCla))
 		{
 			ATManBase* Man = Cast<ATManBase>(SeenActor);
