@@ -331,7 +331,9 @@ void ATPlayerController::OnGameEnd(bool bIsWin)
 	UIManagerComponent->PushUIState(TEXT("EndGame"));
 	// UIManagerComponent->GetCurrentUIState()
 }
-
+/*
+ * 绑定到Hero的OnSelectHero委托上
+ */
 void ATPlayerController::OnSelectHero(bool bSelectHero)
 {
 	bInHeroControlMode = bSelectHero;

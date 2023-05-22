@@ -56,7 +56,7 @@ void ATMainTower::AttackRangeEndOverlap(UPrimitiveComponent* OverlappedComponent
 		AttackHandleComponent->RemoveAttackTarget(Cast<ATManBase>(OtherActor));
 		
 		TArray<AActor*> ManBases;
-		GetOverlappingActors(ManBases, ATManBase::StaticClass());
+		GetOverlappingActors(ManBases, ATEnemyBase::StaticClass());
 		if( ManBases.Num() == 0 && AttackHandleComponent->TargetIsEmpty())
 		{
 			// TargetMan = nullptr;

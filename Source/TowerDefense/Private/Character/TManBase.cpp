@@ -93,8 +93,9 @@ void ATManBase::OnPerceptionUpdated(const TArray<AActor*>& Actors)
 		ManAIC = Cast<ATAIBaseController>(GetController());
 	if( !ManAIC || !ManAIC->CanBeSoloed()) return ; // 自己在对战的情况下 不设置对战对象
 	
-	for( AActor* const & SeenActor: Actors)
+	for( auto SeenActorIt = Actors.end(); SeenActorIt != Actors.begin(); SeenActorIt.operator--())
 	{
+		const auto SeenActor = *SeenActorIt;
 		if( SeenActor->IsA(AttackManCla))
 		{
 			ATManBase* Man = Cast<ATManBase>(SeenActor);
