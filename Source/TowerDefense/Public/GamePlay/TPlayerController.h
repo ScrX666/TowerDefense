@@ -8,6 +8,7 @@
 #include "Interface/TBuildingInterface.h"
 #include "TPlayerController.generated.h"
 
+class UTCursorManagerComponent;
 class UTSkillManagerComponent;
 class ATHeroController;
 class UBlackboardComponent;
@@ -30,6 +31,8 @@ public:
 	UTUIManagerComponent* UIManagerComponent;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	UTSkillManagerComponent* SkillManagerComponent;
+	// UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	// UTCursorManagerComponent* CursorManagerComponent;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TScriptInterface<ITBuildingInterface> SelectedBuilding; // 选中的建筑
 
@@ -60,6 +63,8 @@ private:
 	UBlackboardComponent* HeroBlackboardComponent;
 	UPROPERTY(VisibleAnywhere)
 	ATHeroController* HeroAIC;
+
+	FName CurSkillName; // 即将释放的技能名字
 	
 public:
 	ATPlayerController();
@@ -70,6 +75,15 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable)
 	void SetBuildingMode(TSubclassOf<AActor> BuildingCla);
+	/*
+	 *  准备执行技能
+	 */
+	UFUNCTION(BlueprintCallable)
+	void ExecuteSkill(FName SkillName);
+	/*
+	 * 实际执行技能
+	 */
+	void ConfirmExecuteSkill();
 
 	UFUNCTION()
 	void MouseClickDown();

@@ -169,12 +169,19 @@ float ATManBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 	{
 		if( DamageCauser && DamageCauser->IsA<ATMainTower>())
 		{
+			// 塔的直接伤害
 			ManStateAndBuffer->ApplyHealthChange(DamageCauser,-DamageAmount);
 		}
 		else
 		{
+			// Buff伤害等
 			ManStateAndBuffer->ApplyHealthChange(DamageCauser->GetOwner(),-DamageAmount);
 		}
+	}
+	else
+	{
+		// 技能
+		ManStateAndBuffer->ApplyHealthChange(DamageCauser,-DamageAmount);
 	}
 
 	return DamageAmount;

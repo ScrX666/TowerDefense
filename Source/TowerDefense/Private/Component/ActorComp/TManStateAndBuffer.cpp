@@ -74,7 +74,9 @@ void UTManStateAndBuffer::ApplyHealthChange(AActor* Instigator,float Delta)
 	if( CurrentHealth == 0)
 		OnDead.Broadcast(Instigator);
 }
-
+/*
+ * 死亡后获得金币和经验
+ */
 void UTManStateAndBuffer::AddCoinsAndExp(AActor* InstigatorActor)
 {
 	UE_LOG(LogTemp,Log,TEXT("Destory Man AddCoins"));
@@ -92,7 +94,9 @@ void UTManStateAndBuffer::AddCoinsAndExp(AActor* InstigatorActor)
 		Cast<ATMainTower>(InstigatorActor)->GetExp(ManState.Exp);
 	}
 }
-
+/*
+ * 激活Buff
+ */
 void UTManStateAndBuffer::ActivateBuffer(const TArray<FTManBuffer>& Buffers, AActor* Instigator)
 {
 	for( const FTManBuffer& Buffer : Buffers)
@@ -183,7 +187,9 @@ void UTManStateAndBuffer::ApplyPoisonDamage()
 		BufferInstigators[EManBufferType::E_Poison],
 		UDamageType::StaticClass());
 }
-
+/*
+ * 设置Buff的特效
+ */
 void UTManStateAndBuffer::ActiveBufferEffect(const FTManBuffer& Buffer, FName SocketName)
 {
 	if( !BufferNiagaraSystems.Contains(Buffer.BufferType))
@@ -207,7 +213,9 @@ void UTManStateAndBuffer::ActiveBufferEffect(const FTManBuffer& Buffer, FName So
 		}
 	}
 }
-
+/*
+ * 移除Buff的特效
+ */
 void UTManStateAndBuffer::DeActiveBufferEffect(const EManBufferType ManBufferType)
 {
 	if( BufferNiagaraSystems.Contains(ManBufferType))

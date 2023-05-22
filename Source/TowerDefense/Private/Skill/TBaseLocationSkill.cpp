@@ -12,6 +12,6 @@ void UTBaseLocationSkill::Execute(UWorld* World)
 	ATPlayerController* PC = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(World,0));
 	if( ensureMsgf(PC,TEXT("Fail to Use SKill, ATPlayerController is Null")))
 	{
-		SpawnLocation = PC->GetCursorHitLoc();
+		SkillLocation = PC->GetCursorHitLoc();
 	}
 }

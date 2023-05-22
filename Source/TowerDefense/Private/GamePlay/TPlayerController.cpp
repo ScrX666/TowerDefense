@@ -13,6 +13,7 @@
 #include "Building/Tower/TMainTower.h"
 #include "Character/THero.h"
 #include "Character/TSoldierBase.h"
+#include "Component/ActorComp/TCursorManagerComponent.h"
 #include "Component/ActorComp/TSkillManagerComponent.h"
 #include "Component/ActorComp/TUIManagerComponent.h"
 #include "Components/DecalComponent.h"
@@ -28,10 +29,13 @@ BuildingMode(EBuildingMode::E_NotInBuildMode)
 	this->SetShowMouseCursor(true);
 	UIManagerComponent = CreateDefaultSubobject<UTUIManagerComponent>(TEXT("UIManager"));
 	SkillManagerComponent = CreateDefaultSubobject<UTSkillManagerComponent>(TEXT("SkillManager"));
+	// CursorManagerComponent = CreateDefaultSubobject<UTCursorManagerComponent>(TEXT("CursorManager"));
 }
 
 void ATPlayerController::SetBuildingMode(TSubclassOf<AActor> BuildingCla)
 {
+	if(BuildingMode == EBuildingMode::E_InSillMode) return ;
+	
 	this->BuildingClass = BuildingCla;
 	if( BuildingMode == EBuildingMode::E_InBuildMode)
 	{
@@ -47,10 +51,27 @@ void ATPlayerController::SetBuildingMode(TSubclassOf<AActor> BuildingCla)
 	}
 }
 
+void ATPlayerController::ExecuteSkill(FName SkillName)
+{
+	BuildingMode = EBuildingMode::E_InSillMode;
+	CurSkillName = SkillName;
+	CurrentMouseCursor = EMouseCursor::Hand;
+	// 释放Skill为UI点击，不会立即更新，需要手动更新
+	SetInputMode(FInputModeGameOnly());
+}
+
+void ATPlayerController::ConfirmExecuteSkill()
+{
+	BuildingMode = EBuildingMode::E_NotInBuildMode;
+	CurrentMouseCursor = EMouseCursor::Default;
+	SkillManagerComponent->Execute(CurSkillName);
+}
+
 void ATPlayerController::MouseClickDown()
 {
-	if( EBuildingMode::E_InBuildMode == BuildingMode)
+	switch( BuildingMode)
 	{
+	case EBuildingMode::E_InBuildMode:
 		// 建造模式
 		if( BuildingReferActor != nullptr)
 		{
@@ -77,34 +98,10 @@ void ATPlayerController::MouseClickDown()
 				
 				}
 			}
-			else
-			{
-				// 创建 角色
-				if( TPlayerState && TPlayerState->CoinsEnough(BuildingReferInterface->GetCostCoins()))
-				{
-					if( bCanConstruct)
-					{
-						// auto Building = GetWorld()->SpawnActor<ATSoldierBase>(BuildingClass,BuildingReferActor->GetTransform());
-						// Building->OnSelected(false);
-						// Building->OnConstruct(nullptr);
-						// TPlayerState->RemoveCoins(Building->GetCostCoins());
-						SkillManagerComponent->Execute(TEXT("SpawnSolider"));
-					}
-					else
-					{
-						UE_LOG(LogTemp,Log,TEXT("Build ERROR"));
-					}
-				}
-				else
-				{
-				
-				}
-			}
 			SetBuildingMode(nullptr);
 		}
-	}
-	else
-	{
+		break;
+	case EBuildingMode::E_NotInBuildMode:
 		// 非建造模式 点击
 		if(bInHeroControlMode)
 		{
@@ -140,6 +137,10 @@ void ATPlayerController::MouseClickDown()
 				SelectedBuilding = nullptr;
 			}
 		}
+		break;
+	case EBuildingMode::E_InSillMode:
+		ConfirmExecuteSkill();
+		break;
 	}
 }
 
@@ -159,13 +160,24 @@ void ATPlayerController::MouseMove(float Value)
 		if( CursorHitBuildingInterface)
 		{
 			CursorHitBuildingInterface->OnHovered(false);
+			// CursorManagerComponent->SetCursorType(this,EMouseCursor::Default);
+			if( bInHeroControlMode)
+			CurrentMouseCursor = EMouseCursor::Crosshairs;
+			else if( BuildingMode != EBuildingMode::E_InSillMode)
+			{
+				CurrentMouseCursor = EMouseCursor::Default;
+			}
 		}
 		//---------------------------------------- CursorHitBuildingActor 赋值
 		CursorHitBuildingActor = Cast<AActor>(HitResult.Actor);
 		CursorHitBuildingInterface = CursorHitBuildingActor;
 		
 		if( CursorHitBuildingInterface)
+		{
 			CursorHitBuildingInterface->OnHovered(true);
+			// CursorManagerComponent->SetCursorType(this,EMouseCursor::Hand);
+			CurrentMouseCursor = EMouseCursor::Hand;
+		}
 	}
 #pragma endregion
 
@@ -267,6 +279,10 @@ void ATPlayerController::BeginPlay()
 	{
 		GameMode->OnGameEnd.AddDynamic(this,&ATPlayerController::OnGameEnd);
 	}
+
+	// 设置Cursor
+	// CursorManagerComponent->SetCursorType(this,EMouseCursor::Default);
+	CurrentMouseCursor = EMouseCursor::Default;
 }
 
 void ATPlayerController::SetupInputComponent()
@@ -337,4 +353,16 @@ void ATPlayerController::OnGameEnd(bool bIsWin)
 void ATPlayerController::OnSelectHero(bool bSelectHero)
 {
 	bInHeroControlMode = bSelectHero;
+
+	// 设置对应的Cursor
+	if( bSelectHero == true)
+	{
+		// CursorManagerComponent->SetCursorType(this,EMouseCursor::Crosshairs);
+		CurrentMouseCursor = EMouseCursor::Crosshairs;
+	}
+	else
+	{
+		// CursorManagerComponent->SetCursorType(this,EMouseCursor::Default);
+		CurrentMouseCursor = EMouseCursor::Default;
+	}
 }

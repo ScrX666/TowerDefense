@@ -15,7 +15,7 @@ class TOWERDEFENSE_API UTBaseLocationSkill : public UTBaseSkill
 	GENERATED_BODY()
 protected:
 	UPROPERTY(VisibleAnywhere)
-	FVector SpawnLocation;
+	FVector SkillLocation;
 public:
 	virtual void Execute(UWorld* World) override;
 };

@@ -14,7 +14,7 @@ void UTSpawnSoliderSkill::Execute(UWorld* World)
 	ActorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	for( int32 i = 0; i < SpawnCount; i++)
 	{
-		FVector SpawnLoc = SpawnLocation;
+		FVector SpawnLoc = SkillLocation;
 		SpawnLoc.X += FMath::RandRange(-50.0f,50.0f);
 		SpawnLoc.Y += FMath::RandRange(-50.0f,50.0f);
 		FRotator SpawnRot = FRotator::ZeroRotator;
