@@ -23,6 +23,9 @@ protected:
 	ATManBase* SoloMan;
 	UPROPERTY()
 	bool bIsSoloed;
+protected:
+	UPROPERTY()
+	ATManBase* OwnMan;
 public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
@@ -30,6 +33,8 @@ public:
 	virtual bool CanBeSoloed() const;
 	UFUNCTION()
 	void DisableSolo(AActor* InstigatorActor);
+	UFUNCTION()
+	void PerceptionUpdated(AActor* InstigatorActor);
 	void SetSoloTarget(ATManBase* TargetMan);
 	ATManBase* GetAttackMan() const; 
 };

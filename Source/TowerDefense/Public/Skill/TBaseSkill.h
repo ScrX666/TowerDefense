@@ -25,16 +25,19 @@ public:
 	FOnCoolDownUpdate OnCDUpdate;
 
 	FTimerHandle CoolDownHandle; // 更新技能的TimerHandle
+protected:
+	UPROPERTY()
+	UWorld* CurWorld;
 public:
 	/*
 	 * 释放技能
 	 */
 	virtual void Execute(UWorld* World);
 
-private:
+protected:
 	/*
 	 * 更新技能状态 定时调用
 	 */
 	UFUNCTION()
-	void OnCoolDownUpdate();
+	virtual void OnCoolDownUpdate();
 };

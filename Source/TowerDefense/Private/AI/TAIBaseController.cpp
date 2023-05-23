@@ -44,10 +44,23 @@ void ATAIBaseController::DisableSolo(AActor* InstigatorActor)
 {
 	bIsSoloed = false;
 	if( SoloMan)
+	{
+		SoloMan->ManStateAndBuffer->OnDead.RemoveDynamic(this,&ATAIBaseController::PerceptionUpdated);
 		SoloMan->ManStateAndBuffer->OnDead.RemoveDynamic(this,&ATAIBaseController::DisableSolo);
+	}
 	if( Blackboard)
 		Blackboard->SetValueAsObject(TEXT("TargetActor"),nullptr);
 	SoloMan = nullptr;
+}
+/*
+ * 对方死亡后，手动更新攻击对象，绑定到死亡的委托上
+ */
+void ATAIBaseController::PerceptionUpdated(AActor* InstigatorActor)
+{
+	if( !OwnMan)
+		OwnMan = Cast<ATManBase>(GetPawn());
+	if( OwnMan)
+		OwnMan->ManualPerceptionUpdated();
 }
 
 void ATAIBaseController::SetSoloTarget(ATManBase* TargetMan)
@@ -57,6 +70,7 @@ void ATAIBaseController::SetSoloTarget(ATManBase* TargetMan)
 	if( Blackboard)
 		Blackboard->SetValueAsObject(TEXT("TargetActor"),TargetMan);
 	TargetMan->ManStateAndBuffer->OnDead.AddDynamic(this,&ATAIBaseController::DisableSolo);
+	TargetMan->ManStateAndBuffer->OnDead.AddDynamic(this,&ATAIBaseController::PerceptionUpdated);
 }
 
 ATManBase* ATAIBaseController::GetAttackMan() const

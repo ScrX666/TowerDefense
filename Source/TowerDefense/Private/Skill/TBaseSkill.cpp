@@ -11,6 +11,7 @@ void UTBaseSkill::Execute(UWorld* World)
 	if( bCanUse == false) return;
 	// 子类实现 具体攻击逻辑
 
+	this->CurWorld = World;
 	// 定时
 	CurrentCoolDown = 0.0f;
 	bCanUse = false;

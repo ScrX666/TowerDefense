@@ -46,4 +46,3 @@ void ATMainAttachBase::OnSnapAttachBuilding()
 {
 	AttachedBuilding->Destroy();
 }
-

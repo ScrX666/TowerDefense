@@ -31,6 +31,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	virtual void OnConstruct(ATMainAttachBase* AttachBase) override;
+	UFUNCTION(BlueprintCallable)
 	virtual void OnDestory() override;
 	virtual void OnHovered(bool bHovered) override;
 	virtual void OnSelected(bool bSelected);

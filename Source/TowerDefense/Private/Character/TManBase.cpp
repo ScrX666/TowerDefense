@@ -3,6 +3,7 @@
 
 #include "Character/TManBase.h"
 
+#include "DrawDebugHelpers.h"
 #include "ToolContextInterfaces.h"
 #include "AI/TAIBaseController.h"
 #include "AI/Enemy/TEnemyAIController.h"
@@ -94,20 +95,46 @@ void ATManBase::OnPerceptionUpdated(const TArray<AActor*>& Actors)
 	if( !ManAIC || !ManAIC->CanBeSoloed()) return ; // 自己在对战的情况下 不设置对战对象
 	
 	// for( auto SeenActorIt = Actors.end(),SeenActorIt.operator--(); SeenActorIt != Actors.begin(); SeenActorIt.operator--())
-	for( int32 i = Actors.Num() - 1; i >= 0; i--)
+	ATManBase* SeenActor = nullptr;
+	float Dis = 0.0f;
+	// 获取距离最近的敌人
+	for( int32 i = 0; i < Actors.Num(); i++)
 	{
-		const auto SeenActor = Actors[i];
-		if( SeenActor->IsA(AttackManCla))
+		if(Actors[i]->IsA(AttackManCla) == false) continue;
+		
+		ATManBase* Man = Cast<ATManBase>(Actors[i]);
+		ATAIBaseController* TargetAIC = Cast<ATAIBaseController>(Man->GetController());
+		if( TargetAIC && Man)
 		{
-			ATManBase* Man = Cast<ATManBase>(SeenActor);
-			ATAIBaseController* TargetAIC = Cast<ATAIBaseController>(Man->GetController());
-			if( TargetAIC && Man)
+			if( !TargetAIC->CanBeSoloed())
 			{
-				if( TargetAIC->CanBeSoloed() && ManAIC->CanBeSoloed())
-				{
-					ManAIC->SetSoloTarget(Man);
-					TargetAIC->SetSoloTarget(this);
-				}
+				continue; // 对方已经战斗，无法对战
+			}
+		}
+		if( SeenActor == nullptr)
+		{
+			// 初始赋值
+			SeenActor = Man;
+			Dis = FVector::Distance(SeenActor->GetActorLocation(),this->GetActorLocation());
+			continue;
+		}
+		// 取距离最短
+		float CurDis = FVector::Distance(Actors[i]->GetActorLocation(),this->GetActorLocation());
+		if( Dis > CurDis)
+		{
+			Dis = CurDis;
+			SeenActor = Man;
+		}
+	}
+	if( SeenActor)
+	{
+		ATAIBaseController* TargetAIC = Cast<ATAIBaseController>(SeenActor->GetController());
+		if( TargetAIC && SeenActor)
+		{
+			if( TargetAIC->CanBeSoloed() && ManAIC->CanBeSoloed())
+			{
+				ManAIC->SetSoloTarget(SeenActor);
+				TargetAIC->SetSoloTarget(this);
 			}
 		}
 	}
@@ -118,6 +145,18 @@ void ATManBase::ManualPerceptionUpdated()
 	TArray<AActor*> Actors;
 	PerceptionComponent->GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(),Actors);
 	OnPerceptionUpdated(Actors);
+}
+
+void ATManBase::OnManDead()
+{
+	Destroy();
+}
+/*
+ * 目前只有Hero实现
+ */
+void ATManBase::OnManReborn()
+{
+	
 }
 
 void ATManBase::Destroyed()
@@ -209,7 +248,7 @@ void ATManBase::Attack()
 		FVector Direction = ManAIC->GetAttackMan()->GetActorLocation() - this->GetActorLocation();
 		Direction.Z = 0;
 		FRotator NewRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
-		this->SetActorRotation(NewRotation);
+		GetController()->SetControlRotation(NewRotation);
 	}
 }
 /*

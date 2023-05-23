@@ -23,4 +23,6 @@ public:
 public:
 	ATHero();
 	virtual void OnSelected(bool bIsSelected) override;
+	virtual void OnManDead() override;
+	virtual void OnManReborn() override;
 };

@@ -57,7 +57,10 @@ void ATPlayerController::ExecuteSkill(FName SkillName)
 	CurSkillName = SkillName;
 	CurrentMouseCursor = EMouseCursor::Hand;
 	// 释放Skill为UI点击，不会立即更新，需要手动更新
-	SetInputMode(FInputModeGameOnly());
+	if(bIsTest)
+	{
+		SetInputMode(FInputModeGameOnly());
+	}
 }
 
 void ATPlayerController::ConfirmExecuteSkill()
@@ -65,10 +68,15 @@ void ATPlayerController::ConfirmExecuteSkill()
 	BuildingMode = EBuildingMode::E_NotInBuildMode;
 	CurrentMouseCursor = EMouseCursor::Default;
 	SkillManagerComponent->Execute(CurSkillName);
+	if(bIsTest)
+	{
+		SetInputMode(FInputModeGameAndUI());
+	}
 }
 
 void ATPlayerController::MouseClickDown()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("MouseClickDown"));
 	switch( BuildingMode)
 	{
 	case EBuildingMode::E_InBuildMode:
@@ -200,7 +208,7 @@ void ATPlayerController::MouseMove(float Value)
 			bCanConstruct = false;
 			if( AttachBase != nullptr)
 			{
-				if( AttachBase->AttachedBuilding != nullptr)
+				if( IsValid(AttachBase->AttachedBuilding))
 				{
 					BuildingReferInterface->CanConstructBuilding(false);
 					BuildingReferActor->SetActorLocation(CursorLocation);

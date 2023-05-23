@@ -27,7 +27,7 @@ class TOWERDEFENSE_API ATPlayerController : public APlayerController
 public:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	ATPlayerState* TPlayerState;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	UTUIManagerComponent* UIManagerComponent;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	UTSkillManagerComponent* SkillManagerComponent;
@@ -35,6 +35,8 @@ public:
 	// UTCursorManagerComponent* CursorManagerComponent;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TScriptInterface<ITBuildingInterface> SelectedBuilding; // 选中的建筑
+	UPROPERTY(EditDefaultsOnly)
+	bool bIsTest; // 测试
 
 private:
 	EBuildingMode BuildingMode = EBuildingMode::E_NotInBuildMode;

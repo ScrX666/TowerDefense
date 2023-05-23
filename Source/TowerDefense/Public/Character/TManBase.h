@@ -34,7 +34,7 @@ public:
 	UAnimMontage* AttackMontage;
 	UPROPERTY(VisibleAnywhere)
 	TSubclassOf<ATManBase> AttackManCla;
-private:
+protected:
 	UPROPERTY(VisibleAnywhere)
 	ATAIBaseController* ManAIC;
 public:	
@@ -64,6 +64,16 @@ public:
 	 */
 	UFUNCTION()
 	void ManualPerceptionUpdated();
+	/*
+	 * 角色死亡调用
+	 */
+	UFUNCTION()
+	virtual void OnManDead();
+	/*
+	 * 角色死亡重生
+	 */
+	UFUNCTION()
+	virtual void OnManReborn();
 	
 protected:
 	UFUNCTION()

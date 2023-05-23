@@ -3,6 +3,10 @@
 
 #include "Building/TMainBuilding.h"
 
+#include "GamePlay/TPlayerController.h"
+#include "GamePlay/TPlayerState.h"
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 ATMainBuilding::ATMainBuilding()
 {
@@ -36,6 +40,14 @@ void ATMainBuilding::OnConstruct(ATMainAttachBase* AttachBase)
 
 void ATMainBuilding::OnDestory()
 {
+	ATPlayerController* PC = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(this,0));
+	if( PC)
+	{
+		PC->TPlayerState->AddCoins(GetCostCoins() * 0.6f);
+	}
+	this->Destroy();
+	UE_LOG(LogTemp,Log,TEXT("Building Destory"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Building Destory"));
 }
 
 void ATMainBuilding::OnHovered(bool bHovered)

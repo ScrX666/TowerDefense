@@ -27,7 +27,11 @@ UTManStateAndBuffer::UTManStateAndBuffer()
 
 void UTManStateAndBuffer::DestorySelf(AActor* InstigatorActor)
 {
-	GetOwner()->Destroy();
+	ATManBase* Man = Cast<ATManBase>(GetOwner());
+	if( Man)
+	{
+		Man->OnManDead();
+	}
 }
 
 // Called when the game starts
