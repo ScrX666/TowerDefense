@@ -16,6 +16,8 @@ class TOWERDEFENSE_API UTBaseLocationSkill : public UTBaseSkill
 protected:
 	UPROPERTY(VisibleAnywhere)
 	FVector SkillLocation;
+	UPROPERTY(EditDefaultsOnly)
+	TArray<USoundBase*> SkillSounds;
 public:
 	virtual void Execute(UWorld* World) override;
 };

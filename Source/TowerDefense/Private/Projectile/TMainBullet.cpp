@@ -3,6 +3,7 @@
 
 #include "Projectile/TMainBullet.h"
 
+#include "BlueprintFunctionLibrary/TBlueprintFunctionLibrary.h"
 #include "Character/TManBase.h"
 #include "Component/ActorComp/TManStateAndBuffer.h"
 #include "Components/SphereComponent.h"
@@ -21,6 +22,7 @@ ATMainBullet::ATMainBullet()
 	SphereComponent->SetupAttachment(RootComponent);
 	SphereComponent->SetGenerateOverlapEvents(true);
 	SphereComponent->SetCollisionProfileName(TEXT("Bullet"));
+	Mesh->SetCollisionProfileName(TEXT("NoCollision"));
 	
 	// ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMoveComp"));
 	// ProjectileMovementComponent->MaxSpeed = 1000.0f;
@@ -61,6 +63,9 @@ void ATMainBullet::SphereOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 		if(OtherActor->GetComponentByClass(UTManStateAndBuffer::StaticClass()))
 		Cast<UTManStateAndBuffer>(OtherActor->GetComponentByClass(UTManStateAndBuffer::StaticClass()))
 		->ActivateBuffer(*BuffersPointer,this->GetOwner());
+
+		// sound
+		UTBlueprintFunctionLibrary::PlayRandomSound(this,ExplosionSounds,this->GetActorLocation());
 		
 		this->Destroy();
 	}

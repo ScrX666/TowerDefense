@@ -5,6 +5,7 @@
 
 #include "NiagaraComponent.h"
 #include "AI/Hero/THeroController.h"
+#include "BlueprintFunctionLibrary/TBlueprintFunctionLibrary.h"
 #include "Component/ActorComp/TManStateAndBuffer.h"
 #include "Components/CapsuleComponent.h"
 #include "GamePlay/TPlayerController.h"
@@ -52,4 +53,6 @@ void ATHero::OnManReborn()
 	ManStateAndBuffer->ApplyHealthChange(nullptr,ManStateAndBuffer->ManState.MaxHealth);
 	// 复活后手动更新被感知的敌人
 	ManualPerceptionUpdated();
+
+	UTBlueprintFunctionLibrary::PlayRandomSound(this,RebornSounds,this->GetActorLocation());
 }

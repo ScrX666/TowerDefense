@@ -29,7 +29,7 @@ public:
 	float ShotRateUpGrade = 0.5f;
 	
 	UPROPERTY(EditDefaultsOnly)
-	USoundBase* ShotSound;
+	TArray<USoundBase*> ShotSounds;
 	
 	UPROPERTY(EditDefaultsOnly)
 	float AttackRange = 100.0f;

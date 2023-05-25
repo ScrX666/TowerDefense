@@ -121,3 +121,10 @@ int32 UTBlueprintFunctionLibrary::GetTowerCoinsByClassAndName(TSubclassOf<ATMain
         return TDataTableManager::GetInstance()->GetShotTowerData(Name).CostCoins;
     }
 }
+
+void UTBlueprintFunctionLibrary::PlayRandomSound(UObject* WorldContext, const TArray<USoundBase*>& Sounds, FVector Location)
+{
+    if( Sounds.Num() == 0) return ;
+    int32 PlayIndex = FMath::RandRange(0, Sounds.Num() - 1);
+    UGameplayStatics::PlaySoundAtLocation(WorldContext,Sounds[PlayIndex],Location,FRotator::ZeroRotator);
+}

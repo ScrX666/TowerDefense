@@ -82,6 +82,10 @@ public:
 	 * 获取关卡初始拥有的Coins
 	 */
 	int32 GetLevelInitCoins( const FName CurrentLevelName);
+	/*
+	 * 获取关卡初始拥有的Coins
+	 */
+	FTLevelInfo GetLevelInfo( const FName CurrentLevelName);
 
 	int GetAISpawnStructNum();
 	

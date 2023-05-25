@@ -3,6 +3,7 @@
 
 #include "Building/Tower/TMainShotTower.h"
 
+#include "BlueprintFunctionLibrary/TBlueprintFunctionLibrary.h"
 #include "Component/ActorComp/TShotTowerState.h"
 #include "Engine/StaticMeshSocket.h"
 #include "Component/ActorComp/Tower/TAttackHandleComponent.h"
@@ -79,10 +80,8 @@ void ATMainShotTower::Fire()
 			return ;
 		}
 		// 播放发射音效
-		if( ShotTowerStateComp->GetSoundClass() != nullptr)
-		{
-			UGameplayStatics::PlaySound2D(this,ShotTowerStateComp->GetSoundClass());
-		}
+
+		UTBlueprintFunctionLibrary::PlayRandomSound(this,ShotTowerStateComp->GetShotSound(),this->GetActorLocation());
 
 		// 生成子弹
 		FActorSpawnParameters ActorSpawnParameters;
