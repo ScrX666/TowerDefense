@@ -4,6 +4,7 @@
 #include "TowerDefenseGameModeBase.h"
 
 #include "Character/Player/TPlayer.h"
+#include "Components/AudioComponent.h"
 #include "GamePlay/TDataTableManager.h"
 #include "GamePlay/TGameInstance.h"
 #include "GamePlay/TGameState.h"
@@ -20,7 +21,6 @@ ATowerDefenseGameModeBase::ATowerDefenseGameModeBase()
 	HUDClass = ATHUD::StaticClass();
 	PlayerStateClass = ATPlayerState::StaticClass();
 	GameStateClass = ATGameState::StaticClass();
-	
 }
 
 void ATowerDefenseGameModeBase::BeginPlay()

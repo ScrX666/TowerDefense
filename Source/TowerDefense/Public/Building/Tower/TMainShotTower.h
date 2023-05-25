@@ -20,7 +20,7 @@ public:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	class UTShotTowerState* ShotTowerStateComp;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	TSubclassOf<ATMainBullet> BulletClass;
 
 	

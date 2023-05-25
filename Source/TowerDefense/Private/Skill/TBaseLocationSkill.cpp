@@ -3,6 +3,7 @@
 
 #include "Skill/TBaseLocationSkill.h"
 
+#include "BlueprintFunctionLibrary/TBlueprintFunctionLibrary.h"
 #include "GamePlay/TPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -14,4 +15,5 @@ void UTBaseLocationSkill::Execute(UWorld* World)
 	{
 		SkillLocation = PC->GetCursorHitLoc();
 	}
+	UTBlueprintFunctionLibrary::PlayRandomSound(World,SkillSounds,SkillLocation);
 }

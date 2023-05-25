@@ -148,9 +148,9 @@ TSubclassOf<ATMainBullet> UTShotTowerState::GetBulletClass() const
 	return ShotTowerData.Bullet;
 }
 
-USoundBase* UTShotTowerState::GetSoundClass() const
+TArray<USoundBase*> const & UTShotTowerState::GetShotSound() const
 {
-	return ShotTowerData.ShotSound;
+	return ShotTowerData.ShotSounds;
 }
 
 int32 UTShotTowerState::GetLevelUpExp() const

@@ -30,7 +30,7 @@ public:
 	void Init(const FName Name);
 	virtual void GetExp(const int Exp) override;
 	TSubclassOf<ATMainBullet> GetBulletClass() const;
-	USoundBase* GetSoundClass() const;
+	const TArray<USoundBase*>& GetShotSound() const;
 
 	UFUNCTION(BlueprintPure)
 	int32 GetLevelUpExp() const;

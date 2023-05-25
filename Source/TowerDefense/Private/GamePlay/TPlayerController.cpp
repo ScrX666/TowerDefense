@@ -15,6 +15,7 @@
 #include "Character/TSoldierBase.h"
 #include "Component/ActorComp/TCursorManagerComponent.h"
 #include "Component/ActorComp/TSkillManagerComponent.h"
+#include "Component/ActorComp/TSoundManagerComponent.h"
 #include "Component/ActorComp/TUIManagerComponent.h"
 #include "Components/DecalComponent.h"
 #include "GamePlay/TGameState.h"
@@ -29,6 +30,7 @@ BuildingMode(EBuildingMode::E_NotInBuildMode)
 	this->SetShowMouseCursor(true);
 	UIManagerComponent = CreateDefaultSubobject<UTUIManagerComponent>(TEXT("UIManager"));
 	SkillManagerComponent = CreateDefaultSubobject<UTSkillManagerComponent>(TEXT("SkillManager"));
+	SoundManagerComponent = CreateDefaultSubobject<UTSoundManagerComponent>(TEXT("SoundManager"));
 	// CursorManagerComponent = CreateDefaultSubobject<UTCursorManagerComponent>(TEXT("CursorManager"));
 }
 
@@ -264,6 +266,7 @@ void ATPlayerController::BeginPlay()
 		if( Hero)
 		{
 			Hero->OnSelectHero.AddDynamic(this,&ATPlayerController::OnSelectHero);
+			Hero->OnSelectHero.AddDynamic(SoundManagerComponent,&UTSoundManagerComponent::OnSelectHero);
 			HeroAIC = Cast<ATHeroController>(Hero->GetController());
 			if( HeroAIC)
 			{
@@ -286,6 +289,7 @@ void ATPlayerController::BeginPlay()
 	if( GameMode)
 	{
 		GameMode->OnGameEnd.AddDynamic(this,&ATPlayerController::OnGameEnd);
+		GameMode->OnGameEnd.AddDynamic(SoundManagerComponent,&UTSoundManagerComponent::OnGameEnd);
 	}
 
 	// 设置Cursor

@@ -15,9 +15,13 @@ struct TOWERDEFENSE_API FTLevelInfo : public FTableRowBase
 {
  GENERATED_USTRUCT_BODY()
  UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
- TSoftObjectPtr<UWorld> Level;
+ FName LevelName;
  UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
  TArray<TSubclassOf<ATMainTower>> WinTowers;
  UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
  int32 InitCoins = 100;
+ UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+ USoundBase* AmbientSound;
+ UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+ USoundBase* BackgroundMusic;
 };

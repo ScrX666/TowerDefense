@@ -25,4 +25,8 @@ struct FTManState : public FTableRowBase
 	int32 Cost;
 	UPROPERTY(EditDefaultsOnly)
 	int32 Damage;
+	UPROPERTY(EditDefaultsOnly)
+	TArray<USoundBase*> DeadSounds;
+	UPROPERTY(EditDefaultsOnly)
+	TArray<USoundBase*> AttackSounds;
 };

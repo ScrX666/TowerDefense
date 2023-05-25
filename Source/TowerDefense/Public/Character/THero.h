@@ -16,6 +16,8 @@ class TOWERDEFENSE_API ATHero : public ATSoldierBase
 {
 	GENERATED_BODY()
 public:
+	UPROPERTY(EditDefaultsOnly)
+	TArray<USoundBase*> RebornSounds;
 	UPROPERTY(VisibleAnywhere)
 	UNiagaraComponent* SelectedEffect;
 	UPROPERTY(VisibleAnywhere,BlueprintAssignable)

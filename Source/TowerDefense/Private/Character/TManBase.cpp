@@ -8,6 +8,7 @@
 #include "AI/TAIBaseController.h"
 #include "AI/Enemy/TEnemyAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "BlueprintFunctionLibrary/TBlueprintFunctionLibrary.h"
 #include "Building/Tower/TMainTower.h"
 #include "Character/TSoldierBase.h"
 #include "Component/ActorComp/TManStateAndBuffer.h"
@@ -149,6 +150,7 @@ void ATManBase::ManualPerceptionUpdated()
 
 void ATManBase::OnManDead()
 {
+	UTBlueprintFunctionLibrary::PlayRandomSound(this,ManStateAndBuffer->ManState.DeadSounds,this->GetActorLocation());
 	Destroy();
 }
 /*
@@ -260,6 +262,7 @@ void ATManBase::ApplyDamageInAnim()
 	
 	AActor* TargetActor = ManAIC->GetAttackMan();
 	UGameplayStatics::ApplyDamage(TargetActor,ManStateAndBuffer->ManState.Damage,nullptr,this,UDamageType::StaticClass());
+	UTBlueprintFunctionLibrary::PlayRandomSound(this,ManStateAndBuffer->ManState.AttackSounds,this->GetActorLocation());
 }
 
 

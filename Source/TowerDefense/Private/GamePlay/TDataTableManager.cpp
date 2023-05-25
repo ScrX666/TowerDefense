@@ -182,23 +182,33 @@ FName TDataTableManager::GetNextLevel(const FName CurrentLevelName)
 	for( int i = 0; i < OutArray.Num(); i++)
 	{
 		// UE_LOG(LogTemp,Log,TEXT("CurrentLevelName %s"),*OutArray[i]->Level->GetName());
-		if( OutArray[i]->Level)
+		// if( OutArray[i]->Level)
+		// {
+		// 	UE_LOG(LogTemp,Log,TEXT("Level Name %s"),*OutArray[i]->Level->GetName());
+		// }
+		//
+		// if( OutArray[i]->Level && FName(OutArray[i]->Level->GetName()) == CurrentLevelName)
+		// {
+		// 	if( i < OutArray.Num() - 1 && OutArray[i + 1]->Level)
+		// 	{
+		// 		return FName(OutArray[i + 1]->Level->GetName());
+		// 	}
+		// 	else
+		// 	{
+		// 		return FName();
+		// 	}
+		// }
+		if( OutArray[i]->LevelName == CurrentLevelName)
 		{
-			UE_LOG(LogTemp,Log,TEXT("Level Name %s"),*OutArray[i]->Level->GetName());
-		}
-		
-		if( OutArray[i]->Level && FName(OutArray[i]->Level->GetName()) == CurrentLevelName)
-		{
-			if( i < OutArray.Num() - 1 && OutArray[i + 1]->Level)
+			if( i < OutArray.Num() - 1)
 			{
-				return FName(OutArray[i + 1]->Level->GetName());
+				return OutArray[i + 1]->LevelName;
 			}
 			else
 			{
 				return FName();
 			}
 		}
-			
 	}
 	return FName();
 }
@@ -220,19 +230,25 @@ TArray<TSubclassOf<ATMainTower>> TDataTableManager::GetWinTowers(const FName Cur
 	TArray<TSubclassOf<ATMainTower>> ResTowers;
 	for( int i = 0; i < OutArray.Num(); i++)
 	{
-		if( OutArray[i]->Level)
-		{
-			UE_LOG(LogTemp,Log,TEXT("Level Name %s"),*OutArray[i]->Level->GetName());
-		}
-		
-		if( OutArray[i]->Level && FName(OutArray[i]->Level->GetName()) == CurrentLevelName)
+		// if( OutArray[i]->Level)
+		// {
+		// 	UE_LOG(LogTemp,Log,TEXT("Level Name %s"),*OutArray[i]->Level->GetName());
+		// }
+		//
+		// if( OutArray[i]->Level && FName(OutArray[i]->Level->GetName()) == CurrentLevelName)
+		// {
+		// 	for( const TSubclassOf<ATMainTower>& Tower : OutArray[i]->WinTowers)
+		// 	{
+		// 		ResTowers.Add(Tower);
+		// 	}
+		// }
+		if( OutArray[i]->LevelName == CurrentLevelName)
 		{
 			for( const TSubclassOf<ATMainTower>& Tower : OutArray[i]->WinTowers)
 			{
 				ResTowers.Add(Tower);
 			}
 		}
-			
 	}
 	return ResTowers;
 }
@@ -254,18 +270,54 @@ int32 TDataTableManager::GetLevelInitCoins(const FName CurrentLevelName)
 	int32 ResCoins = 100;
 	for( int i = 0; i < OutArray.Num(); i++)
 	{
-		if( OutArray[i]->Level)
-		{
-			UE_LOG(LogTemp,Log,TEXT("Level Name %s"),*OutArray[i]->Level->GetName());
-		}
-		
-		if( OutArray[i]->Level && FName(OutArray[i]->Level->GetName()) == CurrentLevelName)
+		// if( OutArray[i]->Level)
+		// {
+		// 	UE_LOG(LogTemp,Log,TEXT("Level Name %s"),*OutArray[i]->Level->GetName());
+		// }
+		//
+		// if( OutArray[i]->Level && FName(OutArray[i]->Level->GetName()) == CurrentLevelName)
+		// {
+		// 	ResCoins = OutArray[i]->InitCoins;
+		// }
+		if( OutArray[i]->LevelName == CurrentLevelName)
 		{
 			ResCoins = OutArray[i]->InitCoins;
 		}
-			
 	}
 	return ResCoins;
+}
+
+FTLevelInfo TDataTableManager::GetLevelInfo(const FName CurrentLevelName)
+{
+	if( LevelInfoTable == nullptr)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("LevelInfoTable NULL"));
+		return FTLevelInfo();
+	}
+	const FString ContextStr;
+	// static TArray<FAISpawnStruct*> OutArray; 打包时使用
+	TArray<FTLevelInfo*> OutArray;
+	if( OutArray.Num() == 0)
+	{
+		LevelInfoTable->GetAllRows<FTLevelInfo>(ContextStr,OutArray);
+	}
+	for( int i = 0; i < OutArray.Num(); i++)
+	{
+		// if( OutArray[i]->Level)
+		// {
+		// 	UE_LOG(LogTemp,Log,TEXT("Level Name %s"),*OutArray[i]->Level->GetName());
+		// }
+		//
+		// if( OutArray[i]->Level && FName(OutArray[i]->Level->GetName()) == CurrentLevelName)
+		// {
+		// 	ResCoins = OutArray[i]->InitCoins;
+		// }
+		if( OutArray[i]->LevelName == CurrentLevelName)
+		{
+			return *OutArray[i];
+		}
+	}
+	return FTLevelInfo();
 }
 
 int TDataTableManager::GetAISpawnStructNum()

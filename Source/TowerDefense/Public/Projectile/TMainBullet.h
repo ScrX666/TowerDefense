@@ -21,6 +21,8 @@ public:
 	class UStaticMeshComponent* Mesh;
 	UPROPERTY(VisibleAnywhere)
 	class USphereComponent* SphereComponent;
+	UPROPERTY(EditDefaultsOnly)
+	TArray<USoundBase*> ExplosionSounds;
 
 private:
 	UPROPERTY(VisibleAnywhere)
