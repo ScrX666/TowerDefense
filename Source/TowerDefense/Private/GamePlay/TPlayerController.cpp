@@ -34,6 +34,21 @@ BuildingMode(EBuildingMode::E_NotInBuildMode)
 	// CursorManagerComponent = CreateDefaultSubobject<UTCursorManagerComponent>(TEXT("CursorManager"));
 }
 
+void ATPlayerController::OnConstructTowerBulid(ATMainTower* Tower, bool bIsConstruct)
+{
+	if( bIsConstruct)
+	{
+		Tower->OnSelected(false);
+		AttachBase->OnConstructAttachBuilding(Tower);
+		Tower->OnConstruct(AttachBase);
+		TPlayerState->RemoveCoins(Tower->GetCostCoins());
+	}
+	else
+	{
+		Tower->OnDestory();
+	}
+}
+
 void ATPlayerController::SetBuildingMode(TSubclassOf<AActor> BuildingCla)
 {
 	if(BuildingMode == EBuildingMode::E_InSillMode) return ;
@@ -92,11 +107,8 @@ void ATPlayerController::MouseClickDown()
 				{
 					if( bCanConstruct)
 					{
-						auto Building = GetWorld()->SpawnActor<ATMainBuilding>(BuildingClass,BuildingReferActor->GetTransform());
-						Building->OnSelected(false);
-						AttachBase->OnConstructAttachBuilding(Building);
-						Building->OnConstruct(AttachBase);
-						TPlayerState->RemoveCoins(Building->GetCostCoins());
+						auto Building = GetWorld()->SpawnActor<ATMainTower>(BuildingClass,BuildingReferActor->GetTransform());
+						OnConstructTower.Broadcast(Building,true);
 					}
 					else
 					{
@@ -292,6 +304,9 @@ void ATPlayerController::BeginPlay()
 		GameMode->OnGameEnd.AddDynamic(SoundManagerComponent,&UTSoundManagerComponent::OnGameEnd);
 	}
 
+	OnConstructTower.AddDynamic(this,&ATPlayerController::OnConstructTowerBulid);
+	OnConstructTower.AddDynamic(SoundManagerComponent,&UTSoundManagerComponent::OnConstructTowerBulid);
+	
 	// 设置Cursor
 	// CursorManagerComponent->SetCursorType(this,EMouseCursor::Default);
 	CurrentMouseCursor = EMouseCursor::Default;

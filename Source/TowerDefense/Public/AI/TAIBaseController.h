@@ -30,7 +30,7 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 
-	virtual bool CanBeSoloed() const;
+	virtual bool CanBeSoloed();
 	UFUNCTION()
 	void DisableSolo(AActor* InstigatorActor);
 	UFUNCTION()

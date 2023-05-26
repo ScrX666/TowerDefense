@@ -35,8 +35,11 @@ void ATAIBaseController::Tick(float DeltaSeconds)
 #pragma endregion
 }
 
-bool ATAIBaseController::CanBeSoloed() const
+bool ATAIBaseController::CanBeSoloed()
 {
+	if( !OwnMan) OwnMan = Cast<ATManBase>(GetPawn());
+	if( OwnMan->ManStateAndBuffer->CurrentHealth <= 0) return false;
+	
 	return !bIsSoloed;
 }
 

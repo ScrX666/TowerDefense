@@ -34,7 +34,7 @@ void ATHeroController::HeroMove(FVector MoveLoc)
 	}
 }
 
-bool ATHeroController::CanBeSoloed() const
+bool ATHeroController::CanBeSoloed()
 {
 	if( Blackboard)
 	{

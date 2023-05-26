@@ -49,6 +49,14 @@ void UTSoundManagerComponent::OnSelectHero(bool bIsSelected)
 	}
 }
 
+void UTSoundManagerComponent::OnBtnClick()
+{
+	UGameplayStatics::PlaySound2D(this,UIClickSound);
+}
+
+/*
+ * 游戏结束播放音效，通过委托触发
+ */
 void UTSoundManagerComponent::OnGameEnd(bool bIsWin)
 {
 	if( bIsWin)
@@ -58,6 +66,20 @@ void UTSoundManagerComponent::OnGameEnd(bool bIsWin)
 	else
 	{
 		UGameplayStatics::PlaySound2D(this,FailGameSound);
+	}
+}
+/*
+ * 创建删除塔播放音效，通过委托触发
+ */
+void UTSoundManagerComponent::OnConstructTowerBulid(ATMainTower* Tower, bool bIsConstruct)
+{
+	if( bIsConstruct)
+	{
+		UGameplayStatics::PlaySound2D(this, BuildSound);
+	}
+	else
+	{
+		UGameplayStatics::PlaySound2D(this, DestorySound);
 	}
 }
 

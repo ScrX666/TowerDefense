@@ -8,6 +8,7 @@
 #include "Interface/TBuildingInterface.h"
 #include "TPlayerController.generated.h"
 
+class ATMainTower;
 class UTSoundManagerComponent;
 class UTCursorManagerComponent;
 class UTSkillManagerComponent;
@@ -17,6 +18,8 @@ class UTUIManagerComponent;
 class ATPlayerState;
 enum class EBuildingMode : uint8;
 class ATMainBuilding;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnConstructTower,ATMainTower*,Tower,bool,bIsConstruct);
 /**
  * 
  */
@@ -26,6 +29,9 @@ class TOWERDEFENSE_API ATPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(VisibleAnywhere,BlueprintAssignable,BlueprintCallable)
+	FOnConstructTower OnConstructTower;
+	
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	ATPlayerState* TPlayerState;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
@@ -73,6 +79,8 @@ private:
 	
 public:
 	ATPlayerController();
+	UFUNCTION()
+	void OnConstructTowerBulid(ATMainTower* Tower,bool bIsConstruct);
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
 	/*

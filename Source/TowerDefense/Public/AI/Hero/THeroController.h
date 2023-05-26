@@ -17,5 +17,5 @@ class TOWERDEFENSE_API ATHeroController : public ATAIBaseController
 public:
 	virtual void BeginPlay() override;
 	void HeroMove(FVector MoveLoc);
-	virtual bool CanBeSoloed() const override;
+	virtual bool CanBeSoloed() override;
 };

@@ -20,6 +20,8 @@ public:
 	TArray<USoundBase*> RebornSounds;
 	UPROPERTY(VisibleAnywhere)
 	UNiagaraComponent* SelectedEffect;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	UStaticMeshComponent* WeaponMeshComp;
 	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
 	FOnSelectHero OnSelectHero;
 public:
@@ -27,4 +29,5 @@ public:
 	virtual void OnSelected(bool bIsSelected) override;
 	virtual void OnManDead() override;
 	virtual void OnManReborn() override;
+	virtual void BeginPlay() override;
 };
