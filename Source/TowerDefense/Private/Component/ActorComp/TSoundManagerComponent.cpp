@@ -5,6 +5,7 @@
 
 #include "Components/AudioComponent.h"
 #include "GamePlay/TDataTableManager.h"
+#include "GamePlay/TGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
@@ -16,6 +17,9 @@ UTSoundManagerComponent::UTSoundManagerComponent()
 	
 	BackgroundSoundComp = CreateDefaultSubobject<UAudioComponent>(TEXT("BackgroundSoundComp"));
 	AmbientSoundComp = CreateDefaultSubobject<UAudioComponent>(TEXT("AmbientSoundComp"));
+
+	MusicVolume = 1.0f;
+	SoundVolume = 1.0f;
 }
 
 void UTSoundManagerComponent::SetBgAndAmSound(USoundBase* AmSound, USoundBase* BGSound)
@@ -27,12 +31,14 @@ void UTSoundManagerComponent::SetBgAndAmSound(USoundBase* AmSound, USoundBase* B
 void UTSoundManagerComponent::PlayAmbientSound()
 {
 	AmbientSoundComp->SetSound(AmbientSound);
+	AmbientSoundComp->SetVolumeMultiplier(MusicVolume);
 	AmbientSoundComp->Play();
 }
 
 void UTSoundManagerComponent::PlayBackgroundSound()
 {
 	BackgroundSoundComp->SetSound(BackgroundSound);
+	BackgroundSoundComp->SetVolumeMultiplier(MusicVolume);
 	BackgroundSoundComp->Play();
 }
 
@@ -51,7 +57,7 @@ void UTSoundManagerComponent::OnSelectHero(bool bIsSelected)
 
 void UTSoundManagerComponent::OnBtnClick()
 {
-	UGameplayStatics::PlaySound2D(this,UIClickSound);
+	UGameplayStatics::PlaySound2D(this,UIClickSound,SoundVolume);
 }
 
 /*
@@ -61,11 +67,17 @@ void UTSoundManagerComponent::OnGameEnd(bool bIsWin)
 {
 	if( bIsWin)
 	{
-		UGameplayStatics::PlaySound2D(this, WinGameSound);
+		UGameplayStatics::PlaySound2D(this, WinGameSound,SoundVolume);
 	}
 	else
 	{
-		UGameplayStatics::PlaySound2D(this,FailGameSound);
+		UGameplayStatics::PlaySound2D(this,FailGameSound,SoundVolume);
+	}
+	UTGameInstance* GameInstance = Cast<UTGameInstance>(UGameplayStatics::GetGameInstance(this));
+	if( GameInstance)
+	{
+		GameInstance->MusicVolume = MusicVolume;
+		GameInstance->SoundVolume = SoundVolume;
 	}
 }
 /*
@@ -75,12 +87,24 @@ void UTSoundManagerComponent::OnConstructTowerBulid(ATMainTower* Tower, bool bIs
 {
 	if( bIsConstruct)
 	{
-		UGameplayStatics::PlaySound2D(this, BuildSound);
+		UGameplayStatics::PlaySound2D(this, BuildSound,SoundVolume);
 	}
 	else
 	{
-		UGameplayStatics::PlaySound2D(this, DestorySound);
+		UGameplayStatics::PlaySound2D(this, DestorySound,SoundVolume);
 	}
+}
+
+void UTSoundManagerComponent::SetMusicVolume(float NewVolume)
+{
+	MusicVolume = NewVolume;
+	AmbientSoundComp->SetVolumeMultiplier(MusicVolume);
+	BackgroundSoundComp->SetVolumeMultiplier(MusicVolume);
+}
+
+void UTSoundManagerComponent::SetSoundVolume(float NewVolume)
+{
+	SoundVolume = NewVolume;
 }
 
 
@@ -90,6 +114,14 @@ void UTSoundManagerComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	UTGameInstance* GameInstance = Cast<UTGameInstance>(UGameplayStatics::GetGameInstance(this));
+	if( GameInstance)
+	{
+		SetMusicVolume(GameInstance->MusicVolume);
+		SetSoundVolume(GameInstance->SoundVolume);
+	}
+
+	
 	auto LevelInfo = TDataTableManager::GetInstance()->GetLevelInfo(FName(UGameplayStatics::GetCurrentLevelName(this)));
 	SetBgAndAmSound(LevelInfo.AmbientSound,LevelInfo.BackgroundMusic);
 	PlayBackgroundSound();

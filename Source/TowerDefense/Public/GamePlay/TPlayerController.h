@@ -82,6 +82,8 @@ public:
 	UFUNCTION()
 	void OnConstructTowerBulid(ATMainTower* Tower,bool bIsConstruct);
 	virtual void BeginPlay() override;
+	UFUNCTION(BlueprintCallable)
+	void OnEscBtnPress();
 	virtual void SetupInputComponent() override;
 	/*
 	 * 设置建造模式（拿起，放下）

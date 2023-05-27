@@ -3,7 +3,9 @@
 
 #include "BlueprintFunctionLibrary/TBlueprintFunctionLibrary.h"
 
+#include "Component/ActorComp/TSoundManagerComponent.h"
 #include "GamePlay/TDataTableManager.h"
+#include "GamePlay/TPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Structure/FTBoolArray.h"
 
@@ -125,6 +127,14 @@ int32 UTBlueprintFunctionLibrary::GetTowerCoinsByClassAndName(TSubclassOf<ATMain
 void UTBlueprintFunctionLibrary::PlayRandomSound(UObject* WorldContext, const TArray<USoundBase*>& Sounds, FVector Location)
 {
     if( Sounds.Num() == 0) return ;
+
+    ATPlayerController* PC = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(WorldContext,0));
+    float Volume = 1.0f;
+    if( PC)
+    {
+        Volume = PC->SoundManagerComponent->SoundVolume;
+    }
+    
     int32 PlayIndex = FMath::RandRange(0, Sounds.Num() - 1);
-    UGameplayStatics::PlaySoundAtLocation(WorldContext,Sounds[PlayIndex],Location,FRotator::ZeroRotator);
+    UGameplayStatics::PlaySoundAtLocation(WorldContext,Sounds[PlayIndex],Location,FRotator::ZeroRotator,Volume);
 }

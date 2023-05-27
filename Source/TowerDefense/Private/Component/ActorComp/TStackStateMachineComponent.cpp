@@ -104,6 +104,8 @@ void UTStackStateMachineComponent::PushState(TScriptInterface<ITStackStateInterf
 
 void UTStackStateMachineComponent::PopState()
 {
+	if( States.Num() == 0) return ;
+	
 	auto OriginState = GetCurrentState();
 	if( OriginState != nullptr)
 	{

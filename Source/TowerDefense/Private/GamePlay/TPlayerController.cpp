@@ -20,6 +20,7 @@
 #include "Components/DecalComponent.h"
 #include "GamePlay/TGameState.h"
 #include "GamePlay/TPlayerState.h"
+#include "GamePlay/TUIState.h"
 #include "Kismet/GameplayStatics.h"
 #include "TowerDefense/TowerDefenseGameModeBase.h"
 
@@ -311,6 +312,29 @@ void ATPlayerController::BeginPlay()
 	// CursorManagerComponent->SetCursorType(this,EMouseCursor::Default);
 	CurrentMouseCursor = EMouseCursor::Default;
 }
+/*
+ * ESC 按键
+ */
+void ATPlayerController::OnEscBtnPress()
+{
+	UTUIState* TopUI = nullptr;
+	TEnumAsByte<EUIStateCastResult> ResType;
+	UIManagerComponent->GetCurrentUIState(UTUIState::StaticClass(),ResType,TopUI);
+	if( TopUI)
+	{
+		UE_LOG(LogTemp,Log,TEXT("TopUI Name %s"),*TopUI->GetClass()->GetFName().ToString());
+	}
+	if( TopUI && TopUI->GetClass()->GetFName() == TEXT("U_BeginPanel_C"))
+	{
+		return ;
+	}
+	if( TopUI && TopUI->GetClass()->GetFName() == TEXT("U_TowerDefense_C"))
+	{
+		UIManagerComponent->PushUIState(TEXT("PausePanel"));
+		return ;
+	}
+	UIManagerComponent->PopState();
+}
 
 void ATPlayerController::SetupInputComponent()
 {
@@ -318,6 +342,7 @@ void ATPlayerController::SetupInputComponent()
 
 	InputComponent->BindAction(TEXT("MouseClick"), IE_Pressed, this, &ATPlayerController::MouseClickDown);
 	InputComponent->BindAxis(TEXT("MouseMove"), this, &ATPlayerController::MouseMove);
+	//InputComponent->BindAction(TEXT("ESC"), IE_Pressed, this,&ATPlayerController::OnEscBtnPress);
 }
 
 void ATPlayerController::BuildingModeOff()

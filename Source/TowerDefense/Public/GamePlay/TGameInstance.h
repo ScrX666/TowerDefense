@@ -17,6 +17,10 @@ class TOWERDEFENSE_API UTGameInstance : public UGameInstance
 public:
 	UPROPERTY(EditDefaultsOnly)
 	TArray<TSubclassOf<ATMainTower>> InitTowers; // 初始时拥有的塔
+	UPROPERTY(BlueprintReadOnly)
+	float MusicVolume = 1.0f;
+	UPROPERTY(BlueprintReadOnly)
+	float SoundVolume = 1.0f;
 private:
 	UPROPERTY(VisibleAnywhere)
 	TArray<TSubclassOf<ATMainTower>> OwnTowers; // 拥有的塔
