@@ -47,6 +47,7 @@ void ATPlayerController::OnConstructTowerBulid(ATMainTower* Tower, bool bIsConst
 	else
 	{
 		Tower->OnDestory();
+		SelectedBuilding = nullptr;
 	}
 }
 
@@ -143,6 +144,7 @@ void ATPlayerController::MouseClickDown()
 			{
 				SelectedBuilding->OnSelected(false);
 				UIManagerComponent->PopState();
+				SelectedBuilding = nullptr;
 			}
 
 		
