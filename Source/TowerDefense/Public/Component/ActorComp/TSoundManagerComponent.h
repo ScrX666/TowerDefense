@@ -35,6 +35,12 @@ public:
 	USoundBase* AmbientSound;
 	UPROPERTY()
 	USoundBase* BackgroundSound;
+
+	UPROPERTY(BlueprintReadOnly)
+	float MusicVolume;
+	UPROPERTY(BlueprintReadOnly)
+	float SoundVolume;
+	
 public:	
 	// Sets default values for this component's properties
 	UTSoundManagerComponent();
@@ -46,8 +52,14 @@ public:
 	void PlayBackgroundSound();
 
 	void PlayHeroClickSound();
+	/*
+	 * 选择Hero音效
+	 */
 	UFUNCTION()
 	void OnSelectHero(bool bIsSelected);
+	/*
+	 * 按钮点击音效
+	 */
 	UFUNCTION(BlueprintCallable)
 	void OnBtnClick();
 	/*
@@ -60,6 +72,13 @@ public:
 	 */
 	UFUNCTION()
 	void OnConstructTowerBulid(ATMainTower* Tower, bool bIsConstruct);
+	/*
+	 * 设置音量
+	 */
+	UFUNCTION(BlueprintCallable)
+	void SetMusicVolume(float NewVolume);
+	UFUNCTION(BlueprintCallable)
+	void SetSoundVolume(float NewVolume);
 
 protected:
 	// Called when the game starts
