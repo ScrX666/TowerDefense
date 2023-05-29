@@ -20,6 +20,8 @@ class TOWERDEFENSE_API UTUIManagerComponent : public UTStackStateMachineComponen
 public:
 	UPROPERTY(EditDefaultsOnly)
 	TMap<FName,TSubclassOf<UTUIState>> UIStates;
+	UPROPERTY(VisibleAnywhere)
+	APlayerController* PlayerController;
 private:
 	UPROPERTY()
 	TMap<FName,UTUIState*> UIInstances;
@@ -34,6 +36,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void GetCurrentUIState(TSubclassOf<UTUIState> StateClass,TEnumAsByte<EUIStateCastResult>& IsVaild,UTUIState*& OutState);
 
+	UFUNCTION(BlueprintCallable)
+	void OnESCPress();
+
+	
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 };

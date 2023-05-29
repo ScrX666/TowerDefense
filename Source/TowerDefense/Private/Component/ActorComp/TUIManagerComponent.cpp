@@ -58,10 +58,36 @@ void UTUIManagerComponent::GetCurrentUIState(TSubclassOf<UTUIState> StateClass,
 	}
 }
 
+void UTUIManagerComponent::OnESCPress()
+{
+	UTUIState* TopUI = nullptr;
+	TEnumAsByte<EUIStateCastResult> ResType;
+	this->GetCurrentUIState(UTUIState::StaticClass(),ResType,TopUI);
+	if( TopUI)
+	{
+		UE_LOG(LogTemp,Log,TEXT("TopUI Name %s"),*TopUI->GetClass()->GetFName().ToString());
+	}
+	if( TopUI && TopUI->GetClass()->GetFName() == TEXT("U_BeginPanel_C"))
+	{
+		return ;
+	}
+	if( !TopUI || ( TopUI && TopUI->GetClass()->GetFName() == TEXT("U_TowerDefense_C")))
+	{
+		PlayerController->SetShowMouseCursor(true);
+		this->PushUIState(TEXT("PausePanel"));
+		return ;
+	}
+	this->PopState();
+	if( this->StateCount() == 0 && PlayerController)
+	{
+		PlayerController->SetShowMouseCursor(false);
+	}
+}
+
 void UTUIManagerComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	PlayerController = UGameplayStatics::GetPlayerController(this, 0);
 	InitUIState();
 }
 

@@ -319,23 +319,7 @@ void ATPlayerController::BeginPlay()
  */
 void ATPlayerController::OnEscBtnPress()
 {
-	UTUIState* TopUI = nullptr;
-	TEnumAsByte<EUIStateCastResult> ResType;
-	UIManagerComponent->GetCurrentUIState(UTUIState::StaticClass(),ResType,TopUI);
-	if( TopUI)
-	{
-		UE_LOG(LogTemp,Log,TEXT("TopUI Name %s"),*TopUI->GetClass()->GetFName().ToString());
-	}
-	if( TopUI && TopUI->GetClass()->GetFName() == TEXT("U_BeginPanel_C"))
-	{
-		return ;
-	}
-	if( TopUI && TopUI->GetClass()->GetFName() == TEXT("U_TowerDefense_C"))
-	{
-		UIManagerComponent->PushUIState(TEXT("PausePanel"));
-		return ;
-	}
-	UIManagerComponent->PopState();
+	UIManagerComponent->OnESCPress();
 }
 
 void ATPlayerController::SetupInputComponent()

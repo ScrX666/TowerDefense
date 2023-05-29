@@ -102,6 +102,7 @@ void ATSplineMapActor::SpawnAI()
 	FRotator SpawnRot = SplineComponent->GetRotationAtSplineInputKey(0,ESplineCoordinateSpace::World);
 	
 	AActor* AIActor = GetWorld()->SpawnActor<AActor>(FaiSpawnStruct.AICharacter,SpawnLoc,SpawnRot,SpawnParameters);
+	if(AIActor == nullptr) return ;
 	APawn* AiPawn = Cast<APawn>(AIActor);
 	AiPawn->SpawnDefaultController();
 	ACharacter* AICharacter = Cast<ACharacter>(AIActor);
