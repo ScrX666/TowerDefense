@@ -337,7 +337,12 @@ TDataTableManager::TDataTableManager()
 	LevelInfoTable = LoadObject<UDataTable>(nullptr, UTF8_TO_TCHAR("/Game/BluePrint/Table/T_LevelInfo"));
 	AISpawnTableLength = 0;
 	
-	// ShotTowerTable->AddToRoot();
+	ShotTowerTable->AddToRoot();
+	BeamTowerTable->AddToRoot();
+	TowerTable->AddToRoot();
+	ManStateTable->AddToRoot();
+	AISpawnTable->AddToRoot();
+	LevelInfoTable->AddToRoot();
 	
 	// TODO: 测试是否多次构造
 	UE_LOG(LogTemp, Log,TEXT("Construct DataTableManager"));

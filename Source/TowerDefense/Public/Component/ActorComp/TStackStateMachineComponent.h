@@ -59,7 +59,7 @@ public:
 	UFUNCTION(BlueprintPure,Category = "StackStateMachine")
 	int32 StateCount() const;
 	UFUNCTION(BlueprintPure,Category = "StackStateMachine")
-	FORCEINLINE float GetCurrentStateTime() const;
+	float GetCurrentStateTime() const;
 
 
 	
