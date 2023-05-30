@@ -7,7 +7,7 @@
 #include "FTTower.generated.h"
 
 /*
- * 塔的信息 
+ * 塔的信息 弃用
  */
 USTRUCT(BlueprintType)
 struct FTTower : public FTableRowBase

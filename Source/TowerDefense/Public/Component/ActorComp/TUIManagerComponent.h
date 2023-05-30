@@ -6,18 +6,24 @@
 #include "Component/ActorComp/TStackStateMachineComponent.h"
 #include "TUIManagerComponent.generated.h"
 
+class UDataTable;
+
 UENUM(BlueprintType)
 enum EUIStateCastResult { Success,Failure };
 
 class UTUIState;
 /**
- * 
+ * UI管理器
  */
 UCLASS()
 class TOWERDEFENSE_API UTUIManagerComponent : public UTStackStateMachineComponent
 {
 	GENERATED_BODY()
 public:
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UDataTable* DialogTable; // 用作打开UI面板  和  对话面板读取数据的交换
+
+	
 	UPROPERTY(EditDefaultsOnly)
 	TMap<FName,TSubclassOf<UTUIState>> UIStates;
 	UPROPERTY(VisibleAnywhere)

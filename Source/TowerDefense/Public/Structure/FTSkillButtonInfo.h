@@ -9,7 +9,7 @@
 
 class UImage;
 /**
- * 
+ * 技能图标信息
  */
 USTRUCT(BlueprintType)
 struct TOWERDEFENSE_API FTSKillButtonInfo : public FTableRowBase

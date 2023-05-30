@@ -123,6 +123,25 @@ int32 UTBlueprintFunctionLibrary::GetTowerCoinsByClassAndName(TSubclassOf<ATMain
         return TDataTableManager::GetInstance()->GetShotTowerData(Name).CostCoins;
     }
 }
+/*
+ * 从表读取对话信息
+ */
+bool UTBlueprintFunctionLibrary::GetDialogFromTable(UDataTable* DataTable, FName RowName, FTDialogData& FindResult)
+{
+    if( DataTable == nullptr)
+    {
+        UE_LOG(LogTemp,Warning,TEXT("DataTable NULL"));
+        return false;
+    }
+    const FString ContextStr;
+    auto Res = DataTable->FindRow<FTDialogData>(RowName,ContextStr);
+    if( Res == nullptr)
+    {
+        return false;
+    }
+    FindResult = *Res;
+    return true;
+}
 
 void UTBlueprintFunctionLibrary::PlayRandomSound(UObject* WorldContext, const TArray<USoundBase*>& Sounds, FVector Location)
 {

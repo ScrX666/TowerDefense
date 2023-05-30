@@ -3,11 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/DataTable.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Structure/FTBoolArray.h"
+#include "Structure/FTDialogData.h"
 #include "TBlueprintFunctionLibrary.generated.h"
 
 
+class UDataTable;
 class ATMainTower;
 /**
  * 
@@ -22,6 +25,9 @@ class TOWERDEFENSE_API UTBlueprintFunctionLibrary : public UBlueprintFunctionLib
 	static FName GetNextLevel(const FName CurrentLevelName);
 	UFUNCTION(BlueprintCallable)
 	static int32 GetTowerCoinsByClassAndName(TSubclassOf<ATMainTower> Tower,FName Name);
+	UFUNCTION(BlueprintCallable)
+	static bool GetDialogFromTable(UDataTable* DataTable,FName RowName,FTDialogData& FindResult);
+
 public:
 	UFUNCTION(BlueprintCallable)
 	static void PlayRandomSound(UObject* WorldContext, const TArray<USoundBase*>& Sounds, FVector Location);
