@@ -3,22 +3,18 @@
 
 #include "Character/TManBase.h"
 
-#include "DrawDebugHelpers.h"
-#include "ToolContextInterfaces.h"
 #include "AI/TAIBaseController.h"
-#include "AI/Enemy/TEnemyAIController.h"
-#include "BehaviorTree/BlackboardComponent.h"
+
 #include "BlueprintFunctionLibrary/TBlueprintFunctionLibrary.h"
 #include "Building/Tower/TMainTower.h"
-#include "Character/TSoldierBase.h"
+
 #include "Component/ActorComp/TManStateAndBuffer.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/ProgressBar.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GamePlay/TDataTableManager.h"
-#include "GamePlay/TPlayerController.h"
-#include "GamePlay/TPlayerState.h"
+
 #include "Kismet/GameplayStatics.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig.h"
