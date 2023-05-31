@@ -75,11 +75,10 @@ void ATPlayerController::ExecuteSkill(FName SkillName)
 	BuildingMode = EBuildingMode::E_InSillMode;
 	CurSkillName = SkillName;
 	CurrentMouseCursor = EMouseCursor::Hand;
+	
 	// 释放Skill为UI点击，不会立即更新，需要手动更新
-	if(bIsTest)
-	{
-		SetInputMode(FInputModeGameOnly());
-	}
+	FInputModeGameOnly InputModeGameOnly;
+	SetInputMode(InputModeGameOnly);
 }
 
 void ATPlayerController::ConfirmExecuteSkill()
@@ -87,10 +86,11 @@ void ATPlayerController::ConfirmExecuteSkill()
 	BuildingMode = EBuildingMode::E_NotInBuildMode;
 	CurrentMouseCursor = EMouseCursor::Default;
 	SkillManagerComponent->Execute(CurSkillName);
-	if(bIsTest)
-	{
-		SetInputMode(FInputModeGameAndUI());
-	}
+
+	// 释放Skill为UI点击，不会立即更新，需要手动更新
+	FInputModeGameAndUI InputModeGameAndUI;
+	InputModeGameAndUI.SetHideCursorDuringCapture(false);
+	SetInputMode(InputModeGameAndUI);
 }
 
 void ATPlayerController::MouseClickDown()
