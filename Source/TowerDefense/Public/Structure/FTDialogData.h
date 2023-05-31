@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
 #include "FTAnsWithDialogs.h"
+#include "Enum/ESpeakerFaceType.h"
+#include "Interface/TDialogEventInterface.h"
 #include "FTDialogData.generated.h"
 
 
@@ -16,7 +18,11 @@ public:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	FText SpeakText;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	ESpeakerFaceType FaceType;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TArray<FTAnsWithDialogs> NextDialogs;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	TSubclassOf<UTDialogEventInterface> DialogEvent;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	bool bIsBranch;
 };

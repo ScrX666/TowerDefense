@@ -16,7 +16,7 @@ class TOWERDEFENSE_API UTInteractComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-
+	TSubclassOf<UTInteractInterface> a;
 
 private:
 	UPROPERTY()
