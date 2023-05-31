@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/WidgetComponent.h"
 #include "GameFramework/Actor.h"
 #include "Interface/TInteractInterface.h"
 #include "TBaseItem.generated.h"
@@ -13,8 +14,11 @@ class TOWERDEFENSE_API ATBaseItem : public AActor, public ITInteractInterface
 	GENERATED_BODY()
 	
 public:	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	UStaticMeshComponent* MeshComponent;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	UWidgetComponent* HealthWidgetComponent;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -24,5 +28,8 @@ public:
 	ATBaseItem();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void Interact_Implementation(APawn* InstigatorPawn);
+	void Interact(APawn* InstigatorPawn);
+
+	virtual void ActiveTipsUI_Implementation(bool bIsActive) override;;
+	virtual void Interact_Implementation(APawn* InstigatorPawn) override;
 };

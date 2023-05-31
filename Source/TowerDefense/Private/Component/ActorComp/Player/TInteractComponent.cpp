@@ -87,6 +87,7 @@ void UTInteractComponent::OnEnterDetectRange(UPrimitiveComponent* OverlappedComp
 	if( OtherActor->Implements<UTInteractInterface>())
 	{
 		DetectedActors.AddUnique(OtherActor);
+		ITInteractInterface::Execute_ActiveTipsUI(OtherActor,true);
 	}
 }
 
@@ -96,5 +97,6 @@ void UTInteractComponent::OnExitDetectRange(UPrimitiveComponent* OverlappedCompo
 	if( OtherActor->Implements<UTInteractInterface>())
 	{
 		DetectedActors.Remove(OtherActor);
+		ITInteractInterface::Execute_ActiveTipsUI(OtherActor,false);
 	}
 }

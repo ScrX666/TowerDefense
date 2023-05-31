@@ -15,8 +15,8 @@ void UTSpawnSoliderSkill::Execute(UWorld* World)
 	for( int32 i = 0; i < SpawnCount; i++)
 	{
 		FVector SpawnLoc = SkillLocation;
-		SpawnLoc.X += FMath::RandRange(-50.0f,50.0f);
-		SpawnLoc.Y += FMath::RandRange(-50.0f,50.0f);
+		SpawnLoc.X += FMath::RandRange(-RandomRange,RandomRange);
+		SpawnLoc.Y += FMath::RandRange(-RandomRange,RandomRange);
 		SpawnLoc.Z += 40.0f;
 		FRotator SpawnRot = FRotator::ZeroRotator;
 		SpawnRot.Yaw = FMath::RandRange(0.0f,360.0f);

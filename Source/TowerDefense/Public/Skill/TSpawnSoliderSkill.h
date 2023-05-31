@@ -20,6 +20,8 @@ public:
 	TSubclassOf<ATSoldierBase> SoliderCla;
 	UPROPERTY(EditDefaultsOnly)
 	int32 SpawnCount;
+	UPROPERTY(EditDefaultsOnly)
+	float RandomRange = 50.0f;
 public:
 	virtual void Execute(UWorld* World) override;
 };

@@ -24,4 +24,6 @@ class TOWERDEFENSE_API ITInteractInterface
 public:
 	UFUNCTION(BlueprintNativeEvent)
 	void Interact(APawn* InstigatorPawn);
+	UFUNCTION(BlueprintNativeEvent)
+	void ActiveTipsUI(bool InstigatorPawn);
 };
