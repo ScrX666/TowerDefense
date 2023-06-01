@@ -9,12 +9,17 @@
 ATBaseItem::ATBaseItem()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
-	HealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthWidgetComp"));
+	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthWidgetComp"));
 	RootComponent = MeshComponent;
-	HealthWidgetComponent->SetupAttachment(RootComponent);
-	HealthWidgetComponent->SetVisibility(false);
+	WidgetComponent->SetupAttachment(RootComponent);
+	WidgetComponent->SetVisibility(false);
+}
+
+void ATBaseItem::EnableItem(bool bActive)
+{
+	bIsItemActive = bActive;
+	BlueprintEnableItem(bActive);
 }
 
 // Called when the game starts or when spawned
@@ -22,13 +27,6 @@ void ATBaseItem::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-// Called every frame
-void ATBaseItem::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 void ATBaseItem::Interact(APawn* InstigatorPawn)
@@ -39,12 +37,12 @@ void ATBaseItem::Interact(APawn* InstigatorPawn)
 void ATBaseItem::ActiveTipsUI_Implementation(bool bIsActive)
 {
 	ITInteractInterface::ActiveTipsUI_Implementation(bIsActive);
-	HealthWidgetComponent->SetVisibility(bIsActive);
+	WidgetComponent->SetVisibility(bIsActive);
 }
 
 void ATBaseItem::Interact_Implementation(APawn* InstigatorPawn)
 {
 	ITInteractInterface::Interact_Implementation(InstigatorPawn);
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red,TEXT("Interact"));
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red,TEXT("Interact_Implementation"));
 }
 

@@ -13,6 +13,6 @@ class ITDialogEventInterface
 	GENERATED_BODY()
 public:
 	UFUNCTION(BlueprintNativeEvent)
-	void TriggerDialogEvent();
+	void TriggerDialogEvent(UWorld* World);
 	
 };

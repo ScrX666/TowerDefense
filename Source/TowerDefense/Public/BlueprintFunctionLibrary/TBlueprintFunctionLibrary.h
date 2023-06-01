@@ -27,6 +27,8 @@ class TOWERDEFENSE_API UTBlueprintFunctionLibrary : public UBlueprintFunctionLib
 	static int32 GetTowerCoinsByClassAndName(TSubclassOf<ATMainTower> Tower,FName Name);
 	UFUNCTION(BlueprintCallable)
 	static bool GetDialogFromTable(UDataTable* DataTable,FName RowName,FTDialogData& FindResult);
+	UFUNCTION(BlueprintCallable)
+	static TArray<AActor*> GetAllActorofClass(UWorld* World,TSubclassOf<AActor> ActorCla);
 
 public:
 	UFUNCTION(BlueprintCallable)

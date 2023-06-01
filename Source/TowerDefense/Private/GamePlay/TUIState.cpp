@@ -3,6 +3,10 @@
 
 #include "GamePlay/TUIState.h"
 
+#include "Component/ActorComp/TUIManagerComponent.h"
+#include "Component/ActorComp/Player/TDialogComponent.h"
+#include "Kismet/GameplayStatics.h"
+
 void UTUIState::ReceiveEnterState_Implementation(EStackAction StackAction)
 {
 	switch (StackAction)
@@ -39,6 +43,18 @@ void UTUIState::ReceiveExitState_Implementation(EStackAction StackAction)
 
 void UTUIState::ReceiveUpdateState_Implementation(float DeltaTime)
 {
+}
+
+void UTUIState::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	PC = UGameplayStatics::GetPlayerController(this, 0);
+	if( PC)
+	{
+		UIManagerComponent = Cast<UTUIManagerComponent>(PC->GetComponentByClass(UTUIManagerComponent::StaticClass()));
+		DialogManagerComponent = Cast<UTDialogComponent>(PC->GetComponentByClass(UTDialogComponent::StaticClass()));
+	}
 }
 
 void UTUIState::EnterState(EStackAction StackAction)

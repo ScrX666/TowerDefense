@@ -17,17 +17,21 @@ public:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	UStaticMeshComponent* MeshComponent;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	UWidgetComponent* HealthWidgetComponent;
-
+	UWidgetComponent* WidgetComponent;
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
+	bool bIsItemActive;
+	
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Sets default values for this actor's properties
 	ATBaseItem();
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void EnableItem(bool bActive);
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "EnableItem"))
+	void BlueprintEnableItem(bool bActive); // 留给蓝图完成相关操作
+	
 	void Interact(APawn* InstigatorPawn);
 
 	virtual void ActiveTipsUI_Implementation(bool bIsActive) override;;

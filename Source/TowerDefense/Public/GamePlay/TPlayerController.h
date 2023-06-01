@@ -8,6 +8,7 @@
 #include "Interface/TBuildingInterface.h"
 #include "TPlayerController.generated.h"
 
+class UTDialogComponent;
 class ATMainTower;
 class UTSoundManagerComponent;
 class UTCursorManagerComponent;
@@ -40,6 +41,8 @@ public:
 	UTSkillManagerComponent* SkillManagerComponent;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	UTSoundManagerComponent* SoundManagerComponent;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	UTDialogComponent* DialogComponent;
 	// UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	// UTCursorManagerComponent* CursorManagerComponent;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)

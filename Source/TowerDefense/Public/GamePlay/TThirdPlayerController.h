@@ -3,10 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Component/ActorComp/TSoundManagerComponent.h"
-#include "Component/ActorComp/TUIManagerComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "TThirdPlayerController.generated.h"
+
+class UTSoundManagerComponent;
+class UTUIManagerComponent;
+class UTDialogComponent;
 
 /**
  * 
@@ -20,6 +22,8 @@ public:
 	UTSoundManagerComponent* SoundManagerComponent;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	UTUIManagerComponent* UIManagerComponent;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	UTDialogComponent* DialogComponent;
 
 public:
 	ATThirdPlayerController();

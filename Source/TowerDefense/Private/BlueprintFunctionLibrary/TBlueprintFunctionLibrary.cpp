@@ -143,6 +143,13 @@ bool UTBlueprintFunctionLibrary::GetDialogFromTable(UDataTable* DataTable, FName
     return true;
 }
 
+TArray<AActor*> UTBlueprintFunctionLibrary::GetAllActorofClass(UWorld* World, TSubclassOf<AActor> ActorCla)
+{
+    TArray<AActor*> OutArray;
+    UGameplayStatics::GetAllActorsOfClass(World,ActorCla,OutArray);
+    return OutArray;
+}
+
 void UTBlueprintFunctionLibrary::PlayRandomSound(UObject* WorldContext, const TArray<USoundBase*>& Sounds, FVector Location)
 {
     if( Sounds.Num() == 0) return ;

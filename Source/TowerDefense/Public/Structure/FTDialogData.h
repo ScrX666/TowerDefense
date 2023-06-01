@@ -3,8 +3,10 @@
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
 #include "FTAnsWithDialogs.h"
+#include "DialogEvent/TBaseDialogEvent.h"
 #include "Enum/ESpeakerFaceType.h"
 #include "Interface/TDialogEventInterface.h"
+#include "UObject/ScriptInterface.h"
 #include "FTDialogData.generated.h"
 
 
@@ -22,7 +24,7 @@ public:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TArray<FTAnsWithDialogs> NextDialogs;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TSubclassOf<UTDialogEventInterface> DialogEvent;
+	TSubclassOf<ATBaseDialogEvent> DialogEvent;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	bool bIsBranch;
 };

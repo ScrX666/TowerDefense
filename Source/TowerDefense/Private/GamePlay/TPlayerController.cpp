@@ -17,6 +17,7 @@
 #include "Component/ActorComp/TSkillManagerComponent.h"
 #include "Component/ActorComp/TSoundManagerComponent.h"
 #include "Component/ActorComp/TUIManagerComponent.h"
+#include "Component/ActorComp/Player/TDialogComponent.h"
 #include "Components/DecalComponent.h"
 #include "GamePlay/TGameState.h"
 #include "GamePlay/TPlayerState.h"
@@ -32,6 +33,7 @@ BuildingMode(EBuildingMode::E_NotInBuildMode)
 	UIManagerComponent = CreateDefaultSubobject<UTUIManagerComponent>(TEXT("UIManager"));
 	SkillManagerComponent = CreateDefaultSubobject<UTSkillManagerComponent>(TEXT("SkillManager"));
 	SoundManagerComponent = CreateDefaultSubobject<UTSoundManagerComponent>(TEXT("SoundManager"));
+	DialogComponent = CreateDefaultSubobject<UTDialogComponent>(TEXT("DialogManager"));
 	// CursorManagerComponent = CreateDefaultSubobject<UTCursorManagerComponent>(TEXT("CursorManager"));
 }
 

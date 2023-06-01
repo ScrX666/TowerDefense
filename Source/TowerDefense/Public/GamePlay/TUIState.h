@@ -7,6 +7,8 @@
 #include "Interface/TStackStateInterface.h"
 #include "TUIState.generated.h"
 
+class UTDialogComponent;
+class UTUIManagerComponent;
 /**
  * 
  */
@@ -15,6 +17,18 @@ class TOWERDEFENSE_API UTUIState : public UUserWidget,public ITStackStateInterfa
 {
 	GENERATED_BODY()
 public:
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	APlayerController* PC;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	UTUIManagerComponent* UIManagerComponent;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	UTDialogComponent* DialogManagerComponent;
+	
+	
+public:
+
+	virtual void NativeConstruct() override;
+	
 	virtual void EnterState(EStackAction StackAction) override;
 	virtual void ExitState(EStackAction StackAction) override;
 	virtual void UpdateState(float DeltaTime) override;

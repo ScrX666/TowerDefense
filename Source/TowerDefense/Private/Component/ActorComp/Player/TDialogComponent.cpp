@@ -32,12 +32,23 @@ void UTDialogComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	// ...
 }
 
-void UTDialogComponent::ExecuteDialogEvent(TSubclassOf<UTDialogEventInterface> DialogEventCla)
+void UTDialogComponent::ExecuteDialogEvent(TSubclassOf<UObject> DialogEventCla)
 {
+	if( *DialogEventCla == nullptr)
+	{
+		UE_LOG(LogTemp,Log,TEXT("The class is empty"));
+		return ;
+	}
+	if( !DialogEventCla->ImplementsInterface(UTDialogEventInterface::StaticClass()))
+	{
+		UE_LOG(LogTemp,Error,TEXT("The class dont implement dialogevent interface"));
+		return ;
+	}
+	
 	if( !DialogEvents.Contains(DialogEventCla))
 	{
-		DialogEvents.Add(DialogEventCla,NewObject<UTDialogEventInterface>(this,DialogEventCla));
+		DialogEvents.Add(DialogEventCla,NewObject<UObject>(this,DialogEventCla));
 	}
-	ITDialogEventInterface::Execute_TriggerDialogEvent(DialogEvents[DialogEventCla].GetObject());
+	ITDialogEventInterface::Execute_TriggerDialogEvent(DialogEvents[DialogEventCla].GetObject(),GetWorld());
 }
 

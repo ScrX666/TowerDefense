@@ -14,7 +14,7 @@ class TOWERDEFENSE_API UTDialogComponent : public UActorComponent
 	GENERATED_BODY()
 public:
 	UPROPERTY(VisibleAnywhere)
-	TMap<TSubclassOf<UTDialogEventInterface>,TScriptInterface<UTDialogEventInterface>> DialogEvents;
+	TMap<TSubclassOf<UObject>,TScriptInterface<ITDialogEventInterface>> DialogEvents;
 public:	
 	// Sets default values for this component's properties
 	UTDialogComponent();
@@ -28,5 +28,5 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-	void ExecuteDialogEvent(TSubclassOf<UTDialogEventInterface> DialogEventCla);
+	void ExecuteDialogEvent(TSubclassOf<UObject> DialogEventCla);
 };

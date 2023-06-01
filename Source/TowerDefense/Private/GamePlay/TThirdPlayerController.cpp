@@ -5,10 +5,12 @@
 
 #include "Component/ActorComp/TSoundManagerComponent.h"
 #include "Component/ActorComp/TUIManagerComponent.h"
+#include "Component/ActorComp/Player/TDialogComponent.h"
 
 ATThirdPlayerController::ATThirdPlayerController()
 {
 	this->SetShowMouseCursor(false);
 	SoundManagerComponent = CreateDefaultSubobject<UTSoundManagerComponent>(TEXT("SoundManager"));
 	UIManagerComponent = CreateDefaultSubobject<UTUIManagerComponent>(TEXT("UIManager"));
+	DialogComponent = CreateDefaultSubobject<UTDialogComponent>(TEXT("DialogManager"));
 }
