@@ -63,6 +63,10 @@ protected:
 	void AddArrow();
 	UFUNCTION()
 	void AIMove(ATAIBaseController* NPC);
+	
+	/*
+	 * 生成AI 并初始化
+	 */
 	UFUNCTION()
 	void SpawnAI();
 	void SpawnWave();

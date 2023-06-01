@@ -92,7 +92,9 @@ void ATSplineMapActor::AIMove(ATAIBaseController* NPC)
 		}
 	}
 }
-
+/*
+ * 生成AI 并初始化
+ */
 void ATSplineMapActor::SpawnAI()
 {
 
@@ -103,6 +105,7 @@ void ATSplineMapActor::SpawnAI()
 	
 	AActor* AIActor = GetWorld()->SpawnActor<AActor>(FaiSpawnStruct.AICharacter,SpawnLoc,SpawnRot,SpawnParameters);
 	if(AIActor == nullptr) return ;
+	AIActor->SetActorScale3D(FVector(AISpawnData[0]->AIScale));
 	APawn* AiPawn = Cast<APawn>(AIActor);
 	AiPawn->SpawnDefaultController();
 	ACharacter* AICharacter = Cast<ACharacter>(AIActor);
