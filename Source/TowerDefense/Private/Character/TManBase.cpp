@@ -64,7 +64,9 @@ ATManBase::ATManBase()
 	
 	Name = FName(GetClass()->GetFName().ToString());
 }
-
+/*
+ * 更新血条
+ */
 void ATManBase::UpdateHealthBar(AActor* InstigatorActor, UTManStateAndBuffer* OwningComp, float NewHealth, float Delta)
 {
 	UUserWidget* InfoWidget = HealthWidgetComponent->GetUserWidgetObject();

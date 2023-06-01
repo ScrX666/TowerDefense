@@ -27,6 +27,8 @@ public:
 	float TimeBetweenWave = 3.0f;
 	UPROPERTY(EditAnywhere,Category="AI")
 	float TimeBetweenSingle = 1.0f;
+	UPROPERTY(EditAnywhere,Category="AI")
+	float AIScale = 1.0f;
 	
 };
 
