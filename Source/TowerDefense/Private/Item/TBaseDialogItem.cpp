@@ -4,6 +4,7 @@
 #include "Item/TBaseDialogItem.h"
 
 #include "Component/ActorComp/TUIManagerComponent.h"
+#include "Component/ActorComp/Player/TDialogComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 void ATBaseDialogItem::Interact_Implementation(APawn* InstigatorPawn)
@@ -12,12 +13,10 @@ void ATBaseDialogItem::Interact_Implementation(APawn* InstigatorPawn)
 	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
 	if( PC)
 	{
-		UTUIManagerComponent* UIMgr = Cast<UTUIManagerComponent>(PC->GetComponentByClass(UTUIManagerComponent::StaticClass()));
-		if( UIMgr)
+		UTDialogComponent* DLMgr = Cast<UTDialogComponent>(PC->GetComponentByClass(UTDialogComponent::StaticClass()));
+		if( DLMgr)
 		{
-			UIMgr->DialogTable = DialogTable;
-			if( DialogTable)
-			UIMgr->PushUIState(TEXT("DialogPanel"));
+			DLMgr->TriggerDialog(this->DialogTable);
 		}
 	}
 }

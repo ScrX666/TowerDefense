@@ -24,4 +24,8 @@ struct TOWERDEFENSE_API FTLevelInfo : public FTableRowBase
  USoundBase* AmbientSound;
  UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
  USoundBase* BackgroundMusic;
+ UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+ UDataTable* BeginDialogTable;
+ UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+ UDataTable* EndDialogTable;
 };

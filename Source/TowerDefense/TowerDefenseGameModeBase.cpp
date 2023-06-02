@@ -50,3 +50,8 @@ void ATowerDefenseGameModeBase::GameEnd(bool IsWin)
 		}
 	}
 }
+
+void ATowerDefenseGameModeBase::GameStart()
+{
+	OnGameStart.Broadcast();
+}

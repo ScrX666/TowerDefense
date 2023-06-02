@@ -7,6 +7,7 @@
 #include "TowerDefenseGameModeBase.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGameEnd, bool,IsWin);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGameReallyStart);
 /**
  * 
  */
@@ -15,15 +16,19 @@ class TOWERDEFENSE_API ATowerDefenseGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	ATowerDefenseGameModeBase();
-protected:
-	virtual void BeginPlay() override;
 
 public:
 	int LevelIndex = 0;
 	bool bGameEnd = false;
 	UPROPERTY(BlueprintAssignable,EditAnywhere)
 	FOnGameEnd OnGameEnd;
-
+	UPROPERTY(BlueprintAssignable,EditAnywhere)
+	FOnGameReallyStart OnGameStart;
+public:
 	UFUNCTION()
 	void GameEnd(bool IsWin);
+	UFUNCTION(BlueprintCallable)
+	void GameStart();
+protected:
+	virtual void BeginPlay() override;
 };

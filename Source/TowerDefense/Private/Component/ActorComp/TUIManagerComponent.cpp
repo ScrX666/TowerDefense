@@ -17,6 +17,7 @@ void UTUIManagerComponent::InitUIState_Implementation()
 	for(TTuple<FName,TSubclassOf<UTUIState>> UI : UIStates)
 	{
 		auto Widget = CreateWidget<UTUIState>(PlayerControl,UI.Value.Get(),UI.Key);
+		if( !UIInstances.Contains(UI.Key))
 		UIInstances.Add(UI.Key,Widget);
 	}
 }
@@ -28,7 +29,12 @@ UTUIState* UTUIManagerComponent::GetUI_Implementation(FName Name)
 	{
 		return *UI;
 	}
-
+	if( UIStates.Contains(Name))
+	{
+		auto Widget = CreateWidget<UTUIState>(PlayerController,UIStates[Name],Name);
+		UIInstances.Add(Name,Widget);
+		return UIInstances[Name];
+	}
 	return nullptr;
 }
 
@@ -84,10 +90,12 @@ void UTUIManagerComponent::OnESCPress()
 	}
 }
 
+
 void UTUIManagerComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+
 	InitUIState();
 }
 

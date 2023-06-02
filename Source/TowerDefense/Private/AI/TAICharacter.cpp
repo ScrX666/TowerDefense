@@ -5,7 +5,9 @@
 
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-
+/*
+ * 弃用
+ */
 // Sets default values
 ATAICharacter::ATAICharacter()
 {

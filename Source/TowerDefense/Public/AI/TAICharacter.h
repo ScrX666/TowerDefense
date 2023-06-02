@@ -6,8 +6,8 @@
 #include "GameFramework/Character.h"
 #include "TAICharacter.generated.h"
 /*
-	弃用
-*/
+ *	弃用
+ */
 UCLASS()
 class TOWERDEFENSE_API ATAICharacter : public ACharacter
 {
@@ -21,5 +21,4 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-
 };

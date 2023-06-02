@@ -21,6 +21,13 @@ FVector ATEnemyAIController::GetNextPosition()
 	else
 		return FVector(0.0f);
 }
+
+FVector ATEnemyAIController::GetClosetPosition()
+{
+	NextIndex--;
+	return SplineMapActor->GetClosestPoint(GetPawn()->GetActorLocation(),NextIndex);
+}
+
 void ATEnemyAIController::Destroyed()
 {
 	Super::Destroyed();

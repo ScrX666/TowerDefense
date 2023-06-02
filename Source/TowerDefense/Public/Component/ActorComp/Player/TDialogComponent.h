@@ -8,6 +8,8 @@
 #include "TDialogComponent.generated.h"
 
 
+class UDataTable;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TOWERDEFENSE_API UTDialogComponent : public UActorComponent
 {
@@ -15,18 +17,19 @@ class TOWERDEFENSE_API UTDialogComponent : public UActorComponent
 public:
 	UPROPERTY(VisibleAnywhere)
 	TMap<TSubclassOf<UObject>,TScriptInterface<ITDialogEventInterface>> DialogEvents;
-public:	
-	// Sets default values for this component's properties
-	UTDialogComponent();
-
+	UPROPERTY(BlueprintReadOnly)
+	UDataTable* CurDialogTable;
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	// Sets default values for this component's properties
+	UTDialogComponent();
 
 	UFUNCTION(BlueprintCallable)
 	void ExecuteDialogEvent(TSubclassOf<UObject> DialogEventCla);
+	UFUNCTION(BlueprintCallable)
+	void TriggerDialog(UDataTable* DialogTable);
 };

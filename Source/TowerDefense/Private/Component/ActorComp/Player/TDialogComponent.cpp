@@ -2,6 +2,11 @@
 
 
 #include "Component/ActorComp/Player/TDialogComponent.h"
+#include "Component/ActorComp/TUIManagerComponent.h"
+#include "GamePlay/TDataTableManager.h"
+#include "GamePlay/TUIState.h"
+#include "Kismet/GameplayStatics.h"
+#include "TowerDefense/TowerDefenseGameModeBase.h"
 
 // Sets default values for this component's properties
 UTDialogComponent::UTDialogComponent()
@@ -19,19 +24,27 @@ void UTDialogComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	// 关卡前开始对话
+	UDataTable* BeginDialog = TDataTableManager::GetInstance()->GetLevelInfo(
+		FName(UGameplayStatics::GetCurrentLevelName(this, true))
+	).BeginDialogTable;
+	if( BeginDialog == nullptr)
+	{
+		ATowerDefenseGameModeBase* TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
+		TDGameMode->GameStart();
+	}
+	else
+	{
+		TriggerDialog(BeginDialog);
+	}
+	
 	
 }
 
 
-// Called every frame
-void UTDialogComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
+/*
+ * 执行可交互对象的对话
+ */
 void UTDialogComponent::ExecuteDialogEvent(TSubclassOf<UObject> DialogEventCla)
 {
 	if( *DialogEventCla == nullptr)
@@ -50,5 +63,23 @@ void UTDialogComponent::ExecuteDialogEvent(TSubclassOf<UObject> DialogEventCla)
 		DialogEvents.Add(DialogEventCla,NewObject<UObject>(this,DialogEventCla));
 	}
 	ITDialogEventInterface::Execute_TriggerDialogEvent(DialogEvents[DialogEventCla].GetObject(),GetWorld());
+}
+/*
+ * 触发对话
+ */
+void UTDialogComponent::TriggerDialog(UDataTable* DialogTable)
+{
+	CurDialogTable = DialogTable;
+	
+	APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+	if( PC)
+	{
+		UTUIManagerComponent* UIMgr = Cast<UTUIManagerComponent>(PC->GetComponentByClass(UTUIManagerComponent::StaticClass()));
+		if( UIMgr)
+		{
+			if( DialogTable)
+				UIMgr->PushUIState(TEXT("DialogPanel"));
+		}
+	}
 }
 

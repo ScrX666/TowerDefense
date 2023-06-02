@@ -47,6 +47,7 @@ private:
 public:	
 	// Sets default values for this actor's properties
 	ATSplineMapActor();
+	virtual void PostInitializeComponents() override;
 	UFUNCTION()
 	void MoveTo(ATAIBaseController* AIController, int index, FVector& NextPosition);
 
@@ -56,11 +57,14 @@ public:
 	int32 GetMaxWaveCount();
 	UFUNCTION(BlueprintCallable)
 	FVector GetTargetPos(int32 index);
+	UFUNCTION()
+	void SpawnWave();
+
+	FVector GetClosestPoint(FVector CurPos, int& CurIndex);
 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	void AddArrow();
 	UFUNCTION()
 	void AIMove(ATAIBaseController* NPC);
 	
@@ -69,6 +73,5 @@ protected:
 	 */
 	UFUNCTION()
 	void SpawnAI();
-	void SpawnWave();
 
 };

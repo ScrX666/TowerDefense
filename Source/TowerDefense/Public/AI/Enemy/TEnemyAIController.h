@@ -21,6 +21,7 @@ public:
 	int NextIndex = 0;
 public:
 	FVector GetNextPosition();
+	FVector GetClosetPosition();
 	virtual void BeginPlay() override;
 	virtual void Destroyed() override;
 };

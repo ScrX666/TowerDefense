@@ -24,6 +24,14 @@ ATSplineMapActor::ATSplineMapActor()
 	
 }
 
+void ATSplineMapActor::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	// 绑定开始游戏
+	ATowerDefenseGameModeBase* TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
+	TDGameMode->OnGameStart.AddDynamic(this, &ATSplineMapActor::SpawnWave);
+}
+
 // Called when the game starts or when spawned
 void ATSplineMapActor::BeginPlay()
 {
@@ -40,22 +48,13 @@ void ATSplineMapActor::BeginPlay()
 		// 使用自定义名字查询
 		TDataTableManager::GetInstance()->GetAISpawnStructs(TableNameSuffix,AISpawnData);
 	}
-	
-	SpawnWave();
+
+
+	// SpawnWave();
 }
-
-void ATSplineMapActor::AddArrow()
-{
-	int SplinePointNums = SplineComponent->GetNumberOfSplinePoints();
-	FInterpCurveVector SplinePos = SplineComponent->GetSplinePointsPosition();
-	FInterpCurveQuat SplineRot = SplineComponent->GetSplinePointsRotation();
-
-	for(int i=0; i<SplinePointNums-1;i++)
-	{
-		
-	}
-}
-
+/*
+ * 弃用 原AI移动逻辑
+ */
 void ATSplineMapActor::AIMove(ATAIBaseController* NPC)
 {
 	int SplinePointNums = SplineComponent->GetNumberOfSplinePoints();
@@ -116,9 +115,6 @@ void ATSplineMapActor::SpawnAI()
 	ATEnemyAIController* moveController = Cast<ATEnemyAIController >(AiPawn->GetController());
 	if(ensure(moveController))
 	moveController->SplineMapActor = this;
-	// AIMove(moveController);
-	//MoveTo(moveController, 1, moveController->NextPosition); 原AI移动逻辑
-	// FPlatformProcess::Sleep(0.5);
 		
 	CurrentExistEnemyCount++;
 }
@@ -171,6 +167,24 @@ void ATSplineMapActor::SpawnWave()
 		
 	}
 }
+
+FVector ATSplineMapActor::GetClosestPoint(FVector CurPos, int& CurIndex)
+{
+	int32 Num = SplineComponent->GetNumberOfSplinePoints();
+	float Dist = FVector::Distance(CurPos, SplineComponent->GetLocationAtSplinePoint(CurIndex + 1, ESplineCoordinateSpace::World));
+	int32 Res = CurIndex + 1;
+	for( int i = CurIndex + 2; i < Num; i++)
+	{
+		if( FVector::Distance(CurPos,SplineComponent->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::World)) < Dist)
+		{
+			Dist = FVector::Distance(CurPos,SplineComponent->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::World));
+			Res = i;
+		}
+	}
+	CurIndex = Res;
+	return SplineComponent->GetLocationAtSplinePoint(Res, ESplineCoordinateSpace::World);
+}
+
 /*
  * 弃用 原AI移动逻辑
  */

@@ -53,6 +53,14 @@ void ATPlayerController::OnConstructTowerBulid(ATMainTower* Tower, bool bIsConst
 	}
 }
 
+void ATPlayerController::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	// 绑定开始游戏
+	ATowerDefenseGameModeBase* TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
+	TDGameMode->OnGameStart.AddDynamic(this, &ATPlayerController::OnGameReallyStart);
+}
+
 void ATPlayerController::SetBuildingMode(TSubclassOf<AActor> BuildingCla)
 {
 	if(BuildingMode == EBuildingMode::E_InSillMode) return ;
@@ -292,15 +300,14 @@ void ATPlayerController::BeginPlay()
 		}
 	}
 	
-	if( UGameplayStatics::GetCurrentLevelName(GetWorld()) == TEXT("Map_Start"))
-		UIManagerComponent->PushUIState(TEXT("BeginUI"));
-	else
-		UIManagerComponent->PushUIState(TEXT("TowerDefense"));
-	//TODO 用事件替换
+	
 	EnableInput(this);
 	TPlayerState = GetPlayerState<ATPlayerState>();
 	DecalComponent = UGameplayStatics::SpawnDecalAtLocation(this,DecalMaterial, FVector(50.0f), CursorLocation);
 
+
+
+	
 	// 绑定结束事件
 	ATowerDefenseGameModeBase* GameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
 	if( GameMode)
@@ -405,4 +412,14 @@ void ATPlayerController::OnSelectHero(bool bSelectHero)
 		// CursorManagerComponent->SetCursorType(this,EMouseCursor::Default);
 		CurrentMouseCursor = EMouseCursor::Default;
 	}
+}
+/*
+ * 绑定到GameMode 的 OnGameReallyStart
+ */
+void ATPlayerController::OnGameReallyStart()
+{
+	if( UGameplayStatics::GetCurrentLevelName(GetWorld()) == TEXT("Map_Start"))
+		UIManagerComponent->PushUIState(TEXT("BeginUI"));
+	else
+		UIManagerComponent->PushUIState(TEXT("TowerDefense"));
 }

@@ -84,6 +84,7 @@ public:
 	ATPlayerController();
 	UFUNCTION()
 	void OnConstructTowerBulid(ATMainTower* Tower,bool bIsConstruct);
+	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
 	UFUNCTION(BlueprintCallable)
 	void OnEscBtnPress();
@@ -124,4 +125,6 @@ private:
 	void OnGameEnd(bool bIsWin);
 	UFUNCTION()
 	void OnSelectHero(bool bSelectHero);
+	UFUNCTION()
+	void OnGameReallyStart();
 };
