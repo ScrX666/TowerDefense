@@ -31,6 +31,7 @@ void UTDialogComponent::BeginPlay()
 	if( BeginDialog == nullptr)
 	{
 		ATowerDefenseGameModeBase* TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
+		if( TDGameMode)
 		TDGameMode->GameStart();
 	}
 	else

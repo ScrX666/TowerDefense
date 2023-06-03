@@ -42,9 +42,11 @@ void UTGameInstance::BeginLoadingScreen(const FString& MapName)
 {
 	if (!IsRunningDedicatedServer())
 	{
+		LoadNum++;
+		
+		if (LoadNum == 1) return;
+		
 		FLoadingScreenAttributes LoadingScreen;
-		
-		
 		APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
 		if(PC)
 		{
@@ -60,11 +62,6 @@ void UTGameInstance::BeginLoadingScreen(const FString& MapName)
 		{
 			LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
 		}
-		UE_LOG(LogTemp, Log, TEXT("beginloadMap"));
-
-		// loadNum++;
-		//
-		// if (loadNum == 1) return;
 
 		LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
 		LoadingScreen.bMoviesAreSkippable = true;
@@ -77,5 +74,5 @@ void UTGameInstance::BeginLoadingScreen(const FString& MapName)
  
 void UTGameInstance::EndLoadingScreen(UWorld* World)
 {
-	UE_LOG(LogTemp, Log, TEXT("EndLoadingScreen"));
+	GEngine->AddOnScreenDebugMessage(1,20,FColor::Red,TEXT("EndLoadingScreen"));
 }

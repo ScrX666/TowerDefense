@@ -16,6 +16,7 @@ class TOWERDEFENSE_API UTGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 public:
+	int LoadNum = 0;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UUserWidget> LoadingUICla;
 	UPROPERTY(EditDefaultsOnly)

@@ -19,14 +19,7 @@ UCLASS()
 class TOWERDEFENSE_API UTBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
-public:
 
-	UFUNCTION(BlueprintCallable, Category = "loadingScene",  meta=(AdvancedDisplay = "MovieNames,bSkippable,bAutoCompleteWhenLoadingCompletes",  AutoCreateRefTerm = "MovieNames"))
-	static void SetLoadSceneAttributes(UUserWidget * WidgetTemplate, const  TArray<FString> &MovieNames, bool bSkippable = true, bool  bAutoCompleteWhenLoadingCompletes = true);
-	UFUNCTION(BlueprintCallable, Category = "loadingScene")
-	static bool IsLoadingFinished();
-
-	
 	UFUNCTION(BlueprintCallable)
 	static TArray<FTBoolArray> GetRandomPath(int32 Width, int32 Length, int32 N);
 	UFUNCTION(BlueprintCallable)
@@ -41,7 +34,10 @@ public:
 	static void StopMovie();
 	UFUNCTION(BlueprintCallable)
 	static bool PlayMovie(UUserWidget* WidgetTemplate, TArray<FString> Names, bool bSkippable);
-	
+	UFUNCTION(BlueprintCallable, Category = "loadingScene",  meta=(AdvancedDisplay = "MovieNames,bSkippable,bAutoCompleteWhenLoadingCompletes",  AutoCreateRefTerm = "MovieNames"))
+	static void SetLoadSceneAttributes(UUserWidget * WidgetTemplate, const  TArray<FString> &MovieNames, bool bSkippable = true, bool  bAutoCompleteWhenLoadingCompletes = true);
+	UFUNCTION(BlueprintCallable, Category = "loadingScene")
+	static bool IsLoadingFinished();
 
 public:
 	UFUNCTION(BlueprintCallable)
