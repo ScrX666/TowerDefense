@@ -7,6 +7,7 @@
 #include "Engine/GameInstance.h"
 #include "TGameInstance.generated.h"
 
+class UWidget;
 /**
  * 
  */
@@ -15,6 +16,8 @@ class TOWERDEFENSE_API UTGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 public:
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> LoadingUICla;
 	UPROPERTY(EditDefaultsOnly)
 	TArray<TSubclassOf<ATMainTower>> InitTowers; // 初始时拥有的塔
 	UPROPERTY(BlueprintReadOnly)
@@ -29,4 +32,11 @@ public:
 	bool AddTower(TSubclassOf<ATMainTower> Tower);
 	UFUNCTION(BlueprintCallable)
 	const TArray<TSubclassOf<ATMainTower>>& GetOwnTowers();
+
+	virtual void Init() override;
+ 
+	UFUNCTION()
+	virtual void BeginLoadingScreen(const FString& MapName);
+	UFUNCTION()
+	virtual void EndLoadingScreen(UWorld* World);
 };

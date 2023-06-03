@@ -3,11 +3,14 @@
 
 #include "BlueprintFunctionLibrary/TBlueprintFunctionLibrary.h"
 
+#include "MoviePlayer.h"
+#include "Blueprint/UserWidget.h"
 #include "Component/ActorComp/TSoundManagerComponent.h"
 #include "GamePlay/TDataTableManager.h"
 #include "GamePlay/TPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Structure/FTBoolArray.h"
+
 
 TArray<FTBoolArray> UTBlueprintFunctionLibrary::GetRandomPath(int32 Width, int32 Length,int32 N)
 {
@@ -163,4 +166,50 @@ void UTBlueprintFunctionLibrary::PlayRandomSound(UObject* WorldContext, const TA
     
     int32 PlayIndex = FMath::RandRange(0, Sounds.Num() - 1);
     UGameplayStatics::PlaySoundAtLocation(WorldContext,Sounds[PlayIndex],Location,FRotator::ZeroRotator,Volume);
+}
+bool UTBlueprintFunctionLibrary::PlayMovie(UUserWidget* WidgetTemplate, TArray<FString> Names, bool bSkippable)
+{
+    if (Names.Num() > 0)
+    {
+        FLoadingScreenAttributes LoadingScreen;
+        LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;//因为我们没有在加载关卡，所以这个需要设置为false，不然视频一播放就停止了
+        LoadingScreen.bMoviesAreSkippable = bSkippable;
+        LoadingScreen.MoviePaths = Names;
+
+        if (WidgetTemplate)
+        {
+            LoadingScreen.WidgetLoadingScreen = WidgetTemplate->TakeWidget();
+        }
+
+        GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
+        return GetMoviePlayer()->PlayMovie();
+    }
+    else {
+        return true;
+
+    }
+
+}
+void UTBlueprintFunctionLibrary::StopMovie()
+{
+    GetMoviePlayer()->StopMovie();
+}
+void UTBlueprintFunctionLibrary::SetLoadSceneAttributes(UUserWidget*  WidgetTemplate, const TArray<FString> &MovieNames, bool bSkippable, bool  bAutoCompleteWhenLoadingCompletes)
+{
+    FLoadingScreenAttributes LoadingScreen;
+    LoadingScreen.bAutoCompleteWhenLoadingCompletes =  bAutoCompleteWhenLoadingCompletes;
+    LoadingScreen.bMoviesAreSkippable = bSkippable;
+    LoadingScreen.MoviePaths = MovieNames;
+
+    if (WidgetTemplate)
+    {
+        LoadingScreen.WidgetLoadingScreen = WidgetTemplate->TakeWidget();
+    }
+
+    GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
+}
+
+bool UTBlueprintFunctionLibrary::IsLoadingFinished()
+{
+    return GetMoviePlayer()->IsLoadingFinished();
 }
