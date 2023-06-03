@@ -58,6 +58,7 @@ void ATPlayerController::PostInitializeComponents()
 	Super::PostInitializeComponents();
 	// 绑定开始游戏
 	ATowerDefenseGameModeBase* TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
+	if( TDGameMode)
 	TDGameMode->OnGameStart.AddDynamic(this, &ATPlayerController::OnGameReallyStart);
 }
 

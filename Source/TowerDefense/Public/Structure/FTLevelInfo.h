@@ -28,4 +28,6 @@ struct TOWERDEFENSE_API FTLevelInfo : public FTableRowBase
  UDataTable* BeginDialogTable;
  UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
  UDataTable* EndDialogTable;
+ UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+ UTexture2D* ChangeLevelTexture;
 };

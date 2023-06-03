@@ -6,6 +6,7 @@
 #include "MoviePlayer.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Widget.h"
+#include "GamePlay/TDataTableManager.h"
 #include "GamePlay/TPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -45,6 +46,10 @@ void UTGameInstance::BeginLoadingScreen(const FString& MapName)
 		LoadNum++;
 		
 		if (LoadNum == 1) return;
+
+		LoadingTexture = TDataTableManager::GetInstance()->GetLevelInfo(
+			FName(UGameplayStatics::GetCurrentLevelName(this, true)))
+		.ChangeLevelTexture;
 		
 		FLoadingScreenAttributes LoadingScreen;
 		APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
@@ -66,7 +71,7 @@ void UTGameInstance::BeginLoadingScreen(const FString& MapName)
 		LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
 		LoadingScreen.bMoviesAreSkippable = true;
 		LoadingScreen.PlaybackType = EMoviePlaybackType::MT_Looped;
-		LoadingScreen.MoviePaths.Add("Test");
+		// LoadingScreen.MoviePaths.Add("Test");
 
 		GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
 	}
