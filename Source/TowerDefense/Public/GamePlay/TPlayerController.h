@@ -88,6 +88,7 @@ public:
 	virtual void BeginPlay() override;
 	UFUNCTION(BlueprintCallable)
 	void OnEscBtnPress();
+	void MouseRightClickDown();
 	virtual void SetupInputComponent() override;
 	/*
 	 * 设置建造模式（拿起，放下）

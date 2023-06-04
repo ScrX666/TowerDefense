@@ -80,7 +80,9 @@ void ATPlayerController::SetBuildingMode(TSubclassOf<AActor> BuildingCla)
 		BuildingModeOn();
 	}
 }
-
+/*
+ * 准备执行技能
+ */
 void ATPlayerController::ExecuteSkill(FName SkillName)
 {
 	BuildingMode = EBuildingMode::E_InSillMode;
@@ -91,7 +93,9 @@ void ATPlayerController::ExecuteSkill(FName SkillName)
 	FInputModeGameOnly InputModeGameOnly;
 	SetInputMode(InputModeGameOnly);
 }
-
+/*
+ * 确认执行技能
+ */
 void ATPlayerController::ConfirmExecuteSkill()
 {
 	BuildingMode = EBuildingMode::E_NotInBuildMode;
@@ -179,7 +183,9 @@ void ATPlayerController::MouseClickDown()
 		break;
 	}
 }
-
+/*
+ * 每一帧调用
+ */
 void ATPlayerController::MouseMove(float Value)
 {
 #pragma region 获取鼠标碰撞信息
@@ -331,12 +337,64 @@ void ATPlayerController::OnEscBtnPress()
 {
 	UIManagerComponent->OnESCPress();
 }
+/*
+ * 取消操作
+ */
+void ATPlayerController::MouseRightClickDown()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("MouseRightClickDown"));
+	switch( BuildingMode)
+	{
+	case EBuildingMode::E_InBuildMode:
+		// 建造模式
+		if( BuildingReferActor != nullptr)
+		{
+			SetBuildingMode(nullptr);
+		}
+		break;
+	case EBuildingMode::E_NotInBuildMode:
+		// 非建造模式 点击
+		if(bInHeroControlMode)
+		{
+			// 控制英雄的模式
+			if(HitResult.Actor != nullptr)
+			{
+				SelectedBuilding->OnSelected(false);
+			}
+		}
+		else
+		{
+			// 如果是塔 关闭UI面板
+			if(SelectedBuilding && SelectedBuilding.GetObject()->IsA<ATMainBuilding>())
+			{
+				SelectedBuilding->OnSelected(false);
+				UIManagerComponent->PopState();
+				SelectedBuilding = nullptr;
+			}
+
+			SelectedBuilding = nullptr;
+		}
+		break;
+	case EBuildingMode::E_InSillMode:
+		{
+			BuildingMode = EBuildingMode::E_NotInBuildMode;
+			CurrentMouseCursor = EMouseCursor::Default;
+
+			// 释放Skill为UI点击，不会立即更新，需要手动更新
+			FInputModeGameAndUI InputModeGameAndUI;
+			InputModeGameAndUI.SetHideCursorDuringCapture(false);
+			SetInputMode(InputModeGameAndUI);
+		}
+		break;
+	}
+}
 
 void ATPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
 	InputComponent->BindAction(TEXT("MouseClick"), IE_Pressed, this, &ATPlayerController::MouseClickDown);
+	InputComponent->BindAction(TEXT("Cancel"), IE_Pressed, this, &ATPlayerController::MouseRightClickDown);
 	InputComponent->BindAxis(TEXT("MouseMove"), this, &ATPlayerController::MouseMove);
 	//InputComponent->BindAction(TEXT("ESC"), IE_Pressed, this,&ATPlayerController::OnEscBtnPress);
 }
