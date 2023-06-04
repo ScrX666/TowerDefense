@@ -34,6 +34,8 @@ void UTGameInstance::Init()
 {
 	Super::Init();
 
+	TowerAttackRangeAmend = TDataTableManager::GetInstance()->GetLevelInfo(
+		FName(UGameplayStatics::GetCurrentLevelName(this, true))).TowerAttackRangeAmend;
 	
 	FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UTGameInstance::BeginLoadingScreen);
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UTGameInstance::EndLoadingScreen);

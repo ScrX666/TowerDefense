@@ -16,7 +16,30 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TOWERDEFENSE_API UTBeamTowerState : public UTTowerStateComponent
 {
 	GENERATED_BODY()
-
+	
+public:
+	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
+	FOnLevelUp OnLevelUp;
+	
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	int32 CurrentLevel = 0;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	int32 CurrentExp = 0;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	float CurrentDamage;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	float CurrentAttackRange;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	int32 ParallelAttackCount;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	float TowerAttackRangeAmend = 1.0f;
+	
+private:
+	
+	UPROPERTY(EditAnywhere)
+	FTBeamTower BeamTowerData;
+	UPROPERTY()
+	ATMainTower* Tower;
 public:	
 	// Sets default values for this component's properties
 	UTBeamTowerState();
@@ -60,26 +83,5 @@ private:
 	// 更新状态
 	UFUNCTION()
 	void UpdateParallelAttackCount(const int32 NewCount);
-	
-public:
-	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
-	FOnLevelUp OnLevelUp;
-	
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	int32 CurrentLevel = 0;
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	int32 CurrentExp = 0;
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	float CurrentDamage;
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	float CurrentAttackRange;
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	int32 ParallelAttackCount;
-	
-private:
-	
-	UPROPERTY(EditAnywhere)
-	FTBeamTower BeamTowerData;
-	UPROPERTY()
-	ATMainTower* Tower;
+
 };

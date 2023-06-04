@@ -8,6 +8,8 @@
 #include "Building/Tower/TMainTower.h"
 #include "Component/ActorComp/Tower/TAttackHandleComponent.h"
 #include "GamePlay/TDataTableManager.h"
+#include "GamePlay/TGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UTBeamTowerState::UTBeamTowerState()
@@ -26,6 +28,13 @@ void UTBeamTowerState::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// 设置塔范围的修正值
+	auto GameInstance = Cast<UTGameInstance>(UGameplayStatics::GetGameInstance(this));
+	if( GameInstance)
+	{
+		TowerAttackRangeAmend = GameInstance->TowerAttackRangeAmend;
+	}
+	
 	Tower = Cast<ATMainTower>(GetOwner());
 	
 	OnLevelUp.AddDynamic(this, &UTBeamTowerState::UpdateLevel);
@@ -36,6 +45,7 @@ void UTBeamTowerState::BeginPlay()
 	CurrentExp = BeamTowerData.LevelUpExp;
 	UpdateParallelAttackCount(BeamTowerData.ParallelAttackCount);
 	OnLevelUp.Broadcast(0);
+
 }
 
 void UTBeamTowerState::UpdateLevel(int32 NewLevel)
@@ -62,6 +72,7 @@ void UTBeamTowerState::UpdateAttackRange(const int32 NewLevel)
 		AddAttackRange += BeamTowerData.AttackRangeUpGrade * BeamTowerData.AttackRange;
 	}
 	CurrentAttackRange = BeamTowerData.AttackRange + AddAttackRange;
+	CurrentAttackRange *= TowerAttackRangeAmend; // 修正每一关塔的攻击范围
 	if( Tower)
 	{
 		Tower->UpdateAttackRange(CurrentAttackRange);

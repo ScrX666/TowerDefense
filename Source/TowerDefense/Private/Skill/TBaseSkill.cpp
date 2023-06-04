@@ -17,6 +17,11 @@ void UTBaseSkill::Execute(UWorld* World)
 	bCanUse = false;
 	GetWorld()->GetTimerManager().SetTimer(CoolDownHandle,this,&UTBaseSkill::OnCoolDownUpdate,0.1f,true);
 }
+
+void UTBaseSkill::Init(UWorld* World)
+{
+}
+
 /*
  * 更新技能状态 定时调用
  */

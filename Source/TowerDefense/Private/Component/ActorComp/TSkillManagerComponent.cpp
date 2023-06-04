@@ -26,8 +26,7 @@ UTBaseSkill* UTSkillManagerComponent::GetSkill(FName SkillName)
 	// 没有技能 但有技能的类，就创建技能
 	if( SkillsCla.Contains(SkillName) && SkillsCla[SkillName])
 	{
-		UTBaseSkill* Skill = NewObject<UTBaseSkill>(this,SkillsCla[SkillName]);
-		SkillsWithName.Add(SkillName,Skill);
+		CreateAndAddSkill(SkillName,SkillsCla[SkillName]);
 		return SkillsWithName[SkillName];
 	}
 	return nullptr;
@@ -39,6 +38,7 @@ TArray<FName>& UTSkillManagerComponent::GetAllSkill()
 {
 	if( SkillsWithName.Num() == 0)
 	{
+		// 未初始化时，初始化
 		for( auto& SkillCla : SkillsCla)
 		{
 			SkillsNameInArray.Add(SkillCla.Key);
@@ -60,8 +60,7 @@ bool UTSkillManagerComponent::Execute(FName SkillName)
 	// 没有技能 但有技能的类，就创建技能
 	if( SkillsCla.Contains(SkillName) && SkillsCla[SkillName])
 	{
-		UTBaseSkill* Skill = NewObject<UTBaseSkill>(this,SkillsCla[SkillName]);
-		SkillsWithName.Add(SkillName,Skill);
+		CreateAndAddSkill(SkillName,SkillsCla[SkillName]);
 		SkillsWithName[SkillName]->Execute(GetWorld());
 		return true;
 	}
@@ -77,6 +76,13 @@ void UTSkillManagerComponent::BeginPlay()
 
 	// ...
 	
+}
+
+void UTSkillManagerComponent::CreateAndAddSkill(FName SkillName, TSubclassOf<UTBaseSkill> SkillCla)
+{
+	UTBaseSkill* Skill = NewObject<UTBaseSkill>(this,SkillCla);
+	Skill->Init(GetWorld()); // 初始化技能
+	SkillsWithName.Add(SkillName,Skill);
 }
 
 

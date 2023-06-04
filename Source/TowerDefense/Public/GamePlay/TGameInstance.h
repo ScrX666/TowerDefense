@@ -17,6 +17,9 @@ class TOWERDEFENSE_API UTGameInstance : public UGameInstance
 	GENERATED_BODY()
 public:
 	int LoadNum = 0;
+
+	UPROPERTY(BlueprintReadOnly)
+	float TowerAttackRangeAmend = 1.0f;
 	UPROPERTY(BlueprintReadOnly)
 	UTexture2D* LoadingTexture;
 	UPROPERTY(EditDefaultsOnly)
@@ -36,6 +39,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	const TArray<TSubclassOf<ATMainTower>>& GetOwnTowers();
 
+	/*
+	 * 每一关初始化
+	 */
 	virtual void Init() override;
  
 	UFUNCTION()

@@ -8,6 +8,8 @@
 #include "Building/Tower/TMainTower.h"
 #include "Component/ActorComp/Tower/TAttackHandleComponent.h"
 #include "GamePlay/TDataTableManager.h"
+#include "GamePlay/TGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UTShotTowerState::UTShotTowerState()
@@ -25,6 +27,14 @@ void UTShotTowerState::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// 设置塔范围的修正值
+	auto GameInstance = Cast<UTGameInstance>(UGameplayStatics::GetGameInstance(this));
+	if( GameInstance)
+	{
+		TowerAttackRangeAmend = GameInstance->TowerAttackRangeAmend;
+	}
+	
+	
 	Tower = Cast<ATMainTower>(GetOwner());
 	
 	OnLevelUp.AddDynamic(this, &UTShotTowerState::UpdateLevel);
@@ -63,6 +73,7 @@ void UTShotTowerState::UpdateAttackRange(const int32 NewLevel)
 		AddAttackRange += ShotTowerData.AttackRangeUpGrade * ShotTowerData.AttackRange;
 	}
 	CurrentAttackRange = ShotTowerData.AttackRange + AddAttackRange;
+	CurrentAttackRange *= TowerAttackRangeAmend; // 每一关修正攻击范围数值
 	if( Tower)
 	{
 		Tower->UpdateAttackRange(CurrentAttackRange);
@@ -112,7 +123,7 @@ void UTShotTowerState::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 /*
- * 初始化
+ * 初始化 在construct中调用
  */
 void UTShotTowerState::Init(const FName Name)
 {

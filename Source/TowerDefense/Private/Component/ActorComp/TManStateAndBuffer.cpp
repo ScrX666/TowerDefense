@@ -46,7 +46,6 @@ void UTManStateAndBuffer::BeginPlay()
 		if( Cast<UCharacterMovementComponent>(Owner->GetMovementComponent()))
 		{
 			CharacterMovementComp = Cast<UCharacterMovementComponent>(Owner->GetMovementComponent());
-			OrignWalkSpeed = CharacterMovementComp->MaxWalkSpeed;
 		}
 	}
 
@@ -58,15 +57,6 @@ void UTManStateAndBuffer::BeginPlay()
 
 	// Buffer
 	
-}
-
-
-// Called every frame
-void UTManStateAndBuffer::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 
 void UTManStateAndBuffer::ApplyHealthChange(AActor* Instigator,float Delta)
@@ -132,6 +122,7 @@ void UTManStateAndBuffer::ActiveIce(const FTManBuffer& Buffer)
 	{
 		if( CharacterMovementComp)
 		{
+			OrignWalkSpeed = CharacterMovementComp->MaxWalkSpeed;
 			CharacterMovementComp->MaxWalkSpeed = OrignWalkSpeed * Buffer.EffectNum;
 		}
 	}
@@ -165,7 +156,7 @@ void UTManStateAndBuffer::ActivePoison(const FTManBuffer& Buffer)
 	FLatentActionInfo LatentActionInfo;
 	LatentActionInfo.Linkage = 0;
 	LatentActionInfo.CallbackTarget = this;
-	LatentActionInfo.ExecutionFunction = TEXT("DeActivePoison");
+	LatentActionInfo.ExecutionFunction = TEXT("DeActivePoison"); // 设置函数名
 	LatentActionInfo.UUID = GetUniqueID() + 2;
 	
 	UKismetSystemLibrary::RetriggerableDelay(this, Buffer.DurationTime,LatentActionInfo);

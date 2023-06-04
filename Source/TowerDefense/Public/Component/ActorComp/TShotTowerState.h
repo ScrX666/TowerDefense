@@ -17,7 +17,36 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TOWERDEFENSE_API UTShotTowerState : public UTTowerStateComponent
 {
 	GENERATED_BODY()
+	
+public:
+	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
+	FOnLevelUp OnLevelUp;
+	// UPROPERTY(VisibleAnywhere,BlueprintAssignable)
+	// FOnShotTowerGetExp OnGetExp;
 
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	int32 CurrentLevel = 0;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	int32 CurrentExp = 0;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	float CurrentDamage;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	float CurrentAttackRange;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	float BulletSpeed;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	float ShotRate;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	int32 ParallelAttackCount;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	float TowerAttackRangeAmend = 1.0f;
+	
+private:
+	
+	UPROPERTY(EditAnywhere)
+	FTShotTower ShotTowerData;
+	UPROPERTY()
+	ATMainTower* Tower;
 public:	
 	// Sets default values for this component's properties
 	UTShotTowerState();
@@ -67,33 +96,5 @@ private:
 	// 更新状态
 	UFUNCTION()
 	void UpdateParallelAttackCount(const int32 NewCount);
-	
-public:
-	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
-	FOnLevelUp OnLevelUp;
-	// UPROPERTY(VisibleAnywhere,BlueprintAssignable)
-	// FOnShotTowerGetExp OnGetExp;
 
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	int32 CurrentLevel = 0;
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	int32 CurrentExp = 0;
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	float CurrentDamage;
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	float CurrentAttackRange;
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	float BulletSpeed;
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	float ShotRate;
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
-	int32 ParallelAttackCount;
-	
-	
-private:
-	
-	UPROPERTY(EditAnywhere)
-	FTShotTower ShotTowerData;
-	UPROPERTY()
-	ATMainTower* Tower;
 };

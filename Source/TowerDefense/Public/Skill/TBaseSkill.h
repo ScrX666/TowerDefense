@@ -33,7 +33,10 @@ public:
 	 * 释放技能
 	 */
 	virtual void Execute(UWorld* World);
-
+	/*
+	 * 技能的相关初始化
+	 */
+	virtual void Init(UWorld* World);
 protected:
 	/*
 	 * 更新技能状态 定时调用

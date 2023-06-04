@@ -3,6 +3,7 @@
 
 #include "Skill/TSpawnSoliderSkill.h"
 
+#include "Character/THero.h"
 #include "GamePlay/TPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -20,9 +21,20 @@ void UTSpawnSoliderSkill::Execute(UWorld* World)
 		SpawnLoc.Z += 40.0f;
 		FRotator SpawnRot = FRotator::ZeroRotator;
 		SpawnRot.Yaw = FMath::RandRange(0.0f,360.0f);
+		FTransform SpawnTransform(SpawnRot,SpawnLoc,FVector(SoliderScale));
 		if( SoliderCla)
 		{
-			World->SpawnActor(SoliderCla,&SpawnLoc,&SpawnRot,ActorSpawnParameters);
+			World->SpawnActor(SoliderCla,&SpawnTransform,ActorSpawnParameters);
 		}
+	}
+}
+
+void UTSpawnSoliderSkill::Init(UWorld* World)
+{
+	Super::Init(World);
+	AActor* Hero = UGameplayStatics::GetActorOfClass(World,ATHero::StaticClass());
+	if( Hero)
+	{
+		SoliderScale = Hero->GetActorScale().X;
 	}
 }

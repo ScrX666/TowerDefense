@@ -62,8 +62,6 @@ private:
 	
 public:	
 	UTManStateAndBuffer();
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	// 状态
 	void ApplyHealthChange(AActor* Instigator, float Delta);
@@ -94,7 +92,12 @@ private:
 
 	UFUNCTION()
 	void ApplyPoisonDamage();
-
+	/*
+	 * 设置Buff的特效
+	 */
 	void ActiveBufferEffect(const FTManBuffer& Buffer, FName SocketName);
+	/*
+	 * 消除Buff的特效
+	 */
 	void DeActiveBufferEffect(const EManBufferType ManBufferType);
 };

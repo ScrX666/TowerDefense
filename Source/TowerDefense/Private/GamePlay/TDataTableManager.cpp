@@ -342,6 +342,7 @@ TDataTableManager::TDataTableManager()
 	TowerTable->AddToRoot();
 	ManStateTable->AddToRoot();
 	AISpawnTable->AddToRoot();
+	if(LevelInfoTable)
 	LevelInfoTable->AddToRoot();
 	
 	// TODO: 测试是否多次构造

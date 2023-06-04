@@ -33,7 +33,11 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
+private:
+	/*
+	 * 没有技能，创建技能
+	 */
+	void CreateAndAddSkill(FName SkillName,TSubclassOf<UTBaseSkill> SkillCla);
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
