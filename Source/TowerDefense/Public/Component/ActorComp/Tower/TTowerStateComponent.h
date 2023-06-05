@@ -15,13 +15,15 @@ class TOWERDEFENSE_API UTTowerStateComponent : public UActorComponent
 public:
 	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
 	FOnTowerGetExp OnGetExp;
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	int32 SelectedAbilityIndex = -1;
 public:	
 	// Sets default values for this component's properties
 	UTTowerStateComponent();
 	UFUNCTION(BlueprintCallable)
 	virtual const TArray<FTTowerAbility>& GetAllAbility() const;
 	UFUNCTION(BlueprintCallable)
-	virtual void ApplyAbility(const FTTowerAbility& TowerAbility);
+	virtual void ApplyAbility(const FTTowerAbility& TowerAbility, int32 Index);
 	UFUNCTION(BlueprintCallable)
 	virtual  int32 GetMaxLevel() const;
 	UFUNCTION(BlueprintCallable)

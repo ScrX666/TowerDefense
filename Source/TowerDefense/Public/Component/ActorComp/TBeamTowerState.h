@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "TShotTowerState.h"
-#include "Components/ActorComponent.h"
 #include "Structure/FTBeamTower.h"
 #include "Structure/FTTowerAbility.h"
 #include "Tower/TTowerStateComponent.h"
@@ -60,7 +59,7 @@ public:
 	UFUNCTION(BlueprintPure)
 	const TArray<FTManBuffer>& GetApplyBuffers() const;
 	// UFUNCTION(BlueprintCallable)
-	virtual void ApplyAbility(const FTTowerAbility& TowerAbility) override;
+	virtual void ApplyAbility(const FTTowerAbility& TowerAbility, int32 Index) override;
 	/*
 	 * 获取所有可加点能力
 	 */

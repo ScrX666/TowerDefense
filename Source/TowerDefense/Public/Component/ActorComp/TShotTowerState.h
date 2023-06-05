@@ -68,7 +68,7 @@ public:
 	UFUNCTION(BlueprintPure)
 	const TArray<FTManBuffer>& GetApplyBuffers() const;
 	// UFUNCTION(BlueprintCallable)
-	virtual void ApplyAbility(const FTTowerAbility& TowerAbility) override;
+	virtual void ApplyAbility(const FTTowerAbility& TowerAbility, int32 Index) override;
 	
 	/*
 	 * 获取所有可加点能力

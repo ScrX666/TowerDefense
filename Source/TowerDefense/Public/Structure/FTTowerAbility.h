@@ -33,6 +33,6 @@ struct FTTowerAbility : public FTableRowBase
 	float BulletSpeedUp = 1.0f;
 
 	// Buff
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	FTManBuffer AdditiveBuff;
 };
