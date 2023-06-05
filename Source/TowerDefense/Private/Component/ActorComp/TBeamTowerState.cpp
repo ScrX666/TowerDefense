@@ -149,9 +149,9 @@ const TArray<FTManBuffer>& UTBeamTowerState::GetApplyBuffers() const
 	return BeamTowerData.Buffers;
 }
 
-void UTBeamTowerState::ApplyAbility(const FTTowerAbility& TowerAbility)
+void UTBeamTowerState::ApplyAbility(const FTTowerAbility& TowerAbility, int32 Index)
 {
-	// Super::ApplyAbility(TowerAbility);
+	Super::ApplyAbility(TowerAbility, Index);
 	switch (TowerAbility.TowerAbilityType)
 	{
 	case ETowerAbility::E_Damage:

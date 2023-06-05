@@ -178,10 +178,12 @@ const TArray<FTManBuffer>& UTShotTowerState::GetApplyBuffers() const
 {
 	return ShotTowerData.Buffers;
 }
-
-void UTShotTowerState::ApplyAbility(const FTTowerAbility& TowerAbility)
+/*
+ * 加点能力，应用能力
+ */
+void UTShotTowerState::ApplyAbility(const FTTowerAbility& TowerAbility, int32 Index)
 {
-	// Super::ApplyAbility(TowerAbility);
+	Super::ApplyAbility(TowerAbility, Index);
 	switch (TowerAbility.TowerAbilityType)
 	{
 	case ETowerAbility::E_Damage:

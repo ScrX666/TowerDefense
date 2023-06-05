@@ -16,7 +16,7 @@ struct FTManBuffer : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	EManBufferType BufferType;
 	UPROPERTY(EditDefaultsOnly)
 	float DurationTime;

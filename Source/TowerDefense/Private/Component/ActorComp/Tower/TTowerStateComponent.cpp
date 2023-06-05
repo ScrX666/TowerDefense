@@ -3,6 +3,8 @@
 
 #include "Component/ActorComp/Tower/TTowerStateComponent.h"
 
+#include "Kismet/KismetArrayLibrary.h"
+
 // Sets default values for this component's properties
 UTTowerStateComponent::UTTowerStateComponent()
 {
@@ -18,8 +20,9 @@ const TArray<FTTowerAbility>& UTTowerStateComponent::GetAllAbility() const
 	return TowerAbilities;
 }
 
-void UTTowerStateComponent::ApplyAbility(const FTTowerAbility& TowerAbility)
+void UTTowerStateComponent::ApplyAbility(const FTTowerAbility& TowerAbility, int32 Index)
 {
+	SelectedAbilityIndex = Index;
 }
 
 int32 UTTowerStateComponent::GetMaxLevel() const
