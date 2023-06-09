@@ -30,6 +30,8 @@ struct TOWERDEFENSE_API FTLevelInfo : public FTableRowBase
  UDataTable* EndDialogTable;
  UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
  UTexture2D* ChangeLevelTexture;
+ UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+ FText ChangeLevelText;
  /**
   * 每一关塔的攻击范围修正
   */

@@ -95,9 +95,11 @@ private:
 	TDataTableManager();
 	~TDataTableManager();
 
-	// 将其拷贝构造和赋值构造成为私有函数, 禁止外部拷贝和赋值
-	TDataTableManager(const TDataTableManager &signal) = delete;
-	const TDataTableManager &operator=(const TDataTableManager &signal) = delete;
+	// 私有函数, 禁止外部调用
+	TDataTableManager(const TDataTableManager& signal) = delete;
+	const TDataTableManager &operator=(const TDataTableManager& signal) = delete;
+	TDataTableManager(const TDataTableManager&& signal) = delete;
+	const TDataTableManager &operator=(const TDataTableManager&& signal) = delete;
 
 private:
 	// 唯一单实例对象指针
