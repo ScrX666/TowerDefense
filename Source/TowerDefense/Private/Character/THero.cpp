@@ -7,6 +7,7 @@
 #include "AI/Hero/THeroController.h"
 #include "BlueprintFunctionLibrary/TBlueprintFunctionLibrary.h"
 #include "Component/ActorComp/TManStateAndBuffer.h"
+#include "Component/ActorComp/TMouseControlComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GamePlay/TPlayerController.h"
 #include "Kismet/GameplayStatics.h"
@@ -47,8 +48,8 @@ void ATHero::OnManDead()
 	ManAIC->DisableSolo(nullptr);
 	if( PC)
 	{
-		PC->ExecuteSkill(TEXT("Hero"));
-		PC->ConfirmExecuteSkill();
+		PC->MouseControlComponent->ExecuteSkill(TEXT("Hero"));
+		PC->MouseControlComponent->ConfirmExecuteSkill();
 	}
 }
 

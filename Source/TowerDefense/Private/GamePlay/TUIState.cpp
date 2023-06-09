@@ -5,6 +5,8 @@
 
 #include "Component/ActorComp/TUIManagerComponent.h"
 #include "Component/ActorComp/Player/TDialogComponent.h"
+#include "GamePlay/TPlayerController.h"
+#include "GamePlay/TThirdPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
 void UTUIState::ReceiveEnterState_Implementation(EStackAction StackAction)
@@ -50,6 +52,8 @@ void UTUIState::NativeConstruct()
 	Super::NativeConstruct();
 
 	PC = UGameplayStatics::GetPlayerController(this, 0);
+	TowerDefensePC = Cast<ATPlayerController>(PC);
+	ThirdPlayerPC = Cast<ATThirdPlayerController>(PC);
 	if( PC)
 	{
 		UIManagerComponent = Cast<UTUIManagerComponent>(PC->GetComponentByClass(UTUIManagerComponent::StaticClass()));

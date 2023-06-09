@@ -4,6 +4,7 @@
 #include "Skill/TBaseLocationSkill.h"
 
 #include "BlueprintFunctionLibrary/TBlueprintFunctionLibrary.h"
+#include "Component/ActorComp/TMouseControlComponent.h"
 #include "GamePlay/TPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -13,7 +14,7 @@ void UTBaseLocationSkill::Execute(UWorld* World)
 	ATPlayerController* PC = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(World,0));
 	if( ensureMsgf(PC,TEXT("Fail to Use SKill, ATPlayerController is Null")))
 	{
-		SkillLocation = PC->GetCursorHitLoc();
+		SkillLocation = PC->MouseControlComponent->GetCursorHitLoc();
 	}
 	UTBlueprintFunctionLibrary::PlayRandomSound(World,SkillSounds,SkillLocation);
 }
