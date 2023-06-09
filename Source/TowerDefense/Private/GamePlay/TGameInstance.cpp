@@ -7,17 +7,20 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/Widget.h"
 #include "GamePlay/TDataTableManager.h"
-#include "GamePlay/TPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
-
+/*
+ * 添加能够建造的塔
+ */
 bool UTGameInstance::AddTower(TSubclassOf<ATMainTower> Tower)
 {
 	if( OwnTowers.Contains(Tower)) return false;
 	OwnTowers.Add(Tower);
 	return true;
 }
-
+/*
+ * 获取所有能够建造的塔
+ */
 const TArray<TSubclassOf<ATMainTower>>& UTGameInstance::GetOwnTowers()
 {
 	if( OwnTowers.Num() == 0)
@@ -49,9 +52,13 @@ void UTGameInstance::BeginLoadingScreen(const FString& MapName)
 		
 		if (LoadNum == 1) return;
 
+		// 获取loading界面信息
 		LoadingTexture = TDataTableManager::GetInstance()->GetLevelInfo(
 			FName(UGameplayStatics::GetCurrentLevelName(this, true)))
 		.ChangeLevelTexture;
+		LoadingText = TDataTableManager::GetInstance()->GetLevelInfo(
+			FName(UGameplayStatics::GetCurrentLevelName(this, true)))
+		.ChangeLevelText;
 		
 		FLoadingScreenAttributes LoadingScreen;
 		APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);

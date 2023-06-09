@@ -19,13 +19,21 @@ public:
 	int LoadNum = 0;
 
 	UPROPERTY(BlueprintReadOnly)
-	float TowerAttackRangeAmend = 1.0f;
+	float TowerAttackRangeAmend = 1.0f; // 塔攻击范围的修正值
+
+	// 关卡加载信息
 	UPROPERTY(BlueprintReadOnly)
 	UTexture2D* LoadingTexture;
+	UPROPERTY(BlueprintReadOnly)
+	FText LoadingText;
+
+	
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UUserWidget> LoadingUICla;
 	UPROPERTY(EditDefaultsOnly)
 	TArray<TSubclassOf<ATMainTower>> InitTowers; // 初始时拥有的塔
+
+	// 音量
 	UPROPERTY(BlueprintReadOnly)
 	float MusicVolume = 1.0f;
 	UPROPERTY(BlueprintReadOnly)
@@ -34,8 +42,14 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TArray<TSubclassOf<ATMainTower>> OwnTowers; // 拥有的塔
 public:
+	/*
+	 * 添加能够建造的塔
+	 */
 	UFUNCTION(BlueprintCallable)
 	bool AddTower(TSubclassOf<ATMainTower> Tower);
+	/*
+	 * 获取所有能够建造的塔
+	 */
 	UFUNCTION(BlueprintCallable)
 	const TArray<TSubclassOf<ATMainTower>>& GetOwnTowers();
 
