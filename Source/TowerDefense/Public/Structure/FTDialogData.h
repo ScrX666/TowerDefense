@@ -22,7 +22,7 @@ public:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	ESpeakerFaceType FaceType;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TArray<FTAnsWithDialogs> NextDialogs;
+	TArray<FTAnsWithDialogs> NextDialogs; //对话的分支选项
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	TSubclassOf<ATBaseDialogEvent> DialogEvent;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
