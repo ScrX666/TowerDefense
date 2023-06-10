@@ -7,7 +7,6 @@
 #include "Component/ActorComp/TShotTowerState.h"
 #include "Engine/StaticMeshSocket.h"
 #include "Component/ActorComp/Tower/TAttackHandleComponent.h"
-#include "Kismet/GameplayStatics.h"
 #include "Projectile/TMainBullet.h"
 
 ATMainShotTower::ATMainShotTower()
@@ -43,8 +42,12 @@ void ATMainShotTower::UpdateShotRate(float ShotRate)
 	UE_LOG(LogTemp,Log,TEXT("UpdateShotRate %f"),ShotRate);
 	if( AttackHandleComponent->TargetIsEmpty())
 	{
+		const float TimeRemain = FMath::Clamp(
+		GetWorld()->GetTimerManager().GetTimerRemaining(FireTimerHandle),
+		0.0f,
+		MAX_flt);
 		GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
-		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,ShotRate, true,0.0f);
+		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,ShotRate, true,TimeRemain);
 	}
 }
 
@@ -86,8 +89,9 @@ void ATMainShotTower::Fire()
 		// 生成子弹
 		FActorSpawnParameters ActorSpawnParameters;
 		ActorSpawnParameters.Owner = this;
-	
-		auto Bullet = GetWorld()->SpawnActor<ATMainBullet>(BulletClass,BuildingMesh->GetSocketTransform(TEXT("BulletSocket")),ActorSpawnParameters);
+
+		FTransform SocketTransform = BuildingMesh->GetSocketTransform(TEXT("BulletSocket"));
+		const auto Bullet = GetWorld()->SpawnActor<ATMainBullet>(BulletClass, SocketTransform.GetLocation(),SocketTransform.Rotator(),ActorSpawnParameters);
 		if( Bullet != nullptr)
 		{
 			Bullet->Init(TargetMan,ShotTowerStateComp->BulletSpeed,ShotTowerStateComp->CurrentDamage,ApplyBuffers);
@@ -110,8 +114,12 @@ void ATMainShotTower::TargetInRange()
 {
 	UE_LOG(LogTemp,Log,TEXT("TargetInRange ShotTowerStateComp->ShotRate %f"),ShotTowerStateComp->ShotRate);
 	Super::TargetInRange();
+	const float TimeRemain = FMath::Clamp(
+		GetWorld()->GetTimerManager().GetTimerRemaining(FireTimerHandle),
+		0.0f,
+		MAX_flt);
 	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
-	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,ShotTowerStateComp->ShotRate, true, 0.0f);
+	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,ShotTowerStateComp->ShotRate, true, TimeRemain);
 }
 
 void ATMainShotTower::NoTargetInRange()
