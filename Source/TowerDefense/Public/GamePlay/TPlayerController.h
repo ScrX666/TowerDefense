@@ -10,7 +10,6 @@
 
 class UTMouseControlComponent;
 class UTDialogComponent;
-class ATMainTower;
 class UTSoundManagerComponent;
 class UTCursorManagerComponent;
 class UTSkillManagerComponent;
@@ -18,12 +17,9 @@ class ATHeroController;
 class UBlackboardComponent;
 class UTUIManagerComponent;
 class ATPlayerState;
-enum class EBuildingMode : uint8;
-class ATMainBuilding;
-
 
 /**
- * 
+ * 塔防游戏PlayerController
  */
 UCLASS()
 class TOWERDEFENSE_API ATPlayerController : public APlayerController
@@ -31,8 +27,6 @@ class TOWERDEFENSE_API ATPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
-
-	
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	ATPlayerState* TPlayerState;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
@@ -59,16 +53,12 @@ private:
 	
 public:
 	ATPlayerController();
-	
 	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
+	virtual void SetupInputComponent() override;
+	
 	UFUNCTION(BlueprintCallable)
 	void OnEscBtnPress();
-	
-	virtual void SetupInputComponent() override;
-
-
-	
 private:
 
 	/*

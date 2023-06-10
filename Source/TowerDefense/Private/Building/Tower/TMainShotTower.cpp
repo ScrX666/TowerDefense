@@ -44,7 +44,7 @@ void ATMainShotTower::UpdateShotRate(float ShotRate)
 	if( AttackHandleComponent->TargetIsEmpty())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
-		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,ShotRate, true);
+		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,ShotRate, true,0.0f);
 	}
 }
 
@@ -111,7 +111,7 @@ void ATMainShotTower::TargetInRange()
 	UE_LOG(LogTemp,Log,TEXT("TargetInRange ShotTowerStateComp->ShotRate %f"),ShotTowerStateComp->ShotRate);
 	Super::TargetInRange();
 	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
-	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,ShotTowerStateComp->ShotRate, true);
+	GetWorld()->GetTimerManager().SetTimer(FireTimerHandle,this,&ATMainShotTower::Fire,ShotTowerStateComp->ShotRate, true, 0.0f);
 }
 
 void ATMainShotTower::NoTargetInRange()

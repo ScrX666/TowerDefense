@@ -23,7 +23,6 @@ UTMouseControlComponent::UTMouseControlComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
 }
 
 void UTMouseControlComponent::InitializeComponent()
@@ -121,6 +120,9 @@ void UTMouseControlComponent::OnConstructTowerBulid(ATMainTower* Tower, bool bIs
 		SelectedBuilding = nullptr;
 	}
 }
+/*
+ * 绑定到输入事件 左键
+ */
 void UTMouseControlComponent::MouseClickDown()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("MouseClickDown"));
@@ -300,7 +302,7 @@ FVector UTMouseControlComponent::GetCursorHitLoc() const
 }
 
 /*
- * 取消操作
+ * 绑定到输入事件 右键 取消操作
  */
 void UTMouseControlComponent::MouseRightClickDown()
 {
@@ -376,10 +378,11 @@ void UTMouseControlComponent::BuildingModeOff()
 
 void UTMouseControlComponent::BuildingModeOn()
 {
-	//------------------------------ BuildingRefer 赋值
 	FActorSpawnParameters ActorSpawnParameters;
 	ActorSpawnParameters.Instigator = PC->GetPawn();
 	ActorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	
+	//------------------------------ BuildingRefer 赋值
 	BuildingReferActor = GetWorld()->SpawnActor<AActor>(BuildingClass, CursorLocation,FRotator::ZeroRotator,ActorSpawnParameters);
 	BuildingReferInterface = BuildingReferActor;
 	DecalComponent->SetHiddenInGame(true);

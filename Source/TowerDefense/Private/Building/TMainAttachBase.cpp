@@ -10,8 +10,7 @@
 ATMainAttachBase::ATMainAttachBase():
 	AttachedBuilding(nullptr)
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("Arrow"));
@@ -21,20 +20,6 @@ ATMainAttachBase::ATMainAttachBase():
 	AttachedBuildingPos->SetupAttachment(RootComponent);
 
 	Mesh->SetCollisionProfileName(TEXT("BuildingBase"));
-}
-
-// Called when the game starts or when spawned
-void ATMainAttachBase::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ATMainAttachBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 void ATMainAttachBase::OnConstructAttachBuilding(ATMainBuilding* Building)

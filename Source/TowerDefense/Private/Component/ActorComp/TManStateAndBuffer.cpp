@@ -13,18 +13,6 @@
 #include "GamePlay/TPlayerState.h"
 #include "Kismet/GameplayStatics.h"
 
-
-// Sets default values for this component's properties
-UTManStateAndBuffer::UTManStateAndBuffer()
-{
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
-}
-
-
 void UTManStateAndBuffer::DestorySelf(AActor* InstigatorActor)
 {
 	ATManBase* Man = Cast<ATManBase>(GetOwner());
@@ -34,7 +22,6 @@ void UTManStateAndBuffer::DestorySelf(AActor* InstigatorActor)
 	}
 }
 
-// Called when the game starts
 void UTManStateAndBuffer::BeginPlay()
 {
 	Super::BeginPlay();
@@ -64,7 +51,8 @@ void UTManStateAndBuffer::ApplyHealthChange(AActor* Instigator,float Delta)
 	CurrentHealth += Delta;
 	CurrentHealth = FMath::Clamp(CurrentHealth, 0.0f, ManState.MaxHealth);
 	OnHealthChanged.Broadcast(Instigator,this, CurrentHealth,Delta);
-	//TODO: 添加死亡事件
+
+	// 死亡
 	if( CurrentHealth == 0)
 		OnDead.Broadcast(Instigator);
 }
@@ -105,6 +93,8 @@ void UTManStateAndBuffer::ActivateBuffer(const TArray<FTManBuffer>& Buffers, AAc
 			break;
 		default: ;
 		}
+
+		// buff的施加者 方便进行coin和exp的结算
 		if( BufferInstigators.Contains(Buffer.BufferType))
 		{
 			BufferInstigators[Buffer.BufferType] = Instigator;
@@ -120,9 +110,14 @@ void UTManStateAndBuffer::ActiveIce(const FTManBuffer& Buffer)
 {
 	if( Owner)
 	{
-		if( CharacterMovementComp)
+		// 初始化 初始速度
+		if( MAX_flt == OrignWalkSpeed)
 		{
 			OrignWalkSpeed = CharacterMovementComp->MaxWalkSpeed;
+		}
+		
+		if( CharacterMovementComp)
+		{
 			CharacterMovementComp->MaxWalkSpeed = OrignWalkSpeed * Buffer.EffectNum;
 		}
 	}
@@ -174,7 +169,9 @@ void UTManStateAndBuffer::DeActivePoison()
 	GetWorld()->GetTimerManager().ClearTimer(BufferTimerHandles[EManBufferType::E_Poison]);
 	DeActiveBufferEffect(EManBufferType::E_Poison);
 }
-
+/**
+ * 施加持续伤害
+ */
 void UTManStateAndBuffer::ApplyPoisonDamage()
 {
 	UGameplayStatics::ApplyDamage(this->GetOwner(),PoisonDamage,
@@ -189,7 +186,7 @@ void UTManStateAndBuffer::ActiveBufferEffect(const FTManBuffer& Buffer, FName So
 {
 	if( !BufferNiagaraSystems.Contains(Buffer.BufferType))
 	{
-		auto Nia = UNiagaraFunctionLibrary::SpawnSystemAttached(
+		const auto Nia = UNiagaraFunctionLibrary::SpawnSystemAttached(
 			Buffer.NiagaraEffect,
 			GetOwner()->GetRootComponent(),
 			SocketName,

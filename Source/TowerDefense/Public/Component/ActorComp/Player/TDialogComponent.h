@@ -21,11 +21,9 @@ public:
 	UDataTable* CurDialogTable;
 	
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:	
-	// Sets default values for this component's properties
 	UTDialogComponent();
 
 	UFUNCTION(BlueprintCallable)

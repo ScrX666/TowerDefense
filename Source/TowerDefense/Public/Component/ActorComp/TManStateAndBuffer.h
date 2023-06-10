@@ -36,7 +36,7 @@ public:
 	// Buffer 增益
 	// TODO: 添加Buffer
 	// UPROPERTY(VisibleAnywhere)
-	// TArray<FTManBuffer> Buffers;d
+	// TArray<FTManBuffer> Buffers;
 	
 protected:
 	UFUNCTION()
@@ -57,46 +57,51 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UCharacterMovementComponent* CharacterMovementComp;
 
-	float OrignWalkSpeed;
+	float OrignWalkSpeed = MAX_flt;
 	float PoisonDamage;
 	
 public:	
-	UTManStateAndBuffer();
 
 	// 状态
 	void ApplyHealthChange(AActor* Instigator, float Delta);
-
 	UFUNCTION()
 	void AddCoinsAndExp(AActor* InstigatorActor);
 
 	// Buffer 增益
-	/*
+	/**
 	 * 激活Buffer
 	 */
 	void ActivateBuffer(const TArray<FTManBuffer> &Buffers,AActor* Instigator);
 
 private:
-	/*
+	/**
 	 * 施加减速
 	 */
 	void ActiveIce(const FTManBuffer& Buffer);
-	/*
+	/**
 	 * 施加持续伤害
 	 */
 	void ActivePoison(const FTManBuffer& Buffer);
-
+	/**
+	 * 取消减速
+	 */
 	UFUNCTION()
 	void DeActiveIce();
+	/**
+	 * 取消持续伤害
+	 */
 	UFUNCTION()
 	void DeActivePoison();
-
+	/**
+	 * 施加持续伤害
+	 */
 	UFUNCTION()
 	void ApplyPoisonDamage();
-	/*
+	/**
 	 * 设置Buff的特效
 	 */
 	void ActiveBufferEffect(const FTManBuffer& Buffer, FName SocketName);
-	/*
+	/**
 	 * 消除Buff的特效
 	 */
 	void DeActiveBufferEffect(const EManBufferType ManBufferType);

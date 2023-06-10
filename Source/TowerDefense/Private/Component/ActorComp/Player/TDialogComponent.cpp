@@ -19,7 +19,6 @@ UTDialogComponent::UTDialogComponent()
 }
 
 
-// Called when the game starts
 void UTDialogComponent::BeginPlay()
 {
 	Super::BeginPlay();
