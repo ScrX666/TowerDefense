@@ -73,7 +73,9 @@ void UTUIManagerComponent::OnESCPress()
 	{
 		UE_LOG(LogTemp,Log,TEXT("TopUI Name %s"),*TopUI->GetClass()->GetFName().ToString());
 	}
-	if( TopUI && TopUI->GetClass()->GetFName() == TEXT("U_BeginPanel_C"))
+	if( TopUI &&
+		( TopUI->GetClass()->GetFName() == TEXT("U_BeginPanel_C") ||
+		 TopUI->GetClass()->GetFName() == TEXT("U_EndGame_C")))
 	{
 		return ;
 	}

@@ -49,8 +49,6 @@ void UTUIState::ReceiveUpdateState_Implementation(float DeltaTime)
 
 void UTUIState::NativeConstruct()
 {
-	Super::NativeConstruct();
-
 	PC = UGameplayStatics::GetPlayerController(this, 0);
 	TowerDefensePC = Cast<ATPlayerController>(PC);
 	ThirdPlayerPC = Cast<ATThirdPlayerController>(PC);
@@ -59,6 +57,8 @@ void UTUIState::NativeConstruct()
 		UIManagerComponent = Cast<UTUIManagerComponent>(PC->GetComponentByClass(UTUIManagerComponent::StaticClass()));
 		DialogManagerComponent = Cast<UTDialogComponent>(PC->GetComponentByClass(UTDialogComponent::StaticClass()));
 	}
+	
+	Super::NativeConstruct();
 }
 
 void UTUIState::EnterState(EStackAction StackAction)

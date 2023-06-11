@@ -3,9 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Enum/EBuildingMode.h"
+#include "Enum/EShowMessageType.h"
 #include "GameFramework/PlayerController.h"
-#include "Interface/TBuildingInterface.h"
 #include "TPlayerController.generated.h"
 
 class UTMouseControlComponent;
@@ -17,6 +16,8 @@ class ATHeroController;
 class UBlackboardComponent;
 class UTUIManagerComponent;
 class ATPlayerState;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnShowMessage,TEnumAsByte<EShowMessageType>, MessageType);
 
 /**
  * 塔防游戏PlayerController
@@ -43,6 +44,8 @@ public:
 	// UTCursorManagerComponent* CursorManagerComponent;
 	UPROPERTY(EditDefaultsOnly)
 	bool bIsTest; // 测试
+	UPROPERTY(VisibleAnywhere,BlueprintAssignable)
+	FOnShowMessage OnShowMessage;
 
 private:
 

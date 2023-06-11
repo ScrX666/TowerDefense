@@ -13,6 +13,7 @@ class UTUIManagerComponent;
 class ATPlayerState;
 class UBlackboardComponent;
 class ATHeroController;
+class ATPlayerController;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnConstructTower, ATMainTower*, Tower, bool, bIsConstruct);
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -24,7 +25,7 @@ public:
 	FOnConstructTower OnConstructTower;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	ATPlayerState* TPlayerState;
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite)
 	TScriptInterface<ITBuildingInterface> SelectedBuilding; // 选中的建筑
 	
 private:
@@ -32,7 +33,7 @@ private:
 	FName CurSkillName; // 即将释放的技能名字
 	
 	UPROPERTY()
-	APlayerController* PC;
+	ATPlayerController* PC;
 	UPROPERTY()
 	UTSkillManagerComponent* SkillManagerComponent;
 	
