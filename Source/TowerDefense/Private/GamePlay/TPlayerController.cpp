@@ -51,8 +51,6 @@ void ATPlayerController::PostInitializeComponents()
 void ATPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 	
 	TArray<AActor*> Actors;
 	UGameplayStatics::GetAllActorsOfClass(this,ATHero::StaticClass(),Actors);
@@ -99,7 +97,9 @@ void ATPlayerController::OnEscBtnPress()
 	UIManagerComponent->OnESCPress();
 }
 
-
+/**
+ * 绑定输入
+ */
 void ATPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();

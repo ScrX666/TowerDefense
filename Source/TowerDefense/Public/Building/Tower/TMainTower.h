@@ -44,6 +44,8 @@ private:
 public:
 	ATMainTower();
 	virtual void Fire();
+	
+	UFUNCTION(BlueprintCallable)
 	virtual void OnSelected(bool bSelected) override;
 	
 	// 接口

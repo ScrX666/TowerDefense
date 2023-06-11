@@ -9,7 +9,11 @@
 #include "Structure/FAISpawnStruct.h"
 #include "TSplineMapActor.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWaveChanged,int32,NewWave, int32, MaxWave);
+class ATGameState;
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnWaveChanged, int32, NewWave, int32, MaxWave);
+/**
+ * @brief 敌人生成器
+ */
 UCLASS()
 class TOWERDEFENSE_API ATSplineMapActor : public AActor
 {
@@ -23,21 +27,23 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnWaveChanged OnWaveChanged;
 	
-protected:
-	int32 CurrentWave = 0; // 当前波次
-	int32 CurrentEnemyCount = 0; // 当前波次已经生成的敌人数量
-	FTimerHandle WaveTimerHandle;
-	FTimerHandle BeginplayTimerHandle;
+	bool bFinishSpawn = false; // 是否已经生成完了
 	
 protected:
+	int32 CurrentEnemyCount = 0; // 当前波 已经生成的敌人数量
+	int32 CurrentWave = 0; // 当前波次
+	FTimerHandle WaveTimerHandle;
+	
 	UPROPERTY(VisibleAnywhere)
 	USplineComponent* SplineComponent;
+	
 	FVector FirstMoveLoc;
 
 	FAISpawnStruct FaiSpawnStruct;
 private:
+	UPROPERTY()
+	ATGameState* TGameState;
 	int CurrentExistEnemyCount = 0; // 场景中已经生成的敌人
-	bool bFinishSpawn = false; // 是否已经生成完了
 
 	TArray<FAISpawnStruct*> AISpawnData; //所有的敌人生成数据
 	
@@ -45,7 +51,6 @@ private:
 	int32 TotalWaveCount = 2; // 总波次数量
 	float SpawnAIWalkSpeed = 500.0f; // 总波次数量
 public:	
-	// Sets default values for this actor's properties
 	ATSplineMapActor();
 	virtual void PostInitializeComponents() override;
 	UFUNCTION()
@@ -63,7 +68,6 @@ public:
 	FVector GetClosestPoint(FVector CurPos, int& CurIndex);
 	
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	UFUNCTION()
 	void AIMove(ATAIBaseController* NPC);

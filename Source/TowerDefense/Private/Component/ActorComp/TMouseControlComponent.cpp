@@ -6,6 +6,7 @@
 #include "AI/Hero/THeroController.h"
 #include "Building/TMainAttachBase.h"
 #include "Building/TMainBuilding.h"
+#include "Building/TPathEndBuilding.h"
 #include "Building/Tower/TMainBeamTower.h"
 #include "Building/Tower/TMainShotTower.h"
 #include "Building/Tower/TMainTower.h"
@@ -13,6 +14,7 @@
 #include "Component/ActorComp/TSkillManagerComponent.h"
 #include "Component/ActorComp/TUIManagerComponent.h"
 #include "Components/DecalComponent.h"
+#include "GamePlay/TPlayerController.h"
 #include "GamePlay/TPlayerState.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -36,7 +38,7 @@ void UTMouseControlComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	PC = Cast<APlayerController>(GetOwner());
+	PC = Cast<ATPlayerController>(GetOwner());
 	UIManagerComponent = Cast<UTUIManagerComponent>(GetOwner()->GetComponentByClass(UTUIManagerComponent::StaticClass()));
 	SkillManagerComponent = Cast<UTSkillManagerComponent>(GetOwner()->GetComponentByClass(UTSkillManagerComponent::StaticClass()));
 	TPlayerState = PC->GetPlayerState<ATPlayerState>();
@@ -98,7 +100,18 @@ void UTMouseControlComponent::ConfirmExecuteSkill()
 {
 	BuildingMode = EBuildingMode::E_NotInBuildMode;
 	PC->CurrentMouseCursor = EMouseCursor::Default;
-	SkillManagerComponent->Execute(CurSkillName);
+
+	// 不能在基座上释放技能
+	if( HitResult.Actor->IsA(ATMainAttachBase::StaticClass())
+		|| HitResult.Actor->IsA(ATMainTower::StaticClass()))
+	{
+		// 显示错误信息
+		PC->OnShowMessage.Broadcast(EShowMessageType::E_SkillWrong);
+	}
+	else
+	{
+		SkillManagerComponent->Execute(CurSkillName);
+	}
 
 	// 释放Skill为UI点击，不会立即更新，需要手动更新
 	FInputModeGameAndUI InputModeGameAndUI;
@@ -149,7 +162,7 @@ void UTMouseControlComponent::MouseClickDown()
 				}
 				else
 				{
-				
+					PC->OnShowMessage.Broadcast(EShowMessageType::E_CoinNotEnough);
 				}
 			}
 			SetBuildingMode(nullptr);
@@ -173,13 +186,17 @@ void UTMouseControlComponent::MouseClickDown()
 			if(SelectedBuilding && SelectedBuilding.GetObject()->IsA<ATMainBuilding>())
 			{
 				SelectedBuilding->OnSelected(false);
-				UIManagerComponent->PopState();
 				SelectedBuilding = nullptr;
+				UIManagerComponent->PopState();
 			}
 
 		
 			if( CursorHitBuildingInterface)
 			{
+				//TODO: PathEndBuilding 添加显示UI
+				if( CursorHitBuildingActor->IsA(ATPathEndBuilding::StaticClass()))
+					break;
+				
 				CursorHitBuildingInterface->OnSelected(true);
 				SelectedBuilding = CursorHitBuildingActor;
 				if( CursorHitBuildingActor->IsA<ATMainShotTower>())

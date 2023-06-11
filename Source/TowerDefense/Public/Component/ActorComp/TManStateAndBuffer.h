@@ -34,7 +34,6 @@ public:
 	FOnDead OnDead;
 
 	// Buffer 增益
-	// TODO: 添加Buffer
 	// UPROPERTY(VisibleAnywhere)
 	// TArray<FTManBuffer> Buffers;
 	

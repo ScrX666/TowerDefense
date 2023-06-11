@@ -12,6 +12,7 @@
 #include "Character/TManBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GamePlay/TDataTableManager.h"
+#include "GamePlay/TGameState.h"
 #include "GamePlay/TPlayerController.h"
 #include "GamePlay/TPlayerState.h"
 #include "Kismet/GameplayStatics.h"
@@ -30,6 +31,8 @@ void ATSplineMapActor::PostInitializeComponents()
 	// 绑定开始游戏
 	ATowerDefenseGameModeBase* TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
 	TDGameMode->OnGameStart.AddDynamic(this, &ATSplineMapActor::SpawnWave);
+
+	TGameState = Cast<ATGameState>(UGameplayStatics::GetGameState(this));
 }
 
 // Called when the game starts or when spawned
@@ -116,7 +119,7 @@ void ATSplineMapActor::SpawnAI()
 	if(ensure(moveController))
 	moveController->SplineMapActor = this;
 		
-	CurrentExistEnemyCount++;
+	TGameState->OnEnemyNumChange(1);
 }
 
 void ATSplineMapActor::SpawnWave()
@@ -158,11 +161,7 @@ void ATSplineMapActor::SpawnWave()
 		}
 		else
 		{
-			//UE_LOG(LogTemp,Log,TEXT("bFinishSpawn CurrentWave %d GetAISpawnStructNum %d"),CurrentWave,TDataTableManager::GetInstance()->GetAISpawnStructNum());
 			bFinishSpawn = true;
-			// auto TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
-			// if(TDGameMode)
-			// TDGameMode->OnGameEnd.Broadcast(true);
 		}
 		
 	}
@@ -202,22 +201,7 @@ void ATSplineMapActor::MoveTo(ATAIBaseController* AIController, int index, FVect
 
 void ATSplineMapActor::OnManDead()
 {
-	CurrentExistEnemyCount--;
-
-	// 防止游戏结束 现存敌人销毁，引起的空指针引用
-	if(!Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(this,0)) ||
-		Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->bGameEnd)
-		return ;
-	
-	ATPlayerState* PlayerState = Cast<ATPlayerController>(UGameplayStatics::GetPlayerController(this,0))->TPlayerState;
-
-	if( !PlayerState || !PlayerState->EndBuilding) return ;
-	
-	if( CurrentExistEnemyCount == 0 && bFinishSpawn && !PlayerState->EndBuilding->IsDead())
-	{
-		Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this))->OnGameEnd.Broadcast(true);
-		PlayerState->AllEnemyDead = true;
-	}
+	TGameState->OnEnemyNumChange(-1);
 }
 
 int32 ATSplineMapActor::GetMaxWaveCount()

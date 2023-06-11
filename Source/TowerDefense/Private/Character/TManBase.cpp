@@ -138,7 +138,9 @@ void ATManBase::OnPerceptionUpdated(const TArray<AActor*>& Actors)
 		}
 	}
 }
-
+/**
+ * 手动更新感知范围内的敌人
+ */
 void ATManBase::ManualPerceptionUpdated()
 {
 	TArray<AActor*> Actors;
@@ -162,7 +164,7 @@ void ATManBase::OnManReborn()
 void ATManBase::Destroyed()
 {
 	Super::Destroyed();
-	//TODO: 与动画绑定
+	//TODO: 与死亡动画绑定
 	if( ManAIC && ManAIC->GetAttackMan())
 	ManAIC->GetAttackMan()->ManStateAndBuffer->OnDead.RemoveDynamic(ManAIC,&ATAIBaseController::DisableSolo);
 }
@@ -249,6 +251,7 @@ void ATManBase::Attack()
 		Direction.Z = 0;
 		FRotator NewRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
 		GetController()->SetControlRotation(NewRotation);
+		this->SetActorRotation(NewRotation);
 	}
 }
 /*
