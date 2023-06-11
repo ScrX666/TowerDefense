@@ -47,9 +47,9 @@ public:
 	class USpringArmComponent* SpringArmComponent;
 private:
 	// 摄像机移动相关参数
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditInstanceOnly)
 	float CameraMinZoom;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditInstanceOnly)
 	float CameraMaxZoom;
 	UPROPERTY(EditDefaultsOnly)
 	float CameraZoomSpeed;
