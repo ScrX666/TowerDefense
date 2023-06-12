@@ -52,7 +52,6 @@ private:
 	float SpawnAIWalkSpeed = 500.0f; // 总波次数量
 public:	
 	ATSplineMapActor();
-	virtual void PostInitializeComponents() override;
 	UFUNCTION()
 	void MoveTo(ATAIBaseController* AIController, int index, FVector& NextPosition);
 
