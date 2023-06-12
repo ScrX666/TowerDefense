@@ -3,7 +3,6 @@
 
 #include "GamePlay/TDataTableManager.h"
 
-#include "Kismet/GameplayStatics.h"
 #include "Structure/FTShotTower.h"
 #include "Structure/FTTower.h"
 
@@ -149,6 +148,7 @@ void TDataTableManager::GetAISpawnStructs(FName PathSuffix, TArray<FAISpawnStruc
 	{
 		// 此前没有加载过，就加载
 		UDataTable* AISpawnTB = LoadObject<UDataTable>(nullptr, *(AISpawnPath + PathSuffix.ToString()));
+		AISpawnTB->AddToRoot();
 		if( AISpawnTB == nullptr)
 		{
 			UE_LOG(LogTemp,Warning,TEXT("AISpawnStructs NULL "));

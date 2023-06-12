@@ -20,8 +20,6 @@ public:
 private:
 	// UPROPERTY(EditDefaultsOnly)
 	// bool bUseRootAsRotate;
-	UPROPERTY(VisibleAnywhere)
-	USceneComponent* TowerRoot;
 	UPROPERTY(EditDefaultsOnly)
 	USceneComponent* RotateComponent;
 	UPROPERTY()

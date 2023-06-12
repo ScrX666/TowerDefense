@@ -11,7 +11,13 @@
 #include "Kismet/GameplayStatics.h"
 #include "Structure/FTBoolArray.h"
 
-
+/**
+ * @brief 弃用
+ * @param Width 地图的宽
+ * @param Length 地图的长
+ * @param N 路径的长度
+ * @return 返回01矩阵表示路径
+ */
 TArray<FTBoolArray> UTBlueprintFunctionLibrary::GetRandomPath(int32 Width, int32 Length,int32 N)
 {
     TArray<FTBoolArray> Grid;

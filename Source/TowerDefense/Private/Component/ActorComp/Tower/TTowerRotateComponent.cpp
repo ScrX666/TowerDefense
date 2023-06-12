@@ -24,13 +24,10 @@ void UTTowerRotateComponent::BeginPlay()
 	Super::BeginPlay();
 
 	Tower = Cast<ATMainTower>(GetOwner());
-	if( !TowerRoot)
+	if( !RotateComponent)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("The default rotate Comp is the tower RootComp"));
-		TowerRoot = GetOwner()->GetRootComponent();
-		// if( bUseRootAsRotate) RotateComponent = TowerRoot;
-		// else RotateComponent = this;
-		if( !RotateComponent) RotateComponent = TowerRoot;
+		UE_LOG(LogTemp,Log,TEXT("The default rotate Comp is the tower RootComp"));
+		RotateComponent = GetOwner()->GetRootComponent();
 	}
 	
 }
@@ -41,13 +38,11 @@ void UTTowerRotateComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if( TowerRoot &&
-		RotateComponent &&
+	if( RotateComponent &&
 		Tower->AttackHandleComponent &&
 		!Tower->AttackHandleComponent->TargetIsEmpty())
 	{
 		const FMatrix NewMatrix = FRotationMatrix::MakeFromX(Tower->AttackHandleComponent->ReturnTargetLocation() - RotateComponent->GetComponentLocation());
-		const float NewYawValue = NewMatrix.Rotator().Yaw;
 		FRotator TargetRotator = NewMatrix.Rotator();
 		TargetRotator.Pitch = 0;
 		TargetRotator.Roll = 0;

@@ -19,7 +19,13 @@ UCLASS()
 class TOWERDEFENSE_API UTBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
-
+	/**
+	 * @brief 弃用
+	 * @param Width 地图的宽
+	 * @param Length 地图的长
+	 * @param N 路径的长度
+	 * @return 返回01矩阵表示路径
+	 */
 	UFUNCTION(BlueprintCallable)
 	static TArray<FTBoolArray> GetRandomPath(int32 Width, int32 Length, int32 N);
 	UFUNCTION(BlueprintCallable)

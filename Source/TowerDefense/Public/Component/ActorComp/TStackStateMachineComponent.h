@@ -32,7 +32,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PopAllStates();
 
-	// 接口实现
+	// 接口实现 除了状态对应的三种操作，状态机也要响应对应的操作
 	virtual void EnterState(EStackAction StackAction) override;
 	virtual void ExitState(EStackAction StackAction) override;
 	virtual void UpdateState(float DeltaTime) override;

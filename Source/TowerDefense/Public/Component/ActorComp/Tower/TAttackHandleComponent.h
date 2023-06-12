@@ -9,6 +9,7 @@
 #include "TAttackHandleComponent.generated.h"
 
 
+class ATMainTower;
 class ATManBase;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -19,7 +20,17 @@ class TOWERDEFENSE_API UTAttackHandleComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTAttackHandleComponent();
-
+	/**
+	 * @brief 进攻击范围，更新状态
+	 * @param Man 近攻击范围的敌人
+	 */
+	void AttackTargetIn(ATManBase* Man);
+	/**
+	 * @brief 出攻击范围，更新状态
+	 * @param Man 出攻击范围的敌人
+	 */
+	void AttackTargetOut(ATManBase* Man);
+	
 	/*
 	 * 能够攻击的敌人数量是否已经满了
 	 */
@@ -55,17 +66,14 @@ public:
 	FVector ReturnTargetLocation() const;
 	
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 private:
 	UPROPERTY()
 	TArray<ATManBase*> TargetMans;
-		
+	UPROPERTY()
+	ATMainTower* OwnTower;
+	
 	int32 ParallelAttackCount = 1;
 	std::mutex AddMutex;
 };

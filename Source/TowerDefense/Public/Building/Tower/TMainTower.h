@@ -19,6 +19,7 @@ UCLASS()
 class TOWERDEFENSE_API ATMainTower : public ATMainBuilding
 {
 	GENERATED_BODY()
+	friend class UTAttackHandleComponent;
 public:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	USceneComponent* AttackRangeComps;

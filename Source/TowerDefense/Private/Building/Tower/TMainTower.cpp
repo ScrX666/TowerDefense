@@ -3,11 +3,9 @@
 
 #include "Building/Tower/TMainTower.h"
 
-#include "Character/TEnemyBase.h"
 #include "Character/TManBase.h"
 #include "Component/ActorComp/Tower/TAttackHandleComponent.h"
 #include "Components/SphereComponent.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "Structure/FTManBuffer.h"
 
 ATMainTower::ATMainTower()
@@ -31,58 +29,18 @@ void ATMainTower::AttackRangeOverlap(UPrimitiveComponent* OverlappedComponent, A
 {
 	if( OtherActor != nullptr)
 	{
-		auto OthMan = Cast<ATEnemyBase>(OtherActor);
-		if( OthMan != nullptr &&
-			AttackHandleComponent->TargetIsFull() == false)
-		{
-			if( AttackHandleComponent->TargetIsEmpty())
-			{
-				AttackHandleComponent->AddTarget(OthMan);
-				TargetInRange();
-			}
-			else
-			{
-				AttackHandleComponent->AddTarget(OthMan);
-			}
-		}
+		const auto Man = Cast<ATManBase>(OtherActor);
+		AttackHandleComponent->AttackTargetIn(Man);
 	}
 }
 
 void ATMainTower::AttackRangeEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if( OtherActor->IsA<ATEnemyBase>())
+	if( OtherActor != nullptr)
 	{
-		AttackHandleComponent->RemoveAttackTarget(Cast<ATManBase>(OtherActor));
-		
-		TArray<AActor*> ManBases;
-		GetOverlappingActors(ManBases, ATEnemyBase::StaticClass());
-		if( ManBases.Num() == 0 && AttackHandleComponent->TargetIsEmpty())
-		{
-			// TargetMan = nullptr;
-			NoTargetInRange();
-		}
-		else
-		{
-			// TargetMan = Cast<ATManBase>(ManBases[0]);
-
-			UE_LOG(LogTemp,Log,TEXT("AttackRangeEndOverlap Man NUM %d"),ManBases.Num());
-			UE_LOG(LogTemp,Log,TEXT("AttackHandleComponent->TargetIsFull %d"),AttackHandleComponent->TargetIsFull());
-			
-			
-			// 添加敌人，可能重复添加，所以循环判断
-			if( AttackHandleComponent->TargetIsFull() == false)
-			{
-				for( int i = 0; i < ManBases.Num(); i++)
-				{
-					if( !AttackHandleComponent->ExistInAttackTarget(Cast<ATManBase>(ManBases[i]))
-						&& AttackHandleComponent->AddTarget(Cast<ATManBase>(ManBases[i])))
-						break;
-				}
-			
-				TargetInRange();
-			}
-		}
+		const auto Man = Cast<ATManBase>(OtherActor);
+		AttackHandleComponent->AttackTargetOut(Man);
 	}
 }
 

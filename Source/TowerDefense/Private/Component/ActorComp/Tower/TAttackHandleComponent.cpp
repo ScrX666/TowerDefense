@@ -3,6 +3,8 @@
 
 #include "Component/ActorComp/Tower/TAttackHandleComponent.h"
 
+#include "Building/Tower/TMainTower.h"
+#include "Character/TEnemyBase.h"
 #include "Character/TManBase.h"
 
 // Sets default values for this component's properties
@@ -14,6 +16,59 @@ UTAttackHandleComponent::UTAttackHandleComponent()
 	ParallelAttackCount = 1;
 	SetParallelAttackCount(ParallelAttackCount);
 }
+
+void UTAttackHandleComponent::AttackTargetIn(ATManBase* Man)
+{
+	auto OthMan = Cast<ATEnemyBase>(Man);
+	if( OthMan != nullptr &&
+		TargetIsFull() == false)
+	{
+		if( TargetIsEmpty())
+		{
+			AddTarget(OthMan);
+			OwnTower->TargetInRange();
+		}
+		else
+		{
+			AddTarget(OthMan);
+		}
+	}
+}
+
+void UTAttackHandleComponent::AttackTargetOut(ATManBase* Man)
+{
+	if( Man == nullptr || Man->IsA<ATEnemyBase>() == false) return ;
+	
+	RemoveAttackTarget(Cast<ATManBase>(Man));
+		
+	TArray<AActor*> ManBases;
+	OwnTower->GetOverlappingActors(ManBases, ATEnemyBase::StaticClass());
+	if( ManBases.Num() == 0 && TargetIsEmpty())
+	{
+		// TargetMan = nullptr;
+		OwnTower->NoTargetInRange();
+	}
+	else
+	{
+		// UE_LOG(LogTemp,Log,TEXT("AttackRangeEndOverlap Man NUM %d"),ManBases.Num());
+		// UE_LOG(LogTemp,Log,TEXT("AttackHandleComponent->TargetIsFull %d"),TargetIsFull());
+			
+			
+		// 添加敌人，可能重复添加，所以循环判断
+		if( TargetIsFull() == false)
+		{
+			for( int i = 0; i < ManBases.Num(); i++)
+			{
+				if( !ExistInAttackTarget(Cast<ATManBase>(ManBases[i]))
+					&& AddTarget(Cast<ATManBase>(ManBases[i])))
+						break;
+			}
+			
+			OwnTower->TargetInRange();
+		}
+	}
+}
+
 /*
  * 能够攻击的敌人数量是否已经满了
  */
@@ -138,16 +193,5 @@ void UTAttackHandleComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	OwnTower = Cast<ATMainTower>(GetOwner());	
 }
-
-
-// Called every frame
-void UTAttackHandleComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
