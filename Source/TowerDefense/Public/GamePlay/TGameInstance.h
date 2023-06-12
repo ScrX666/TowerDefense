@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Building/Tower/TMainTower.h"
 #include "Engine/GameInstance.h"
+#include "Structure/FTLoadingPanelInfo.h"
 #include "TGameInstance.generated.h"
 
 class UWidget;
@@ -23,9 +24,7 @@ public:
 
 	// 关卡加载信息
 	UPROPERTY(BlueprintReadOnly)
-	UTexture2D* LoadingTexture;
-	UPROPERTY(BlueprintReadOnly)
-	FText LoadingText;
+	FTLoadingPanelInfo LoadingPanelInfo;
 
 	
 	UPROPERTY(EditDefaultsOnly)

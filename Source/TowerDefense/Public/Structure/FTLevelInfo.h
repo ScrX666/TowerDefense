@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FTLoadingPanelInfo.h"
 #include "Engine/DataTable.h"
 #include "FTLevelInfo.generated.h"
 
@@ -28,13 +29,11 @@ struct TOWERDEFENSE_API FTLevelInfo : public FTableRowBase
  UDataTable* BeginDialogTable;
  UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
  UDataTable* EndDialogTable;
- UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
- UTexture2D* ChangeLevelTexture;
- UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
- FText ChangeLevelText;
  /**
   * 每一关塔的攻击范围修正
   */
  UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
  float TowerAttackRangeAmend = 1.0f;
+ UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+ FTLoadingPanelInfo LoadingPanelInfo;
 };

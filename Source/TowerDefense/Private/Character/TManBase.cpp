@@ -32,6 +32,7 @@ ATManBase::ATManBase()
 	HealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthWidgetComp"));
 	HealthWidgetComponent->SetupAttachment(RootComponent);
 	HealthWidgetComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+	HealthWidgetComponent->SetCastShadow(false);
 	AutoPossessAI = EAutoPossessAI::Spawned;
 	AIControllerClass = ATAIBaseController::StaticClass();
 

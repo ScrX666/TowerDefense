@@ -31,8 +31,8 @@ void UTBTServiceCheckAttackInRange::TickNode(UBehaviorTreeComponent& OwnerComp, 
 					float RangeScale = FMath::Max(Pawn->GetActorScale().X,TargetActor->GetActorScale().X);
 					
 					bool bWithInRange = DistanceTo < AttackRange * RangeScale;
-					UE_LOG(LogTemp,Log,TEXT("bWithInAttackRange %d"),bWithInRange);
-					UE_LOG(LogTemp,Log,TEXT("DistanceTo %f"),DistanceTo);
+					// UE_LOG(LogTemp,Log,TEXT("bWithInAttackRange %d"),bWithInRange);
+					// UE_LOG(LogTemp,Log,TEXT("DistanceTo %f"),DistanceTo);
 					// bool bHasLos = false;
 					// if( bWithInRange)
 					// {

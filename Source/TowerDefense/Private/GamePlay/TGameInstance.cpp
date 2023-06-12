@@ -53,12 +53,9 @@ void UTGameInstance::BeginLoadingScreen(const FString& MapName)
 		if (LoadNum == 1) return;
 
 		// 获取loading界面信息
-		LoadingTexture = TDataTableManager::GetInstance()->GetLevelInfo(
+		LoadingPanelInfo = TDataTableManager::GetInstance()->GetLevelInfo(
 			FName(UGameplayStatics::GetCurrentLevelName(this, true)))
-		.ChangeLevelTexture;
-		LoadingText = TDataTableManager::GetInstance()->GetLevelInfo(
-			FName(UGameplayStatics::GetCurrentLevelName(this, true)))
-		.ChangeLevelText;
+		.LoadingPanelInfo;
 		
 		FLoadingScreenAttributes LoadingScreen;
 		APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
