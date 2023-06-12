@@ -25,20 +25,17 @@ ATSplineMapActor::ATSplineMapActor()
 	
 }
 
-void ATSplineMapActor::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
-	// 绑定开始游戏
-	ATowerDefenseGameModeBase* TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
-	TDGameMode->OnGameStart.AddDynamic(this, &ATSplineMapActor::SpawnWave);
-
-	TGameState = Cast<ATGameState>(UGameplayStatics::GetGameState(this));
-}
-
 // Called when the game starts or when spawned
 void ATSplineMapActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// 绑定开始游戏
+	ATowerDefenseGameModeBase* TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
+	if(TDGameMode)
+	TDGameMode->OnGameStart.AddDynamic(this, &ATSplineMapActor::SpawnWave);
+	
+	TGameState = Cast<ATGameState>(UGameplayStatics::GetGameState(GetWorld()));
 
 	if(bUseLevelNameAsTableSuffix)
 	{
