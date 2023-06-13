@@ -111,6 +111,7 @@ void UTShotTowerState::UpdateParallelAttackCount(const int32 NewCount)
 	if( Tower)
 	{
 		Tower->AttackHandleComponent->SetParallelAttackCount(ParallelAttackCount);
+		Tower->TargetInRange();
 	}
 }
 

@@ -86,6 +86,7 @@ void UTBeamTowerState::UpdateParallelAttackCount(const int32 NewCount)
 	{
 		Tower->AttackHandleComponent->SetParallelAttackCount(ParallelAttackCount);
 		Cast<ATMainBeamTower>(Tower)->SetLaserBeamsNum(ParallelAttackCount);
+		Tower->TargetInRange();
 	}
 }
 
