@@ -29,8 +29,6 @@ class TOWERDEFENSE_API UTBlueprintFunctionLibrary : public UBlueprintFunctionLib
 	UFUNCTION(BlueprintCallable)
 	static TArray<FTBoolArray> GetRandomPath(int32 Width, int32 Length, int32 N);
 	UFUNCTION(BlueprintCallable)
-	static FName GetNextLevel(const FName CurrentLevelName);
-	UFUNCTION(BlueprintCallable)
 	static int32 GetTowerCoinsByClassAndName(TSubclassOf<ATMainTower> Tower,FName Name);
 	UFUNCTION(BlueprintCallable)
 	static bool GetDialogFromTable(UDataTable* DataTable,FName RowName,FTDialogData& FindResult);
@@ -48,5 +46,6 @@ class TOWERDEFENSE_API UTBlueprintFunctionLibrary : public UBlueprintFunctionLib
 public:
 	UFUNCTION(BlueprintCallable)
 	static void PlayRandomSound(UObject* WorldContext, const TArray<USoundBase*>& Sounds, FVector Location);
-
+	UFUNCTION(BlueprintCallable)
+	static FName GetNextLevel(const FName CurrentLevelName);
 };

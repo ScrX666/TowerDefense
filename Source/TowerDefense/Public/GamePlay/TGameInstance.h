@@ -19,6 +19,9 @@ class TOWERDEFENSE_API UTGameInstance : public UGameInstance
 public:
 	int LoadNum = 0;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool bCompleteGame = false;
+	
 	UPROPERTY(BlueprintReadOnly)
 	float TowerAttackRangeAmend = 1.0f; // 塔攻击范围的修正值
 

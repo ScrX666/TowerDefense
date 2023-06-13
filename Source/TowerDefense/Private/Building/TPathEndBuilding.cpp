@@ -3,6 +3,7 @@
 
 #include "Building/TPathEndBuilding.h"
 
+#include "Character/TEnemyBase.h"
 #include "Character/TManBase.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -23,7 +24,7 @@ void ATPathEndBuilding::RangeEndOverlap(UPrimitiveComponent* OverlappedComponent
 void ATPathEndBuilding::RangeOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if( OtherActor != nullptr && OtherActor->IsA<ATManBase>())
+	if( OtherActor != nullptr && OtherActor->IsA<ATEnemyBase>())
 	{
 		Health -= 10.0f;
 		OnHomeHealthChanged.Broadcast(Health,-10.0f);

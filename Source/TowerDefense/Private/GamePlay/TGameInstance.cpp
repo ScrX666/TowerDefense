@@ -5,7 +5,9 @@
 
 #include "MoviePlayer.h"
 #include "Blueprint/UserWidget.h"
+#include "BlueprintFunctionLibrary/TBlueprintFunctionLibrary.h"
 #include "Components/Widget.h"
+#include "GameFramework/GameUserSettings.h"
 #include "GamePlay/TDataTableManager.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -37,6 +39,9 @@ void UTGameInstance::Init()
 {
 	Super::Init();
 
+	GEngine->GameUserSettings->SetFullscreenMode(EWindowMode::Windowed);
+	GEngine->GameUserSettings->ApplySettings(true);
+	
 	TowerAttackRangeAmend = TDataTableManager::GetInstance()->GetLevelInfo(
 		FName(UGameplayStatics::GetCurrentLevelName(this, true))).TowerAttackRangeAmend;
 	
@@ -59,7 +64,16 @@ void UTGameInstance::BeginLoadingScreen(const FString& MapName)
 		
 		FLoadingScreenAttributes LoadingScreen;
 		APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
-		if(PC)
+
+		FName CurName = FName(UGameplayStatics::GetCurrentLevelName(this,true));
+		
+		if(PC && bCompleteGame && UTBlueprintFunctionLibrary::GetNextLevel(CurName) == FName())
+		{
+			LoadingScreen.MoviePaths.Add("Rolling Credits 01");
+			LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
+			LoadingScreen.PlaybackType = EMoviePlaybackType::MT_Normal;
+		}
+		else if(PC)
 		{
 			UUserWidget* LoadingUI = CreateWidget<UUserWidget>(PC, LoadingUICla);
 			if( LoadingUI)
@@ -69,17 +83,12 @@ void UTGameInstance::BeginLoadingScreen(const FString& MapName)
 				LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
 			}
 		}
-		else
-		{
-			LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
-		}
 
 		LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
 		LoadingScreen.bMoviesAreSkippable = true;
-		LoadingScreen.PlaybackType = EMoviePlaybackType::MT_Looped;
-		// LoadingScreen.MoviePaths.Add("Test");
 
 		GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
+		GetMoviePlayer()->PlayMovie();
 	}
 }
  
