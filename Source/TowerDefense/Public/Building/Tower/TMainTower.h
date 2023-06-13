@@ -75,10 +75,7 @@ public:
 	UFUNCTION(BlueprintPure)
 	virtual UTTowerStateComponent* GetStateComp() const ;
 	
-protected:
 	virtual void TargetInRange();
 	virtual void NoTargetInRange();
-private:
-		
 	
 };
