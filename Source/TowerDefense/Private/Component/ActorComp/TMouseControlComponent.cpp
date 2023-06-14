@@ -169,18 +169,6 @@ void UTMouseControlComponent::MouseClickDown()
 		}
 		break;
 	case EBuildingMode::E_NotInBuildMode:
-		// 非建造模式 点击
-		if(bInHeroControlMode)
-		{
-			// 控制英雄的模式
-			if(HitResult.Actor != nullptr)
-			{
-				SelectedBuilding->OnSelected(false);
-				if( HeroAIC)
-				HeroAIC->HeroMove(HitResult.Location);
-			}
-		}
-		else
 		{
 			// 如果是塔 关闭UI面板
 			if(SelectedBuilding && SelectedBuilding.GetObject()->IsA<ATMainBuilding>())
@@ -213,6 +201,15 @@ void UTMouseControlComponent::MouseClickDown()
 	case EBuildingMode::E_InSillMode:
 		ConfirmExecuteSkill();
 		break;
+	case EBuildingMode::E_InHeroMode:
+		// 控制英雄的模式
+		if(HitResult.Actor != nullptr)
+		{
+			SelectedBuilding->OnSelected(false);
+			if( HeroAIC)
+				HeroAIC->HeroMove(HitResult.Location);
+		}
+		break;
 	}
 }
 /*
@@ -235,7 +232,7 @@ void UTMouseControlComponent::MouseMove(float Value)
 		{
 			CursorHitBuildingInterface->OnHovered(false);
 			// CursorManagerComponent->SetCursorType(this,EMouseCursor::Default);
-			if( bInHeroControlMode)
+			if( BuildingMode == EBuildingMode::E_InHeroMode)
 			PC->CurrentMouseCursor = EMouseCursor::Crosshairs;
 			else if( BuildingMode != EBuildingMode::E_InSillMode)
 			{
@@ -334,16 +331,6 @@ void UTMouseControlComponent::MouseRightClickDown()
 		}
 		break;
 	case EBuildingMode::E_NotInBuildMode:
-		// 非建造模式 点击
-		if(bInHeroControlMode)
-		{
-			// 控制英雄的模式
-			if(HitResult.Actor != nullptr)
-			{
-				SelectedBuilding->OnSelected(false);
-			}
-		}
-		else
 		{
 			// 如果是塔 关闭UI面板
 			if(SelectedBuilding && SelectedBuilding.GetObject()->IsA<ATMainBuilding>())
@@ -367,6 +354,14 @@ void UTMouseControlComponent::MouseRightClickDown()
 			PC->SetInputMode(InputModeGameAndUI);
 		}
 		break;
+	case EBuildingMode::E_InHeroMode:
+		// 控制英雄的模式
+		if(HitResult.Actor != nullptr)
+		{
+			SelectedBuilding->OnSelected(false);
+		}
+		break;
+	default: ;
 	}
 }
 
@@ -414,16 +409,18 @@ void UTMouseControlComponent::BuildingModeOn()
  */
 void UTMouseControlComponent::OnSelectHero(bool bSelectHero)
 {
-	bInHeroControlMode = bSelectHero;
+	//bInHeroControlMode = bSelectHero;
 
 	// 设置对应的Cursor
 	if( bSelectHero == true)
 	{
+		BuildingMode = EBuildingMode::E_InHeroMode;
 		// CursorManagerComponent->SetCursorType(this,EMouseCursor::Crosshairs);
 		PC->CurrentMouseCursor = EMouseCursor::Crosshairs;
 	}
 	else
 	{
+		BuildingMode = EBuildingMode::E_NotInBuildMode;
 		// CursorManagerComponent->SetCursorType(this,EMouseCursor::Default);
 		PC->CurrentMouseCursor = EMouseCursor::Default;
 	}

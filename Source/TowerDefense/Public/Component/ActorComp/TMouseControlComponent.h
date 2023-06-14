@@ -61,7 +61,6 @@ private:
 
 	FHitResult HitResult;
 	bool bCanConstruct;
-	bool bInHeroControlMode; // 是否在操控英雄的模式
 	UPROPERTY(VisibleAnywhere)
 	UBlackboardComponent* HeroBlackboardComponent;
 	UPROPERTY(VisibleAnywhere)

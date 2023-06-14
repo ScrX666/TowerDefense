@@ -41,10 +41,12 @@ void UTGameInstance::Init()
 
 	GEngine->GameUserSettings->SetFullscreenMode(EWindowMode::Windowed);
 	GEngine->GameUserSettings->ApplySettings(true);
-	
+
+	// 获取塔攻击范围的修正值
 	TowerAttackRangeAmend = TDataTableManager::GetInstance()->GetLevelInfo(
 		FName(UGameplayStatics::GetCurrentLevelName(this, true))).TowerAttackRangeAmend;
-	
+
+	// 绑定 实现切换关卡加载UI面板
 	FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UTGameInstance::BeginLoadingScreen);
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UTGameInstance::EndLoadingScreen);
 }
